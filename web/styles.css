@@ -1,0 +1,105 @@
+/* Modern Styles for Thailand & Vietnam Live Travel OS Dashboard */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #0ea5e9;
+  --accent: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg-main: #0f172a;
+  --card-bg: rgba(30, 41, 59, 0.85);
+  --card-border: rgba(51, 65, 85, 0.6);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+}
+
+body {
+  background: radial-gradient(circle at top right, #1e293b, #0f172a 60%);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-card:hover {
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+/* Badges */
+.badge-confirmed {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.badge-vetted {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.badge-radar {
+  background: rgba(14, 165, 233, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(14, 165, 233, 0.4);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Document Badge in Cards */
+.doc-pill {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease;
+}
+.doc-pill:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+/* Smooth Accordion */
+.accordion-content {
+  transition: max-height 0.35s ease-out, opacity 0.3s ease;
+}
+
+/* Print Styling */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .glass-card {
+    border: 1px solid #ccc !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    color: #000 !important;
+  }
+  .doc-page {
+    box-shadow: none !important;
+  }
+}

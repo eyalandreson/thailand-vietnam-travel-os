@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-09-09T00:47:00.608740Z",
+  "routine_1_ingestion": {
+    "status": "SUCCESS",
+    "total_confirmed_in_registry": 18,
+    "itinerary_days_synchronized": 0,
+    "message": "Ingestion verified: 18 documents active."
+  },
+  "routine_2_sync": {
+    "status": "DUAL_SYNC_COMPLETED",
+    "total_days": 29,
+    "web_json_path": "web/data.json",
+    "web_js_path": "web/itinerary_data.js",
+    "google_doc_path": "google_docs\\master_itinerary_doc.html",
+    "integrity_verified": true
+  },
+  "routine_3_critic": {
+    "total_hotels_audited": 39,
+    "passed_count": 39,
+    "failure_count": 0,
+    "pass_rate_pct": 100.0,
+    "failures": [],
+    "status": "APPROVED"
+  },
+  "routine_4_web": "VERIFIED_READY"
+}
