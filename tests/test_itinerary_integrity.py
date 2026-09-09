@@ -67,5 +67,32 @@ class TestItineraryIntegrity(unittest.TestCase):
         self.assertEqual(len(tao_days), 6, "Expected 6 nights Koh Tao")
         self.assertEqual(len(bkk_finale_days), 2, "Expected 2 nights Bangkok Finale")
 
+    def test_confirmed_vs_unbooked_status_integrity(self):
+        """Verify strict segregation: only the 5 true bookings are marked CONFIRMED, all others UNBOOKED."""
+        confirmed_count = 0
+        unbooked_count = 0
+        for day in self.data.get("days", []):
+            for hotel in day.get("accommodation_matrix", []):
+                status = hotel.get("status", "")
+                if "CONFIRMED" in status:
+                    confirmed_count += 1
+                    # Only Sukhon Hotel (Day 1) can be confirmed accommodation
+                    self.assertIn("Sukhon", hotel["hotel_name"])
+                elif "UNBOOKED" in status or "ACTION REQUIRED" in status:
+                    unbooked_count += 1
+
+        self.assertEqual(confirmed_count, 1, "Only Sukhon Hotel should be marked CONFIRMED accommodation.")
+        self.assertGreaterEqual(unbooked_count, 20, "All pending hotels should be marked ACTION REQUIRED - UNBOOKED.")
+
+    def test_no_synthetic_files_referenced(self):
+        """Verify that document files are not pointing to non-existent synthetic files."""
+        for day in self.data.get("days", []):
+            for doc in day.get("important_documents", []):
+                file_status = doc.get("file_status", "")
+                # If marked as verified local file, it must exist on disk
+                if file_status == "LOCAL_FILE_VERIFIED":
+                    self.assertTrue(os.path.exists(doc.get("file_path", "")), f"File {doc.get('file_path')} does not exist!")
+
 if __name__ == "__main__":
     unittest.main()
+

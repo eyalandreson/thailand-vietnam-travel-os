@@ -228,15 +228,15 @@ class GoogleWorkspaceSync:
     • <b>Buffer:</b> 2h 40m connection buffer allows relaxed baggage claim, suitcase retrieval at Floor B, and complimentary boutique lounge access.
   </div>
 
-  <h2>Summary Table of Confirmed Bookings & Documents</h2>
+  <h2>Summary of Genuine Confirmed Bookings (From Traveler Profile)</h2>
   <table class="meta-table">
     <thead>
       <tr>
         <th>Date</th>
         <th>Category</th>
-        <th>Item & Reference</th>
-        <th>Status</th>
-        <th>Key Logistics / Notes</th>
+        <th>Verified Reference</th>
+        <th>Booking Status</th>
+        <th>File Status</th>
       </tr>
     </thead>
     <tbody>
@@ -244,109 +244,56 @@ class GoogleWorkspaceSync:
         <td>Sep 11</td>
         <td>Immigration</td>
         <td>Thailand Digital Arrival Card (#30C4358)</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>Completed digital pass; show on phone at BKK immigration</td>
+        <td><span class="badge-confirmed">CONFIRMED DETAILS</span></td>
+        <td style="color:#b06000;">Awaiting Gmail Attachment / Local Drop</td>
       </tr>
       <tr>
         <td>Sep 11–12</td>
         <td>Hotel</td>
         <td>Sukhon Hotel Bangkok (Booking: 697155847)</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>BTS Phaya Thai Exit 2 / ARL direct connection</td>
-      </tr>
-      <tr>
-        <td>Sep 12–24</td>
-        <td>Luggage</td>
-        <td>AIRPORTELs BKK Basement Storage (Ref: 771)</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>12-day storage for checked suitcase; 55L pack only in VN</td>
+        <td><span class="badge-confirmed">CONFIRMED BOOKING</span></td>
+        <td style="color:#b06000;">Awaiting Gmail Attachment / Local Drop</td>
       </tr>
       <tr>
         <td>Sep 12</td>
         <td>Flight</td>
         <td>Bangkok -> Hanoi 11:55 AM (Booking: 1145-554-179)</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>BKK to HAN Noi Bai T2 (arr 13:50)</td>
-      </tr>
-      <tr>
-        <td>Sep 13</td>
-        <td>Transit/Tour</td>
-        <td>Hanoi -> Ha Giang VIP Bus + Easy-Rider Pass</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>Licensed easy-riders, DOT helmets, Ma Pi Leng pass permit</td>
-      </tr>
-      <tr>
-        <td>Sep 15</td>
-        <td>Transit</td>
-        <td>Ha Giang -> Sa Pa VIP Mountain Coach</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>Direct mountain transfer via Lao Cai (12GO-SAPA-8821)</td>
-      </tr>
-      <tr>
-        <td>Sep 17</td>
-        <td>Transit</td>
-        <td>Sa Pa -> Cat Ba Direct Luxury Coach & Ferry</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>Combined sleeper coach + speedboat to Cat Ba doorstep</td>
-      </tr>
-      <tr>
-        <td>Sep 18</td>
-        <td>Tour</td>
-        <td>Lan Ha Bay & Ba Trai Dao Boat & Kayak Pass</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>Private/small group cruise; avoids Halong crowds</td>
-      </tr>
-      <tr>
-        <td>Sep 20</td>
-        <td>Transit</td>
-        <td>Cat Ba -> Ninh Binh Express Coach</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>Direct drop-off at Tam Coc retreat</td>
-      </tr>
-      <tr>
-        <td>Sep 22</td>
-        <td>Transit</td>
-        <td>Ninh Binh -> Hanoi Old Quarter Limousine</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>9-seater luxury business van with massage seats</td>
+        <td><span class="badge-confirmed">CONFIRMED FLIGHT</span></td>
+        <td style="color:#b06000;">Awaiting Gmail Attachment / Local Drop</td>
       </tr>
       <tr>
         <td>Sep 24</td>
         <td>Flight</td>
         <td>Hanoi -> Bangkok 12:45 PM (Booking: 1145-554-179)</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>HAN to BKK (arr 14:35). Luggage retrieval & Phase 2 reunion</td>
-      </tr>
-      <tr>
-        <td>Sep 25</td>
-        <td>Ferry</td>
-        <td>Lomprayah Catamaran: Samui -> Koh Phangan</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>10:30 AM departure from Pralarn Pier Maenam</td>
-      </tr>
-      <tr>
-        <td>Oct 01</td>
-        <td>Ferry</td>
-        <td>Lomprayah Catamaran: Phangan -> Koh Tao</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>11:00 AM departure to Mae Haad Pier</td>
-      </tr>
-      <tr>
-        <td>Oct 07</td>
-        <td>Transit</td>
-        <td>Koh Tao -> Bangkok VIP Ferry + Flight</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>Morning catamaran to Samui + Bangkok Airways to BKK</td>
+        <td><span class="badge-confirmed">CONFIRMED FLIGHT</span></td>
+        <td style="color:#b06000;">Awaiting Gmail Attachment / Local Drop</td>
       </tr>
       <tr>
         <td>Oct 09</td>
         <td>Flight</td>
         <td>Bangkok -> Tel Aviv via AUH (Booking: 9KDEH2)</td>
-        <td><span class="badge-confirmed">CONFIRMED</span></td>
-        <td>BKK Suvarnabhumi final international departure</td>
+        <td><span class="badge-confirmed">CONFIRMED FLIGHT</span></td>
+        <td style="color:#b06000;">Awaiting Gmail Attachment / Local Drop</td>
       </tr>
     </tbody>
   </table>
+
+  <h2>Action Items: Unbooked Legs & Required Reservations</h2>
+  <div class="callout-alert">
+    <b>The following legs are NOT yet booked and require user action / reservation:</b><br>
+    1. <b>Luggage Locker (Sep 12):</b> AIRPORTELs Suvarnabhumi Basement drop-off (pay at counter or online).<br>
+    2. <b>Vietnam E-Visa (Sep 12):</b> Apply on official Vietnam immigration portal $\ge$ 2 weeks prior.<br>
+    3. <b>Ha Giang Loop (Sep 13–15):</b> Easy-Riders + VIP bus from Hanoi (Action Required).<br>
+    4. <b>Sa Pa (Sep 15–17):</b> Mountain transfer coach + Eco Palms House / Pao's Sapa (Action Required).<br>
+    5. <b>Cat Ba & Lan Ha Bay (Sep 17–20):</b> Intercity coach + Perle d'Orient / Eco Lodge + Kayak cruise (Action Required).<br>
+    6. <b>Ninh Binh (Sep 20–22):</b> Tam Coc coach + Tam Coc Garden Resort (Action Required).<br>
+    7. <b>Hanoi Finale (Sep 22–24):</b> Limousine van + La Siesta Ma May (Action Required).<br>
+    8. <b>South Flight (Sep 24):</b> Bangkok Airways PG 169 BKK -> USM (Buy in Mid-July / Early August).<br>
+    9. <b>Koh Samui (Sep 24–25):</b> Hansar Samui decompression stay (Action Required).<br>
+    10. <b>Koh Phangan (Sep 25 – Oct 01):</b> Lomprayah catamaran + Anantara Rasananda (Action Required).<br>
+    11. <b>Koh Tao (Oct 01–07):</b> Lomprayah catamaran + The Place Luxury Villas (Action Required).<br>
+    12. <b>Bangkok Finale (Oct 07–09):</b> Return flight/ferry + Riva Arun Bangkok (Action Required).
+  </div>
 
   <h2>Comprehensive 29-Day Master Itinerary</h2>
 """

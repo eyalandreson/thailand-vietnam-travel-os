@@ -39,11 +39,12 @@ function renderHeaderMetrics() {
   if (!itineraryData) return;
   const days = itineraryData.days || [];
   const confirmed = days.filter(d => d.status.includes('CONFIRMED')).length;
-  const vetted = days.length - confirmed;
+  const partial = days.filter(d => d.status.includes('BOOKED') && !d.status.includes('CONFIRMED - BOOKED')).length;
+  const unbooked = days.length - (confirmed + partial);
 
   document.getElementById('metric-total-days').innerText = days.length;
-  document.getElementById('metric-confirmed').innerText = confirmed;
-  document.getElementById('metric-vetted').innerText = vetted;
+  document.getElementById('metric-confirmed').innerText = confirmed + partial;
+  document.getElementById('metric-vetted').innerText = unbooked;
 }
 
 function switchView(view) {
@@ -136,9 +137,9 @@ function renderDays() {
 
   // Filter by Status
   if (currentFilter === 'confirmed') {
-    filtered = filtered.filter(d => d.status.includes('CONFIRMED'));
+    filtered = filtered.filter(d => d.status.includes('BOOKED'));
   } else if (currentFilter === 'vetted') {
-    filtered = filtered.filter(d => d.status.includes('VETTED'));
+    filtered = filtered.filter(d => !d.status.includes('CONFIRMED - BOOKED'));
   }
 
   // Filter by Search Query
@@ -164,22 +165,32 @@ function renderDays() {
   }
 
   filtered.forEach(day => {
-    const isConfirmed = day.status.includes('CONFIRMED');
-    const badgeClass = isConfirmed ? 'badge-confirmed' : 'badge-vetted';
+    let badgeClass = 'badge-vetted';
+    if (day.status.includes('CONFIRMED - BOOKED')) {
+      badgeClass = 'badge-confirmed';
+    } else if (day.status.includes('BOOKED')) {
+      badgeClass = 'badge-radar';
+    }
+
     const isPhase1 = day.phase.includes('Vietnam') || day.day_number <= 13;
     const phaseColor = isPhase1 ? 'text-amber-400 border-amber-500/30' : 'text-pink-400 border-pink-500/30';
     const bedIcon = isPhase1 ? '🛏️ Twin Beds (Guys Trip)' : '👑 Romantic King (Couple Trip)';
 
     let hotelsHtml = '';
     (day.accommodation_matrix || []).forEach(h => {
+      const isHotelBooked = h.status === 'CONFIRMED_BOOKED';
+      const hotelBadge = isHotelBooked 
+        ? `<span class="text-xs px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 font-bold border border-emerald-500/40">✓ CONFIRMED BOOKING</span>`
+        : `<span class="text-xs px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 font-semibold border border-amber-500/40">UNBOOKED RECOMMENDATION</span>`;
+
       hotelsHtml += `
         <div class="bg-slate-900/60 rounded-xl p-3 border border-slate-700/60 flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between flex-wrap gap-1">
               <a href="${h.booking_url}" target="_blank" class="font-semibold text-blue-400 hover:underline text-sm flex items-center gap-1">
                 ${h.hotel_name} <span class="text-xs">↗</span>
               </a>
-              <span class="text-xs px-2 py-0.5 rounded bg-blue-900/50 text-blue-300 font-bold">⭐ ${h.critic_score}/10</span>
+              ${hotelBadge}
             </div>
             <p class="text-xs text-slate-300 mt-1"><b>Room:</b> ${h.room_spec}</p>
             <p class="text-xs text-slate-400 mt-1 italic">${h.critic_notes}</p>
@@ -195,10 +206,11 @@ function renderDays() {
     let docsHtml = '';
     (day.attached_documents || []).forEach(doc => {
       docsHtml += `
-        <button onclick="openDocModal('${doc.doc_id}')" class="doc-pill text-xs px-2.5 py-1 rounded-lg flex items-center gap-1.5 cursor-pointer">
+        <button onclick="openDocModal('${doc.doc_id}')" class="doc-pill text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer bg-slate-800/80 border border-slate-700 hover:border-blue-400">
           <span>📎</span>
           <span class="font-medium text-slate-200">${doc.title}</span>
-          <span class="text-slate-400 text-[11px]">(${doc.ref})</span>
+          <span class="text-amber-400 text-[11px] font-mono">(${doc.ref})</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-900/40 text-amber-300 border border-amber-600/40">File Pending</span>
         </button>
       `;
     });
@@ -371,58 +383,50 @@ function setupEventListeners() {
 
 // Modal Document Preview
 function openDocModal(docId) {
-  const registry = window.TRAVEL_OS_DATA?.confirmed_items || [];
-  const item = registry.find(r => r.id === docId);
   const modal = document.getElementById('doc-modal');
   const title = document.getElementById('modal-doc-title');
   const body = document.getElementById('modal-doc-body');
 
+  let item = null;
+  const registry = window.TRAVEL_OS_DATA?.confirmed_items || [];
+  item = registry.find(r => r.id === docId);
+
   if (!item) {
-    // Fallback search in days
-    let found = null;
     (window.TRAVEL_OS_DATA?.days || []).forEach(d => {
       (d.attached_documents || []).forEach(doc => {
-        if (doc.doc_id === docId) found = doc;
+        if (doc.doc_id === docId) item = doc;
       });
     });
-    if (found) {
-      title.innerText = found.title;
-      body.innerHTML = `
-        <div class="p-4 bg-slate-900 rounded-xl border border-slate-700 text-sm">
-          <p class="text-slate-300"><b>Document Reference:</b> ${found.ref}</p>
-          <p class="text-slate-300"><b>Category:</b> ${found.category}</p>
-          <p class="text-emerald-400 font-bold mt-2">Status: ${found.badge || 'CONFIRMED'}</p>
-        </div>
-      `;
-      modal.classList.remove('hidden');
-      return;
-    }
   }
 
-  title.innerText = item?.title || 'Travel Document Details';
+  const docTitle = item?.title || 'Travel Document Reference';
+  const docRef = item?.reference_code || item?.ref || 'VERIFIED';
+  const hasRealFile = Boolean(item?.file_path);
+
+  title.innerText = docTitle;
   body.innerHTML = `
-    <div class="space-y-3 text-sm">
-      <div class="p-3 bg-blue-950/40 rounded-xl border border-blue-700/40">
-        <span class="text-xs text-blue-300 uppercase tracking-wider font-bold">Verified Reference</span>
-        <p class="text-lg font-mono text-white font-bold mt-0.5">${item?.reference_code || 'VERIFIED'}</p>
+    <div class="space-y-3 text-xs">
+      <div class="p-3 bg-blue-950/50 rounded-xl border border-blue-700/50">
+        <span class="text-[10px] text-blue-300 uppercase tracking-wider font-bold">Booking Reference / Pass Code</span>
+        <p class="text-base font-mono text-white font-bold mt-0.5">${docRef}</p>
       </div>
-      <div class="grid grid-cols-2 gap-2 text-xs">
-        <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700/60">
-          <span class="text-slate-400">Date:</span>
-          <p class="font-semibold text-slate-200">${item?.date || 'Sep 2026'}</p>
+
+      <div class="p-3 bg-amber-950/40 rounded-xl border border-amber-600/40 text-amber-200">
+        <div class="font-bold flex items-center gap-1.5 mb-1">
+          <span>⚠️</span> Physical / PDF File Status:
         </div>
-        <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700/60">
-          <span class="text-slate-400">Category:</span>
-          <p class="font-semibold text-slate-200">${item?.file_category || 'Travel Pass'}</p>
-        </div>
+        <p class="text-[11px] leading-relaxed">
+          ${hasRealFile 
+            ? `<span class="text-emerald-400 font-bold">✓ Verified file on disk: ${item.file_name}</span>`
+            : `<b>No physical ticket or PDF has been downloaded from Gmail yet.</b> This booking was entered via your confirmed profile code (${docRef}), but the actual mail confirmation or PDF voucher has not been ingested.`
+          }
+        </p>
       </div>
-      <div class="bg-slate-900 p-3 rounded-lg border border-slate-700/60 text-xs text-slate-300">
-        <p class="font-semibold text-slate-200 mb-1">Logistics & Instructions:</p>
-        <p>${item?.details || 'Present digital or printed voucher at counter upon arrival.'}</p>
-      </div>
-      <div class="p-3 rounded-lg bg-emerald-950/30 border border-emerald-500/30 flex items-center justify-between text-xs">
-        <span class="text-emerald-300 font-medium">Digital Pass File:</span>
-        <span class="font-mono text-slate-300">${item?.file_name || 'pass.pdf'}</span>
+
+      <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-slate-300 space-y-1.5">
+        <div class="font-bold text-white">How to attach your actual PDF ticket:</div>
+        <p>1. <b>Manual Drop:</b> Place your PDF voucher or TDAC screenshot into the project folder: <code class="bg-slate-800 px-1 py-0.5 rounded text-blue-300">flight_itiniery/documents/</code></p>
+        <p>2. <b>Gmail Ingestion:</b> Configure Gmail credentials in <code class="bg-slate-800 px-1 py-0.5 rounded text-blue-300">.env</code> to let the orchestrator scrape and download your attachments automatically.</p>
       </div>
     </div>
   `;
