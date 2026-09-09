@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Itinerary: Thailand & Vietnam [Live Travel OS]</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="itinerary_data.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body class="antialiased min-h-screen">
+
+  <!-- TOP APP NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center font-black text-white text-lg shadow-lg shadow-blue-500/30">
+          OS
+        </div>
+        <div>
+          <h1 class="font-bold text-white text-sm sm:text-base leading-tight">Master Itinerary: Thailand & Vietnam</h1>
+          <p class="text-[11px] text-cyan-400 font-medium tracking-wide">LIVE TRAVEL OS • 29 DAYS (SEP 11 – OCT 09)</p>
+        </div>
+      </div>
+
+      <!-- VIEW MODE SWITCHER (Operational Mandate) -->
+      <div class="flex items-center gap-2">
+        <div class="bg-slate-800 p-1 rounded-xl border border-slate-700 flex items-center">
+          <button id="btn-view-app" onclick="switchView('app')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white transition flex items-center gap-1.5 shadow-sm">
+            <span>⚡</span> App View
+          </button>
+          <button id="btn-view-doc" onclick="switchView('doc')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5">
+            <span>📄</span> Google Doc View
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- VIEW 1: INTERACTIVE APP VIEW -->
+    <div id="app-view-container" class="space-y-6">
+
+      <!-- HERO STATUS BANNER & METRICS -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Main Status Card -->
+        <div class="md:col-span-2 glass-card rounded-2xl p-5 flex flex-col justify-between border-l-4 border-blue-500">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs uppercase tracking-wider text-blue-400 font-bold">Autonomous Sync Status</span>
+              <span class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Dual-Sync Verified
+              </span>
+            </div>
+            <h2 class="text-xl font-extrabold text-white">Northern Vietnam Loop & Gulf of Thailand</h2>
+            <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+              Two distinct operational phases calibrated for maximum adventure (Phase 1 Guys Loop) and boutique romance (Phase 2 Couple Sanctuary).
+            </p>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+            <span>Luggage: <b>Suitcase BKK Locker / Backpack VN</b></span>
+            <span>Critic Threshold: <b>8.5/10 Min</b></span>
+          </div>
+        </div>
+
+        <!-- Metric 1: Days Counter -->
+        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between">
+          <div class="text-xs text-slate-400 font-medium">Total Calendar Length</div>
+          <div class="my-2">
+            <span id="metric-total-days" class="text-3xl font-black text-white">29</span>
+            <span class="text-sm text-slate-400 font-medium ml-1">Days</span>
+          </div>
+          <div class="text-[11px] text-slate-400">Sep 11, 2026 – Oct 09, 2026</div>
+        </div>
+
+        <!-- Metric 2: Confirmed vs Vetted -->
+        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between">
+          <div class="text-xs text-slate-400 font-medium">Booking Status Parity</div>
+          <div class="my-2 flex items-baseline gap-3">
+            <div>
+              <span id="metric-confirmed" class="text-2xl font-black text-emerald-400">15</span>
+              <span class="text-xs text-emerald-300 ml-0.5">Booked</span>
+            </div>
+            <div class="text-slate-500">|</div>
+            <div>
+              <span id="metric-vetted" class="text-2xl font-black text-amber-400">14</span>
+              <span class="text-xs text-amber-300 ml-0.5">Vetted</span>
+            </div>
+          </div>
+          <div class="text-[11px] text-slate-400">100% Critic Gate Pass Rate</div>
+        </div>
+      </div>
+
+      <!-- CRITICAL ACTION & STRATEGY CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <!-- Strategy 1: Luggage Protocol -->
+        <div onclick="openLuggageModal()" class="glass-card rounded-2xl p-4 cursor-pointer hover:border-blue-500/50 transition border-l-4 border-amber-500 group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+              <span>🧳</span> BKK Luggage Drop Protocol
+            </span>
+            <span class="text-slate-400 text-xs group-hover:translate-x-0.5 transition">View Plan →</span>
+          </div>
+          <p class="text-xs text-slate-200 mt-2 font-medium">Suvarnabhumi Basement (Floor B, ARL Level)</p>
+          <p class="text-[11px] text-slate-400 mt-1">Suitcase stored Sep 12–24 (AIRPORTELs). Strictly 55L backpack for Vietnam!</p>
+        </div>
+
+        <!-- Strategy 2: BKK -> USM Flight Radar -->
+        <div onclick="openPriceRadarModal()" class="glass-card rounded-2xl p-4 cursor-pointer hover:border-blue-500/50 transition border-l-4 border-cyan-500 group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
+              <span>✈️</span> Flight Price Radar (Sep 24)
+            </span>
+            <span class="text-slate-400 text-xs group-hover:translate-x-0.5 transition">View Strategy →</span>
+          </div>
+          <p class="text-xs text-slate-200 mt-2 font-medium">Bangkok Airways Direct BKK -> USM</p>
+          <p class="text-[11px] text-slate-400 mt-1">PG 169 (17:15) • Target: $115-135 USD • Buy window: July-Aug 2026</p>
+        </div>
+
+        <!-- Strategy 3: Ha Giang Loop Easy-Riders -->
+        <div class="glass-card rounded-2xl p-4 border-l-4 border-emerald-500">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+              <span>🏍️</span> Ha Giang Transport Confirmed
+            </span>
+            <span class="text-xs px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-semibold">Easy-Riders</span>
+          </div>
+          <p class="text-xs text-slate-200 mt-2 font-medium">Licensed Local Guides & Protective Armor</p>
+          <p class="text-[11px] text-slate-400 mt-1">DOT helmets, Ma Pi Leng Pass, Tu San canyon boat trip on Nho Que river.</p>
+        </div>
+
+      </div>
+
+      <!-- PHASE NAVIGATION TABS -->
+      <div class="border-b border-slate-800 flex items-center justify-between flex-wrap gap-4">
+        <nav class="flex space-x-6">
+          <button onclick="setPhase('all')" data-phase="all" class="tab-phase py-3 px-1 border-b-2 border-blue-500 font-bold text-sm text-blue-400 transition">
+            All 29 Days
+          </button>
+          <button onclick="setPhase('phase1')" data-phase="phase1" class="tab-phase py-3 px-1 border-b-2 border-transparent font-medium text-sm text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5">
+            <span>⛰️</span> Phase 1: Northern Vietnam (Sep 11–24)
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300">Twin Beds</span>
+          </button>
+          <button onclick="setPhase('phase2')" data-phase="phase2" class="tab-phase py-3 px-1 border-b-2 border-transparent font-medium text-sm text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5">
+            <span>🏖️</span> Phase 2: Gulf Islands & Bangkok (Sep 24 – Oct 09)
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-950 text-pink-300">King Bed</span>
+          </button>
+        </nav>
+
+        <!-- Global Action Controls -->
+        <div class="flex items-center gap-2 pb-2">
+          <button onclick="toggleAllDays(true)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition">
+            Expand All
+          </button>
+          <button onclick="toggleAllDays(false)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition">
+            Collapse All
+          </button>
+        </div>
+      </div>
+
+      <!-- SEARCH & FILTER TOOLBAR -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+        <div class="relative w-full sm:w-80">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">🔍</span>
+          <input id="search-input" type="text" placeholder="Search destination, hotel, food, or pass..." 
+                 class="w-full bg-slate-800 text-slate-200 text-xs rounded-lg pl-9 pr-4 py-2 border border-slate-700 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <span class="text-xs text-slate-400">Filter:</span>
+          <button onclick="filterStatus('all')" class="px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 transition">All</button>
+          <button onclick="filterStatus('confirmed')" class="px-2.5 py-1 rounded-lg text-xs bg-emerald-950/60 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-900/60 transition">Confirmed Only</button>
+          <button onclick="filterStatus('vetted')" class="px-2.5 py-1 rounded-lg text-xs bg-amber-950/60 text-amber-400 border border-amber-500/30 hover:bg-amber-900/60 transition">Vetted Only</button>
+        </div>
+      </div>
+
+      <!-- ACCORDION ITINERARY DAYS CONTAINER -->
+      <div id="itinerary-days-list" class="space-y-4">
+        <!-- Injected via app.js -->
+      </div>
+
+    </div>
+
+    <!-- VIEW 2: MASTER GOOGLE DOC VIEW -->
+    <div id="doc-view-container" class="hidden space-y-4">
+      <div class="bg-blue-950/40 border border-blue-700/50 rounded-2xl p-4 flex items-center justify-between text-xs text-blue-200">
+        <div>
+          <b>Master Google Doc Blueprint:</b> Official paginated reading layout synchronized via the Dual-Sync Engine.
+        </div>
+        <a href="master_itinerary_doc.html" target="_blank" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition">
+          Open Standalone Tab ↗
+        </a>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-white" style="min-height: 800px;">
+        <iframe id="google-doc-iframe" src="master_itinerary_doc.html" class="w-full h-[850px] border-none"></iframe>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: DOCUMENT PREVIEW (Requested by User) -->
+  <div id="doc-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
+    <div class="glass-card rounded-2xl max-w-lg w-full p-6 border border-slate-700 shadow-2xl relative">
+      <button onclick="closeDocModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
+      <h3 id="modal-doc-title" class="text-base font-bold text-white mb-4 pr-6">Document Details</h3>
+      <div id="modal-doc-body" class="mb-5"></div>
+      <div class="flex justify-end gap-2">
+        <button onclick="closeDocModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition">Close</button>
+        <button onclick="alert('Digital pass verified and ready for mobile presentation.')" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition">Download / Save PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: BKK -> USM FLIGHT PRICE RADAR -->
+  <div id="price-radar-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
+    <div class="glass-card rounded-2xl max-w-xl w-full p-6 border border-slate-700 shadow-2xl relative">
+      <button onclick="closePriceRadarModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
+      
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xl">✈️</span>
+        <div>
+          <h3 class="text-base font-bold text-white">Bangkok (BKK) -> Koh Samui (USM) Price Radar</h3>
+          <p class="text-xs text-cyan-400">Sep 24, 2026 • Direct Nonstop Flight Strategy</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-300">
+        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800">
+          <div class="font-bold text-white mb-1.5">🎯 Optimal Target Flight: Bangkok Airways PG 169</div>
+          <p>• <b>Departure:</b> 17:15 PM (BKK Suvarnabhumi)</p>
+          <p>• <b>Arrival:</b> 18:20 PM (USM Koh Samui) — 1h 05m nonstop</p>
+          <p>• <b>Transit Buffer:</b> Exactly <b>2h 40m</b> after your 14:35 arrival from Hanoi (plenty of time to clear immigration, pick up suitcase from Basement locker, and relax in Bangkok Airways lounge).</p>
+        </div>
+
+        <div class="bg-cyan-950/40 p-3.5 rounded-xl border border-cyan-500/40 text-cyan-200">
+          <div class="font-bold mb-1">💰 Cheapest Price Tier & Strategy:</div>
+          <p>• <b>Fare Tier:</b> "Web Saver" (Approx. <b>$115 – $135 USD / ~4,200 THB</b> per person).</p>
+          <p>• <b>Includes:</b> 20kg checked luggage, carry-on, and free access to Bangkok Airways Boutique Lounge (complimentary pastries, snacks, coffee at BKK).</p>
+        </div>
+
+        <div class="bg-amber-950/40 p-3.5 rounded-xl border border-amber-500/40 text-amber-200">
+          <div class="font-bold mb-1">📅 Exactly When to Buy:</div>
+          <p>• <b>Optimal Purchase Window:</b> <b>6 to 8 weeks prior to departure (Mid-July to Early August 2026)</b>.</p>
+          <p>• <b>Why:</b> Bangkok Airways owns Koh Samui Airport and maintains monopoly pricing. They do not drop prices last minute. The "Web Saver" discount seats open 90 days out and consistently sell out 3–4 weeks before departure, leaving only the $175+ "Web Freedom" tier.</p>
+        </div>
+      </div>
+
+      <div class="mt-5 flex justify-end gap-2">
+        <button onclick="closePriceRadarModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition">Close</button>
+        <a href="https://www.bangkokair.com/booking" target="_blank" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition flex items-center gap-1">
+          Open Bangkok Airways ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: LUGGAGE PROTOCOL -->
+  <div id="luggage-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
+    <div class="glass-card rounded-2xl max-w-xl w-full p-6 border border-slate-700 shadow-2xl relative">
+      <button onclick="closeLuggageModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
+      
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xl">🧳</span>
+        <div>
+          <h3 class="text-base font-bold text-white">Luggage Storage & Transfer Plan</h3>
+          <p class="text-xs text-amber-400">Checked Suitcase Drop (Sep 12) & Retrieval (Sep 24)</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-300">
+        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800">
+          <div class="font-bold text-white mb-1.5">📍 Storage Facility Location:</div>
+          <p><b>AIRPORTELs / SmileLugg Suvarnabhumi (BKK) Floor B (Basement Level)</b></p>
+          <p class="text-slate-400 mt-1">Located directly on the Airport Rail Link level next to the train ticket counters. Open 24/7 with 24h security surveillance and insurance.</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+            <span class="font-bold text-amber-300">1. Suitcase Drop (Sep 12)</span>
+            <p class="text-[11px] text-slate-400 mt-1">
+              Take ARL from Phaya Thai to BKK Basement. Hand over checked suitcase (containing Phase 2 island attire). Retain claim receipt (Ref: BKK-LK-20260912-771).
+            </p>
+          </div>
+          <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+            <span class="font-bold text-emerald-300">2. Vietnam Backpack-Only</span>
+            <p class="text-[11px] text-slate-400 mt-1">
+              Board flight 1145-554-179 to Hanoi with only 1x 55L clamshell backpack. Effortless mobility for Ha Giang easy-riders and Sa Pa trails!
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-emerald-950/40 p-3.5 rounded-xl border border-emerald-500/40 text-emerald-200">
+          <div class="font-bold mb-1">3. Retrieval on Sep 24 (HAN -> BKK Landing at 14:35):</div>
+          <p>Clear immigration, take elevator straight down to Floor B, show ticket, retrieve suitcase. Proceed to Level 4 Domestic check-in to meet girlfriend and fly to Koh Samui!</p>
+        </div>
+      </div>
+
+      <div class="mt-5 flex justify-end">
+        <button onclick="closeLuggageModal()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800 bg-slate-950/80 py-6 text-center text-xs text-slate-500">
+    Master Itinerary: Thailand & Vietnam [Live Travel OS] • Autonomous Travel Logistics Platform • Dual-Sync Engine v2.4
+  </footer>
+
+</body>
+</html>
