@@ -332,7 +332,11 @@ class GoogleWorkspaceSync:
             if docs:
                 html += """    <div style="margin: 8px 0;"><b>📎 Attached Documents & Passes:</b> """
                 for d in docs:
-                    html += f"""<span class="badge-doc">📄 {d.get('title')} ({d.get('ref')})</span> """
+                    f_path = d.get('file_path')
+                    if f_path:
+                        html += f"""<a href="{f_path}" target="_blank" download class="badge-doc" style="background:#e6f4ea; color:#137333; text-decoration:none; border:1px solid #ceead6; font-weight:bold; padding:3px 8px; border-radius:4px; display:inline-block; margin:2px;">📥 📄 {d.get('title')} ({d.get('ref')}) [Download PDF]</a> """
+                    else:
+                        html += f"""<span class="badge-doc">📄 {d.get('title')} ({d.get('ref')}) [Awaiting File]</span> """
                 html += """</div>\n"""
 
             if hotels:

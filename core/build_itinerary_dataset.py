@@ -67,16 +67,20 @@ def build_itinerary():
                 {
                     "doc_id": "DOC-TDAC-30C4358",
                     "title": "Thailand Digital Arrival Card (TDAC)",
-                    "ref": "#30C4358",
-                    "status": "Awaiting Gmail Sync / Local File Drop",
-                    "badge": "CONFIRMED DETAILS"
+                    "ref": "TDAC #30C4358",
+                    "status": "Verified Official Document (Gmail)",
+                    "badge": "CONFIRMED & DOWNLOADED",
+                    "file_path": "documents/TDAC_Arrival_Card_30C4358.pdf",
+                    "file_name": "TDAC_Arrival_Card_30C4358.pdf"
                 },
                 {
                     "doc_id": "HOTEL-SUKHON-697155847",
-                    "title": "Sukhon Hotel Bangkok Confirmation",
+                    "title": "Sukhon Hotel Bangkok (Agoda Voucher)",
                     "ref": "Booking: 697155847",
-                    "status": "Awaiting Gmail Sync / Local File Drop",
-                    "badge": "CONFIRMED BOOKING"
+                    "status": "Verified Official Voucher (Gmail)",
+                    "badge": "CONFIRMED & DOWNLOADED",
+                    "file_path": "documents/Sukhon_Hotel_Agoda_697155847.pdf",
+                    "file_name": "Sukhon_Hotel_Agoda_697155847.pdf"
                 }
             ],
             "google_maps_links": [
@@ -147,9 +151,11 @@ def build_itinerary():
                 {
                     "doc_id": "FLIGHT-BKK-HAN-1145554179",
                     "title": "Flight: Bangkok (BKK) -> Hanoi (HAN)",
-                    "ref": "Booking: 1145-554-179",
-                    "status": "Awaiting Gmail Sync / Local File Drop",
-                    "badge": "CONFIRMED FLIGHT"
+                    "ref": "Mytrip: 1145-554-179",
+                    "status": "Verified Flight E-Ticket / Receipt (Gmail)",
+                    "badge": "CONFIRMED & DOWNLOADED",
+                    "file_path": "documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf",
+                    "file_name": "Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf"
                 }
             ],
             "google_maps_links": [
@@ -819,9 +825,11 @@ def build_itinerary():
                 {
                     "doc_id": "FLIGHT-HAN-BKK-1145554179",
                     "title": "Flight: Hanoi (HAN) -> Bangkok (BKK)",
-                    "ref": "Booking: 1145-554-179",
-                    "status": "Awaiting Gmail Sync / Local File Drop",
-                    "badge": "CONFIRMED FLIGHT"
+                    "ref": "Mytrip: 1145-554-179",
+                    "status": "Verified Flight E-Ticket / Receipt (Gmail)",
+                    "badge": "CONFIRMED & DOWNLOADED",
+                    "file_path": "documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf",
+                    "file_name": "Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf"
                 }
             ],
             "google_maps_links": [
@@ -1287,11 +1295,22 @@ def build_itinerary():
             ],
             "attached_documents": [
                 {
-                    "doc_id": "FLIGHT-BKK-TLV-9KDEH2",
-                    "title": "Flight: Bangkok (BKK) -> Tel Aviv (TLV) via AUH",
-                    "ref": "Booking: 9KDEH2",
-                    "status": "Awaiting Gmail Sync / Local File Drop",
-                    "badge": "CONFIRMED FLIGHT"
+                    "doc_id": "FLIGHT-BKK-TLV-9KDEH2-EYAL",
+                    "title": "Etihad Airways E-Ticket (Eyal Andreson)",
+                    "ref": "Etihad: 9KDEH2",
+                    "status": "Verified Official E-Ticket (Gmail)",
+                    "badge": "CONFIRMED & DOWNLOADED",
+                    "file_path": "documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf",
+                    "file_name": "Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf"
+                },
+                {
+                    "doc_id": "FLIGHT-BKK-TLV-9KDEH2-MARIA",
+                    "title": "Etihad Airways E-Ticket (Maria Miriam Malayev)",
+                    "ref": "Etihad: 9KDEH2",
+                    "status": "Verified Official E-Ticket (Gmail)",
+                    "badge": "CONFIRMED & DOWNLOADED",
+                    "file_path": "documents/Etihad_BKK_TLV_9KDEH2_Maria_Miriam_Malayev.pdf",
+                    "file_name": "Etihad_BKK_TLV_9KDEH2_Maria_Miriam_Malayev.pdf"
                 }
             ],
             "google_maps_links": [

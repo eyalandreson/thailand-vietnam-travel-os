@@ -205,12 +205,15 @@ function renderDays() {
 
     let docsHtml = '';
     (day.attached_documents || []).forEach(doc => {
+      const isVerified = Boolean(doc.file_path);
       docsHtml += `
-        <button onclick="openDocModal('${doc.doc_id}')" class="doc-pill text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer bg-slate-800/80 border border-slate-700 hover:border-blue-400">
-          <span>📎</span>
+        <button onclick="openDocModal('${doc.doc_id}')" class="doc-pill text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer ${isVerified ? 'bg-emerald-950/40 border-emerald-600/50 hover:border-emerald-400' : 'bg-slate-800/80 border-slate-700 hover:border-blue-400'} border transition">
+          <span>${isVerified ? '📄' : '📎'}</span>
           <span class="font-medium text-slate-200">${doc.title}</span>
-          <span class="text-amber-400 text-[11px] font-mono">(${doc.ref})</span>
-          <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-900/40 text-amber-300 border border-amber-600/40">File Pending</span>
+          <span class="text-blue-300 text-[11px] font-mono">(${doc.ref})</span>
+          ${isVerified 
+            ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-900/60 text-emerald-300 border border-emerald-500/50 font-semibold">✓ Download PDF</span>` 
+            : `<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-300 border border-amber-600/40">File Pending</span>`}
         </button>
       `;
     });
@@ -411,23 +414,39 @@ function openDocModal(docId) {
         <p class="text-base font-mono text-white font-bold mt-0.5">${docRef}</p>
       </div>
 
-      <div class="p-3 bg-amber-950/40 rounded-xl border border-amber-600/40 text-amber-200">
-        <div class="font-bold flex items-center gap-1.5 mb-1">
-          <span>⚠️</span> Physical / PDF File Status:
-        </div>
-        <p class="text-[11px] leading-relaxed">
-          ${hasRealFile 
-            ? `<span class="text-emerald-400 font-bold">✓ Verified file on disk: ${item.file_name}</span>`
-            : `<b>No physical ticket or PDF has been downloaded from Gmail yet.</b> This booking was entered via your confirmed profile code (${docRef}), but the actual mail confirmation or PDF voucher has not been ingested.`
-          }
-        </p>
-      </div>
+      ${hasRealFile 
+        ? `
+          <div class="p-3.5 bg-emerald-950/60 rounded-xl border border-emerald-500/60 text-emerald-200 space-y-2">
+            <div class="font-bold flex items-center gap-1.5 text-emerald-300 text-sm">
+              <span>✓</span> Genuine Attachment Verified from Gmail
+            </div>
+            <p class="text-[11px] text-slate-300">
+              Extracted from official airline / immigration / hotel email into project repository.
+            </p>
+            <div class="pt-1">
+              <a href="${item.file_path}" target="_blank" download class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs shadow-lg transition">
+                <span>📥</span> Download / View PDF (${item.file_name || 'Document'})
+              </a>
+            </div>
+          </div>
+        `
+        : `
+          <div class="p-3 bg-amber-950/40 rounded-xl border border-amber-600/40 text-amber-200">
+            <div class="font-bold flex items-center gap-1.5 mb-1">
+              <span>⚠️</span> Physical / PDF File Status:
+            </div>
+            <p class="text-[11px] leading-relaxed">
+              <b>No physical ticket or PDF has been downloaded from Gmail yet.</b> This booking was entered via your confirmed profile code (${docRef}), but the actual mail confirmation or PDF voucher has not been ingested.
+            </p>
+          </div>
 
-      <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-slate-300 space-y-1.5">
-        <div class="font-bold text-white">How to attach your actual PDF ticket:</div>
-        <p>1. <b>Manual Drop:</b> Place your PDF voucher or TDAC screenshot into the project folder: <code class="bg-slate-800 px-1 py-0.5 rounded text-blue-300">flight_itiniery/documents/</code></p>
-        <p>2. <b>Gmail Ingestion:</b> Configure Gmail credentials in <code class="bg-slate-800 px-1 py-0.5 rounded text-blue-300">.env</code> to let the orchestrator scrape and download your attachments automatically.</p>
-      </div>
+          <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-slate-300 space-y-1.5">
+            <div class="font-bold text-white">How to attach your actual PDF ticket:</div>
+            <p>1. <b>Manual Drop:</b> Place your PDF voucher into <code class="bg-slate-800 px-1 py-0.5 rounded text-blue-300">flight_itiniery/documents/</code></p>
+            <p>2. <b>Gmail Ingestion:</b> Configured via <code class="bg-slate-800 px-1 py-0.5 rounded text-blue-300">.env</code>.</p>
+          </div>
+        `
+      }
     </div>
   `;
   modal.classList.remove('hidden');
