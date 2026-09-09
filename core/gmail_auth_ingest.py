@@ -29,10 +29,11 @@ class GmailLiveIngestion:
             "697155847",
             "1145-554-179",
             "9KDEH2",
-            "Sukhon Hotel",
+            "Sukhon",
             "Thailand Digital Arrival Card",
             "TDAC",
             "Bangkok Airways",
+            "Etihad",
             "12Go Asia"
         ]
 
@@ -41,7 +42,7 @@ class GmailLiveIngestion:
         Scans documents/ folder for actual files present on disk.
         """
         found_files = []
-        valid_exts = {".pdf", ".png", ".jpg", ".jpeg", ".webp", ".doc", ".docx", ".pkpass"}
+        valid_exts = {".pdf", ".png", ".jpg", ".jpeg", ".webp", ".doc", ".docx", ".pkpass", ".html"}
         if os.path.exists(DOCS_DIR):
             for fname in os.listdir(DOCS_DIR):
                 fpath = os.path.join(DOCS_DIR, fname)
@@ -67,12 +68,14 @@ class GmailLiveIngestion:
     def fetch_via_imap(self, username: str, app_password: str) -> List[Dict[str, Any]]:
         """
         Connects to imap.gmail.com, searches for travel confirmations,
-        and saves genuine attachments to documents/.
+        and saves genuine attachments to documents/. If no attachment,
+        saves the full confirmation email as a viewable HTML document.
         """
         downloaded = []
         try:
+            clean_pwd = app_password.replace(" ", "")
             mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
-            mail.login(username, app_password)
+            mail.login(username, clean_pwd)
             mail.select("inbox")
 
             for query in self.target_queries:
@@ -87,41 +90,73 @@ class GmailLiveIngestion:
 
                     raw_email = msg_data[0][1]
                     msg = email.message_from_bytes(raw_email)
-                    subject, encoding = decode_header(msg["Subject"])[0]
+                    subject, encoding = decode_header(msg.get("Subject", "No Subject"))[0]
                     if isinstance(subject, bytes):
                         subject = subject.decode(encoding or "utf-8", errors="ignore")
 
-                    # Extract attachments
+                    has_attachment = False
+                    html_body = None
+                    text_body = None
+
+                    # Extract attachments & body
                     for part in msg.walk():
-                        if part.get_content_maintype() == 'multipart':
-                            continue
-                        if part.get('Content-Disposition') is None:
-                            continue
+                        content_type = part.get_content_type()
+                        content_disposition = str(part.get('Content-Disposition') or "")
 
-                        filename = part.get_filename()
-                        if filename:
-                            fname_decoded, f_enc = decode_header(filename)[0]
-                            if isinstance(fname_decoded, bytes):
-                                fname_decoded = fname_decoded.decode(f_enc or "utf-8", errors="ignore")
+                        if "attachment" in content_disposition:
+                            filename = part.get_filename()
+                            if filename:
+                                fname_decoded, f_enc = decode_header(filename)[0]
+                                if isinstance(fname_decoded, bytes):
+                                    fname_decoded = fname_decoded.decode(f_enc or "utf-8", errors="ignore")
 
-                            # Save file to documents/
-                            clean_name = "".join(c for c in fname_decoded if c.isalnum() or c in "._- ")
-                            save_path = os.path.join(DOCS_DIR, clean_name)
-                            with open(save_path, "wb") as f:
-                                f.write(part.get_payload(decode=True))
+                                # Save file to documents/
+                                clean_name = "".join(c for c in fname_decoded if c.isalnum() or c in "._- ")
+                                save_path = os.path.join(DOCS_DIR, clean_name)
+                                with open(save_path, "wb") as f:
+                                    f.write(part.get_payload(decode=True))
 
-                            downloaded.append({
-                                "file_name": clean_name,
-                                "subject": subject,
-                                "query_matched": query,
-                                "save_path": save_path
-                            })
+                                has_attachment = True
+                                downloaded.append({
+                                    "file_name": clean_name,
+                                    "subject": subject,
+                                    "query_matched": query,
+                                    "save_path": save_path
+                                })
+                        elif content_type == "text/html":
+                            try:
+                                html_body = part.get_payload(decode=True).decode(part.get_content_charset() or "utf-8", errors="ignore")
+                            except Exception:
+                                pass
+                        elif content_type == "text/plain":
+                            try:
+                                text_body = part.get_payload(decode=True).decode(part.get_content_charset() or "utf-8", errors="ignore")
+                            except Exception:
+                                pass
+
+                    # If no attachment was found but email is a confirmed booking, save body as HTML
+                    if not has_attachment and (html_body or text_body):
+                        safe_title = "".join(c for c in subject if c.isalnum() or c in "_- ").strip()[:50]
+                        file_name = f"{query}_{safe_title}.html"
+                        save_path = os.path.join(DOCS_DIR, file_name)
+                        content = html_body if html_body else f"<pre>{text_body}</pre>"
+                        with open(save_path, "w", encoding="utf-8") as f:
+                            f.write(content)
+
+                        downloaded.append({
+                            "file_name": file_name,
+                            "subject": subject,
+                            "query_matched": query,
+                            "save_path": save_path
+                        })
 
             mail.close()
             mail.logout()
         except Exception as e:
             print(f"[IMAP Notice] Could not connect to Gmail via IMAP: {e}")
 
+        # Sync local folder to web/documents/
+        self.scan_local_documents_folder()
         return downloaded
 
 if __name__ == "__main__":
