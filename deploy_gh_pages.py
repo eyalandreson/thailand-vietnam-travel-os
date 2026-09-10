@@ -108,11 +108,9 @@ def deploy():
         requests.put(pages_url, headers=headers, json=pages_payload)
 
     live_url = f"https://{username}.github.io/{repo_name}/"
-    print("\n" + "="*70)
-    print(f"🚀 LIVE DEPLOYMENT COMPLETE!")
+    print("LIVE DEPLOYMENT COMPLETE!")
+    print(f"Web Dashboard Live URL: https://{username}.github.io/{repo_name}/")
     print(f"GitHub Repository: https://github.com/{repo_full}")
-    print(f"Live Web Application URL: {live_url}")
-    print("="*70 + "\n")
     return True
 
 if __name__ == "__main__":
