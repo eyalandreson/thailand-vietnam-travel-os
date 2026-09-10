@@ -55,18 +55,18 @@
     </button>
   </div>
 
-  <!-- TOP APP NAVIGATION BAR -->
+  <!-- TOP APP NAVIGATION BAR & INTEGRATED DATE SCRUBBER -->
   <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
       
       <!-- Brand & Title -->
-      <div class="flex items-center gap-3 shrink-0">
-        <div class="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center font-black text-white text-base shadow-sm">
+      <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-blue-600 flex items-center justify-center font-black text-white text-sm sm:text-base shadow-sm">
           OS
         </div>
         <div>
-          <h1 class="font-extrabold text-slate-900 dark:text-white text-sm sm:text-base leading-tight tracking-tight">Master Itinerary: Thailand &amp; Vietnam</h1>
-          <p class="text-[11px] sm:text-xs text-blue-600 dark:text-cyan-400 font-semibold tracking-wide uppercase truncate">29 Days • Sep 11 – Oct 09</p>
+          <h1 class="font-extrabold text-slate-900 dark:text-white text-xs sm:text-base leading-tight tracking-tight">Master Itinerary: Thailand &amp; Vietnam</h1>
+          <p class="text-[10px] sm:text-xs text-blue-600 dark:text-cyan-400 font-semibold tracking-wide uppercase truncate">29 Days • Sep 11 – Oct 09</p>
         </div>
       </div>
 
@@ -106,6 +106,17 @@
       </div>
 
     </div>
+
+    <!-- INTEGRATED 29-DAY DATE STRIP -->
+    <div class="border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-md px-3 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between gap-2 overflow-hidden">
+      <div class="flex items-center gap-1.5 shrink-0">
+        <span class="text-xs">📅</span>
+        <span id="active-day-label" class="text-[11px] sm:text-xs font-bold text-blue-600 dark:text-sky-400 font-mono truncate max-w-[130px] sm:max-w-none">Day 1 • Bangkok</span>
+      </div>
+      <div id="timeline-scrubber-list" class="timeline-scrubber sticky-scrubber-strip flex-1 overflow-x-auto">
+        <!-- Dynamically populated by renderTimelineScrubber() in app.js -->
+      </div>
+    </div>
   </header>
 
   <!-- MAIN APP CONTAINER -->
@@ -114,227 +125,178 @@
     <!-- VIEW 1: INTERACTIVE APP VIEW -->
     <div id="app-view-container" class="space-y-6">
 
-      <!-- EXECUTIVE HUD & METRICS -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-        <!-- Main Status Card -->
-        <div class="md:col-span-2 travel-card rounded-2xl p-5 sm:p-6 flex flex-col justify-between border-l-4 border-blue-600 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+      <!-- EXPEDITION OVERVIEW CARD & OPERATIONS DRAWER -->
+      <div class="travel-card rounded-2xl p-4 sm:p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <div class="flex items-center justify-between mb-1.5 flex-wrap gap-2">
-              <span class="text-[11px] uppercase tracking-wider text-blue-400 font-bold flex items-center gap-1.5">
-                <span>⚡</span> Autonomous Operations HUD
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              <span class="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-semibold border border-emerald-300 dark:border-emerald-500/40">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Confirmed Bookings Synced
               </span>
-              <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 font-semibold">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Dual-Sync Verified
-                </span>
-                <span class="text-[11px] px-2 py-0.5 rounded-full bg-indigo-950/80 border border-indigo-500/40 text-indigo-300 font-mono hidden sm:inline-block">
-                  Press ⌘K for Gemini
-                </span>
-              </div>
+              <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Sep 11 – Oct 09 • 29 Days</span>
             </div>
-            <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">Master Itinerary: Thailand & Vietnam</h2>
-            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
-              29-Day Dual-Phase State Machine • <b>Phase 1:</b> Northern Vietnam Guys Adventure (Twin Beds) • <b>Phase 2:</b> Gulf Islands Couple Sanctuary (Romantic King).
+            <h2 class="text-lg sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              🌴 Thailand &amp; Vietnam Expedition
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+              <span class="font-medium text-amber-700 dark:text-amber-300">Phase 1:</span> Northern Vietnam Guys Adventure (Days 1–13) • 
+              <span class="font-medium text-pink-700 dark:text-pink-300">Phase 2:</span> Gulf Islands Couple Sanctuary (Days 14–29)
             </p>
           </div>
 
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 flex-wrap gap-2">
-            <span>Luggage: <b class="text-amber-300">Suitcase BKK Floor B / 55L Backpack VN</b></span>
-            <span>Critic Gate: <b class="text-emerald-400">&ge; 8.5/10 Enforced</b></span>
-          </div>
-        </div>
-
-        <!-- Metric & Parity Card -->
-        <div class="travel-card rounded-2xl p-5 sm:p-6 flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div class="flex items-center justify-between text-xs text-slate-400 font-medium">
-            <span>Calendar Length</span>
-            <span class="text-[11px] text-slate-500">Sep 11 – Oct 09</span>
-          </div>
-          <div class="my-1.5 flex items-baseline justify-between">
-            <div>
-              <span id="metric-total-days" class="text-3xl font-black text-slate-900 dark:text-white">29</span>
-              <span class="text-xs text-slate-400 font-medium ml-1">Days</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs">
-              <span class="px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 font-bold">
+          <!-- Quick Stats & Drawer Trigger -->
+          <div class="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-1.5 text-xs">
+              <span class="px-2.5 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 font-bold">
                 <span id="metric-confirmed">15</span> Booked
               </span>
-              <span class="px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-500/40 font-bold">
+              <span class="px-2.5 py-1 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 font-bold">
                 <span id="metric-vetted">14</span> Vetted
               </span>
             </div>
+            <button onclick="toggleOpsDrawer()" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 transition shadow-sm" title="Show flight risk radar, luggage protocols, and PDF tickets">
+              <span>⚡ Tools &amp; Tickets</span>
+              <svg id="ops-drawer-icon" class="w-4 h-4 transform transition-transform duration-200 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
           </div>
-          <div class="text-[11px] text-cyan-400 flex items-center justify-between border-t border-slate-800/80 pt-2 mt-1">
-            <span>6 Gmail Hard Anchors Locked</span>
-            <span class="font-semibold text-emerald-400">100% Critic Pass</span>
+        </div>
+
+        <!-- COLLAPSIBLE QUICK OPERATIONS & VERIFIED TICKETS DRAWER -->
+        <div id="ops-drawer-content" class="hidden mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-4">
+          <!-- 4 Quick Operations -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+            <!-- Op 1: Luggage Protocol -->
+            <button onclick="openLuggageModal()" class="travel-card rounded-xl p-3 text-left hover:border-amber-500/50 transition border-l-4 border-amber-500 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex flex-col justify-between">
+              <div class="flex items-center justify-between w-full">
+                <span class="text-xs font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                  <span>🧳</span> BKK Luggage Drop
+                </span>
+                <span class="text-[10px] text-slate-400">Plan →</span>
+              </div>
+              <p class="text-[11px] text-slate-700 dark:text-slate-300 mt-1 truncate">AIRPORTELs BKK Floor B</p>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Stored Sep 12–24 • 55L Backpack VN</p>
+            </button>
+
+            <!-- Op 2: Sep 24 Risk Radar -->
+            <button onclick="openPriceRadarModal()" class="travel-card rounded-xl p-3 text-left hover:border-rose-500/50 transition border-l-4 border-rose-500 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex flex-col justify-between">
+              <div class="flex items-center justify-between w-full">
+                <span class="text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                  <span>✈️</span> Sep 24 Risk Radar
+                </span>
+                <span class="text-[10px] text-slate-400">Audit →</span>
+              </div>
+              <p class="text-[11px] text-slate-700 dark:text-slate-300 mt-1 truncate">PG 169 (17:15) High Risk</p>
+              <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold truncate">Recommended: PG 177 / PG 181</p>
+            </button>
+
+            <!-- Op 3: Route Resilience -->
+            <button onclick="openRouteModal()" class="travel-card rounded-xl p-3 text-left hover:border-sky-500/50 transition border-l-4 border-sky-500 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex flex-col justify-between">
+              <div class="flex items-center justify-between w-full">
+                <span class="text-xs font-bold text-sky-600 dark:text-sky-400 flex items-center gap-1.5">
+                  <span>🔄</span> Route Optimization
+                </span>
+                <span class="text-[10px] text-slate-400">Compare →</span>
+              </div>
+              <p class="text-[11px] text-slate-700 dark:text-slate-300 mt-1 truncate">Sequence A Active</p>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Sa Pa → Ninh Binh (Saves 10h)</p>
+            </button>
+
+            <!-- Op 4: Ha Giang Easy-Riders -->
+            <div class="travel-card rounded-xl p-3 text-left border-l-4 border-emerald-500 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex flex-col justify-between">
+              <div class="flex items-center justify-between w-full">
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                  <span>🏍️</span> Ha Giang 3D Tour
+                </span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">Included</span>
+              </div>
+              <p class="text-[11px] text-slate-700 dark:text-slate-300 mt-1 truncate">Airport Sleeper + Easy-Riders</p>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Hotels: Dong Van &amp; Du Gia</p>
+            </div>
+          </div>
+
+          <!-- 6 Verified Gmail Ground Truth Documents -->
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-1.5">
+              <span>🔒</span> 6 Confirmed Flight &amp; Hotel Bookings (Instant PDF Download)
+            </div>
+            <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+              <a href="documents/Emirates_Flight_TLV_BKK_G5M8CF.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
+                <span>✈️</span>
+                <span class="text-[11px]">Emirates TLV-BKK</span>
+                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">G5M8CF</span>
+                <span>📥</span>
+              </a>
+              <a href="documents/TDAC_Arrival_Card_30C4358.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
+                <span>📋</span>
+                <span class="text-[11px]">Thai Arrival (TDAC)</span>
+                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">#30C4358</span>
+                <span>📥</span>
+              </a>
+              <a href="documents/Sukhon_Hotel_Agoda_697155847.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
+                <span>🏨</span>
+                <span class="text-[11px]">Sukhon Hotel Bangkok</span>
+                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">697155847</span>
+                <span>📥</span>
+              </a>
+              <a href="documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
+                <span>✈️</span>
+                <span class="text-[11px]">Flight BKK ⇄ HAN</span>
+                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">1145-554-179</span>
+                <span>📥</span>
+              </a>
+              <a href="documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
+                <span>✈️</span>
+                <span class="text-[11px]">Etihad BKK-TLV</span>
+                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">9KDEH2</span>
+                <span>📥</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- QUICK OPERATIONS STRIP -->
-      <div class="flex sm:grid overflow-x-auto sm:overflow-visible sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 pb-2 sm:pb-0 scrollbar-none">
-        <!-- Operation 1: Luggage Protocol -->
-        <button onclick="openLuggageModal()" class="travel-card shrink-0 w-64 sm:w-auto rounded-2xl p-3.5 sm:p-4 text-left hover:border-amber-500/50 transition border-l-4 border-amber-500 group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div class="flex items-center justify-between w-full">
-            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-              <span>🧳</span> BKK Luggage Drop
-            </span>
-            <span class="text-[10px] text-slate-400 group-hover:text-amber-300 transition">Plan →</span>
-          </div>
-          <p class="text-[11px] text-slate-300 mt-1 truncate">AIRPORTELs BKK Floor B</p>
-          <p class="text-[10px] text-slate-400 truncate">Stored Sep 12–24 • 55L Backpack VN</p>
-        </button>
-
-        <!-- Operation 2: Sep 24 Connection Risk Radar -->
-        <button onclick="openPriceRadarModal()" class="travel-card shrink-0 w-64 sm:w-auto rounded-2xl p-3.5 sm:p-4 text-left hover:border-rose-500/50 transition border-l-4 border-rose-500 group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div class="flex items-center justify-between w-full">
-            <span class="text-xs font-bold text-red-400 flex items-center gap-1.5">
-              <span>✈️</span> Sep 24 Risk Radar
-            </span>
-            <span class="text-[10px] text-slate-400 group-hover:text-red-300 transition">Audit →</span>
-          </div>
-          <p class="text-[11px] text-slate-300 mt-1 truncate">PG 169 (17:15) High Risk</p>
-          <p class="text-[10px] text-emerald-400 font-semibold truncate">Recommended: PG 177 / PG 181</p>
-        </button>
-
-        <!-- Operation 3: Route Resilience -->
-        <button onclick="openRouteModal()" class="travel-card shrink-0 w-64 sm:w-auto rounded-2xl p-3.5 sm:p-4 text-left hover:border-sky-500/50 transition border-l-4 border-sky-500 group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div class="flex items-center justify-between w-full">
-            <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
-              <span>🔄</span> Route Resilience
-            </span>
-            <span class="text-[10px] text-slate-400 group-hover:text-cyan-300 transition">Compare →</span>
-          </div>
-          <p class="text-[11px] text-slate-300 mt-1 truncate">Sequence A Active</p>
-          <p class="text-[10px] text-slate-400 truncate">Sa Pa → Ninh Binh (Saves 10h)</p>
-        </button>
-
-        <!-- Operation 4: Ha Giang Easy-Riders -->
-        <div class="travel-card shrink-0 w-64 sm:w-auto rounded-2xl p-3.5 sm:p-4 text-left border-l-4 border-emerald-500 flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div class="flex items-center justify-between w-full">
-            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-              <span>🏍️</span> Ha Giang 3D Tour
-            </span>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold">Included</span>
-          </div>
-          <p class="text-[11px] text-slate-300 mt-1 truncate">Airport Sleeper + Easy-Riders</p>
-          <p class="text-[10px] text-slate-400 truncate">Twin Hotels: Dong Van &amp; Du Gia</p>
-        </div>
-      </div>
-
-      <!-- COMPACT VERIFIED GMAIL ATTACHMENTS SHELF -->
-      <div class="travel-card rounded-2xl p-4 border border-emerald-500/30 bg-white dark:bg-slate-900 shadow-sm">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2 px-1">
-          <div class="flex items-center gap-2">
-            <span class="text-emerald-400 text-xs">🔒</span>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300">6 Verified Gmail Ground Truth Documents (Instant PDF Download)</span>
-          </div>
-          <span class="text-[10px] text-slate-400 hidden sm:inline">Downloaded into project repository</span>
-        </div>
-        
-        <!-- Horizontal Scrollable PDF Chips -->
-        <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
-          <a href="documents/Emirates_Flight_TLV_BKK_G5M8CF.pdf" target="_blank" download class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-2 text-xs font-semibold shadow-sm">
-            <span>✈️</span>
-            <span class="font-medium text-[11px]">Emirates TLV-BKK (A380)</span>
-            <span class="text-[10px] font-mono text-emerald-400 font-bold">G5M8CF</span>
-            <span class="text-[10px] text-emerald-400">📥</span>
-          </a>
-
-          <a href="documents/TDAC_Arrival_Card_30C4358.pdf" target="_blank" download class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-2 text-xs font-semibold shadow-sm">
-            <span>📋</span>
-            <span class="font-medium text-[11px]">Thailand Arrival (TDAC)</span>
-            <span class="text-[10px] font-mono text-emerald-400 font-bold">#30C4358</span>
-            <span class="text-[10px] text-emerald-400">📥</span>
-          </a>
-
-          <a href="documents/Sukhon_Hotel_Agoda_697155847.pdf" target="_blank" download class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-2 text-xs font-semibold shadow-sm">
-            <span>🏨</span>
-            <span class="font-medium text-[11px]">Sukhon Hotel Bangkok</span>
-            <span class="text-[10px] font-mono text-emerald-400 font-bold">697155847</span>
-            <span class="text-[10px] text-emerald-400">📥</span>
-          </a>
-
-          <a href="documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf" target="_blank" download class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-2 text-xs font-semibold shadow-sm">
-            <span>✈️</span>
-            <span class="font-medium text-[11px]">Flight BKK &rarr; HAN</span>
-            <span class="text-[10px] font-mono text-emerald-400 font-bold">1145-554-179</span>
-            <span class="text-[10px] text-emerald-400">📥</span>
-          </a>
-
-          <a href="documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf" target="_blank" download class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-2 text-xs font-semibold shadow-sm">
-            <span>✈️</span>
-            <span class="font-medium text-[11px]">Flight HAN &rarr; BKK</span>
-            <span class="text-[10px] font-mono text-emerald-400 font-bold">1145-554-179</span>
-            <span class="text-[10px] text-emerald-400">📥</span>
-          </a>
-
-          <a href="documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf" target="_blank" download class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-2 text-xs font-semibold shadow-sm">
-            <span>✈️</span>
-            <span class="font-medium text-[11px]">Etihad BKK-TLV (AUH)</span>
-            <span class="text-[10px] font-mono text-emerald-400 font-bold">9KDEH2</span>
-            <span class="text-[10px] text-emerald-400">📥</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- PHASE NAVIGATION TABS -->
-      <div class="border-b border-slate-200 dark:border-slate-800 flex items-center justify-between flex-wrap gap-4">
-        <nav class="flex space-x-6">
-          <button onclick="setPhase('all')" data-phase="all" class="tab-phase py-3 px-1 border-b-2 border-blue-500 font-bold text-sm text-blue-400 transition">
+      <!-- PHASE SEGMENTED CONTROL & ACTIONS -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+        <!-- Apple-style Segmented Filter -->
+        <div class="bg-slate-200/80 dark:bg-slate-800/80 p-1 rounded-xl flex items-center gap-1 text-xs font-bold overflow-x-auto scrollbar-none">
+          <button onclick="setPhase('all')" data-phase="all" class="tab-phase flex-1 py-1.5 px-3 rounded-lg bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm transition whitespace-nowrap text-center">
             All 29 Days
           </button>
-          <button onclick="setPhase('phase1')" data-phase="phase1" class="tab-phase py-3 px-1 border-b-2 border-transparent font-medium text-sm text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5">
-            <span>⛰️</span> Phase 1: Northern Vietnam (Sep 11–24)
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 font-semibold">Twin Beds</span>
+          <button onclick="setPhase('phase1')" data-phase="phase1" class="tab-phase flex-1 py-1.5 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap text-center flex items-center justify-center gap-1">
+            <span>⛰️</span> Vietnam (1–13)
           </button>
-          <button onclick="setPhase('phase2')" data-phase="phase2" class="tab-phase py-3 px-1 border-b-2 border-transparent font-medium text-sm text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5">
-            <span>🏖️</span> Phase 2: Gulf Islands & Bangkok (Sep 24 – Oct 09)
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-950 text-pink-300 font-semibold">King Bed</span>
+          <button onclick="setPhase('phase2')" data-phase="phase2" class="tab-phase flex-1 py-1.5 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap text-center flex items-center justify-center gap-1">
+            <span>🏖️</span> Thailand (14–29)
           </button>
-        </nav>
+        </div>
 
         <!-- Global Action Controls -->
-        <div class="flex items-center gap-2 pb-2">
-          <button onclick="toggleAllDays(true)" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 transition">
+        <div class="flex items-center justify-end gap-2 shrink-0">
+          <button onclick="toggleAllDays(true)" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shadow-sm transition">
             Expand All
           </button>
-          <button onclick="toggleAllDays(false)" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 transition">
+          <button onclick="toggleAllDays(false)" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shadow-sm transition">
             Collapse All
           </button>
         </div>
       </div>
 
-      <!-- STICKY 29-DAY TIMELINE SCRUBBER -->
-      <div class="sticky top-14 sm:top-16 z-30 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md py-2 sm:py-3 px-2.5 sm:px-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
-        <div class="flex items-center justify-between mb-1.5 px-1">
-          <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-            <span>🧭</span> <span>Quick Day Scrubber</span>
-            <span class="text-[10px] text-slate-500 font-normal hidden sm:inline">(Tap any day to jump &amp; expand)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span id="active-day-label" class="text-[11px] text-sky-400 font-semibold font-mono">Day 1 • Bangkok Base</span>
-          </div>
-        </div>
-        <div id="timeline-scrubber-list" class="timeline-scrubber">
-          <!-- Dynamically populated by renderTimelineScrubber() in app.js -->
-        </div>
-      </div>
-
       <!-- SEARCH & FILTER TOOLBAR -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-slate-900 p-3 sm:p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <div class="relative w-full sm:w-80">
-          <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">🔍</span>
-          <input id="search-input" type="text" placeholder="Search destination, hotel, attraction, or pass..." 
-                 class="w-full bg-slate-800 text-slate-200 text-xs rounded-lg pl-9 pr-4 py-2 border border-slate-700 focus:outline-none focus:border-blue-500 transition">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔍</span>
+          <input id="search-input" type="text" placeholder="Search destination, hotel, tour, or pass..." 
+                 class="w-full bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs rounded-xl pl-9 pr-4 py-2 border border-slate-200 dark:border-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
         </div>
 
         <div class="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-          <span id="search-results-count" class="text-xs text-slate-400 font-medium">Showing 29 days</span>
+          <span id="search-results-count" class="text-xs text-slate-500 dark:text-slate-400 font-medium">Showing 29 days</span>
           <div class="flex items-center gap-1.5">
-            <button onclick="filterStatus('all')" id="btn-filter-all" class="px-2.5 py-1 rounded-lg text-xs bg-blue-600 text-white font-semibold transition">All</button>
-            <button onclick="filterStatus('confirmed')" id="btn-filter-confirmed" class="px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-emerald-400 hover:bg-emerald-950/60 transition border border-transparent hover:border-emerald-500/30">Confirmed</button>
-            <button onclick="filterStatus('vetted')" id="btn-filter-vetted" class="px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-amber-400 hover:bg-amber-950/60 transition border border-transparent hover:border-amber-500/30">Vetted</button>
+            <button onclick="filterStatus('all')" id="btn-filter-all" class="px-2.5 py-1 rounded-lg text-xs bg-blue-600 text-white font-semibold shadow-sm transition">All</button>
+            <button onclick="filterStatus('confirmed')" id="btn-filter-confirmed" class="px-2.5 py-1 rounded-lg text-xs bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 transition border border-emerald-200 dark:border-emerald-500/30">Confirmed</button>
+            <button onclick="filterStatus('vetted')" id="btn-filter-vetted" class="px-2.5 py-1 rounded-lg text-xs bg-slate-100 dark:bg-slate-800 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/60 transition border border-amber-200 dark:border-amber-500/30">Vetted</button>
           </div>
         </div>
       </div>
@@ -366,7 +328,8 @@
 
   <!-- MODAL: DYNAMIC SPLIT-LUGGAGE PACKING CHECKLIST -->
   <div id="packing-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
-    <div class="glass-card rounded-2xl max-w-2xl w-full p-6 border border-slate-700 shadow-2xl relative max-h-[90vh] flex flex-col">
+    <div class="glass-card modal-sheet-card rounded-2xl max-w-2xl w-full p-5 sm:p-6 border border-slate-700 shadow-2xl relative max-h-[90vh] flex flex-col">
+      <div class="modal-drag-indicator sm:hidden"></div>
       <button onclick="closePackingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       
       <div class="flex items-center gap-2 mb-2">
@@ -419,7 +382,8 @@
 
   <!-- MODAL: LIVE 4-WAY CURRENCY CONVERTER -->
   <div id="currency-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
-    <div class="glass-card rounded-2xl max-w-xl w-full p-6 border border-slate-700 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <div class="glass-card modal-sheet-card rounded-2xl max-w-xl w-full p-5 sm:p-6 border border-slate-700 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="modal-drag-indicator sm:hidden"></div>
       <button onclick="closeCurrencyModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       
       <div class="flex items-center gap-2 mb-3">
@@ -504,7 +468,8 @@
 
   <!-- MODAL: OFFLINE EMERGENCY & TAXI PHRASEBOOK -->
   <div id="translations-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
-    <div class="travel-card rounded-2xl max-w-3xl w-full p-6 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative max-h-[90vh] flex flex-col bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+    <div class="travel-card modal-sheet-card rounded-2xl max-w-3xl w-full p-5 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative max-h-[90vh] flex flex-col bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+      <div class="modal-drag-indicator sm:hidden"></div>
       <button onclick="closeTranslationsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       
       <div class="flex items-center gap-2 mb-2">
@@ -569,7 +534,8 @@
 
   <!-- MODAL: DOCUMENT PREVIEW -->
   <div id="doc-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
-    <div class="travel-card rounded-2xl max-w-lg w-full p-6 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+    <div class="travel-card modal-sheet-card rounded-2xl max-w-lg w-full p-5 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+      <div class="modal-drag-indicator sm:hidden"></div>
       <button onclick="closeDocModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       <h3 id="modal-doc-title" class="text-base font-bold text-slate-900 dark:text-white mb-4 pr-6">Document Details</h3>
       <div id="modal-doc-body" class="mb-5"></div>
@@ -736,11 +702,12 @@
   </div>
 
   <!-- MODAL: GEMINI 3.8 FLASH GROUNDED ASSISTANT -->
-  <div id="gemini-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-md hidden p-2 sm:p-4">
+  <div id="gemini-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-md hidden p-0 sm:p-4 modal-sheet-container">
     <div class="travel-card modal-sheet-card rounded-2xl max-w-3xl w-full h-[92vh] sm:h-[84vh] flex flex-col border border-indigo-500/30 shadow-2xl relative overflow-hidden bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+      <div class="modal-drag-indicator sm:hidden mt-3 mb-0"></div>
       
       <!-- MODAL HEADER -->
-      <div class="px-5 py-4 border-b border-slate-800 bg-slate-50 dark:bg-gradient-to-r dark:from-slate-900 dark:via-indigo-950/40 dark:to-slate-900 flex items-center justify-between shrink-0">
+      <div class="px-5 py-3 sm:py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-gradient-to-r dark:from-slate-900 dark:via-indigo-950/40 dark:to-slate-900 flex items-center justify-between shrink-0">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white text-lg shadow-lg shadow-indigo-500/30">
             ✨

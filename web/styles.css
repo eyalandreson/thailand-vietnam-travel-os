@@ -594,3 +594,75 @@ body {
     margin: 0 auto 14px auto;
   }
 }
+
+
+/* --- Connected Vertical Daily Flow Timeline --- */
+.timeline-flow-container {
+  position: relative;
+  padding-left: 28px;
+  margin: 12px 0;
+}
+.timeline-flow-container::before {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 14px;
+  bottom: 16px;
+  width: 2px;
+  background-color: var(--border-subtle);
+}
+.timeline-flow-item {
+  position: relative;
+  margin-bottom: 16px;
+}
+.timeline-flow-item:last-child {
+  margin-bottom: 0;
+}
+.timeline-flow-dot {
+  position: absolute;
+  left: -28px;
+  top: 1px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-medium);
+  box-shadow: var(--shadow-sm);
+}
+.timeline-flow-item.morning .timeline-flow-dot {
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+}
+.timeline-flow-item.afternoon .timeline-flow-dot {
+  border-color: #0284c7;
+  background-color: #f0f9ff;
+}
+.timeline-flow-item.evening .timeline-flow-dot {
+  border-color: #7c3aed;
+  background-color: #f5f3ff;
+}
+.dark .timeline-flow-item.morning .timeline-flow-dot {
+  background-color: #291805;
+  border-color: #f59e0b;
+}
+.dark .timeline-flow-item.afternoon .timeline-flow-dot {
+  background-color: #0c2135;
+  border-color: #38bdf8;
+}
+.dark .timeline-flow-item.evening .timeline-flow-dot {
+  background-color: #1f1338;
+  border-color: #a855f7;
+}
+
+/* Edge-to-edge sticky header date strip */
+.sticky-scrubber-strip {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.sticky-scrubber-strip::-webkit-scrollbar {
+  display: none;
+}

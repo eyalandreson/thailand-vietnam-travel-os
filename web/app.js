@@ -140,17 +140,33 @@ function loadGoogleDocPreview() {
 }
 
 // -------------------------------------------------------------
+// OPERATIONS DRAWER TOGGLE
+// -------------------------------------------------------------
+function toggleOpsDrawer() {
+  const drawer = document.getElementById('ops-drawer-content');
+  const icon = document.getElementById('ops-drawer-icon');
+  if (!drawer) return;
+  const isHidden = drawer.classList.contains('hidden');
+  if (isHidden) {
+    drawer.classList.remove('hidden');
+    if (icon) icon.classList.add('rotate-180');
+  } else {
+    drawer.classList.add('hidden');
+    if (icon) icon.classList.remove('rotate-180');
+  }
+}
+window.toggleOpsDrawer = toggleOpsDrawer;
+
+// -------------------------------------------------------------
 // PHASE & STATUS FILTERING
 // -------------------------------------------------------------
 function setPhase(phase) {
   currentPhase = phase;
   document.querySelectorAll('.tab-phase').forEach(btn => {
     if (btn.dataset.phase === phase) {
-      btn.classList.add('border-blue-500', 'text-blue-400');
-      btn.classList.remove('border-transparent', 'text-slate-400');
+      btn.className = 'tab-phase flex-1 py-1.5 px-3 rounded-lg bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm transition whitespace-nowrap text-center font-bold text-xs flex items-center justify-center gap-1';
     } else {
-      btn.classList.remove('border-blue-500', 'text-blue-400');
-      btn.classList.add('border-transparent', 'text-slate-400');
+      btn.className = 'tab-phase flex-1 py-1.5 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap text-center font-medium text-xs flex items-center justify-center gap-1';
     }
   });
   renderDays();
@@ -165,13 +181,13 @@ function filterStatus(status) {
   if (allBtn && confBtn && vetBtn) {
     allBtn.className = status === 'all' 
       ? 'px-2.5 py-1 rounded-lg text-xs bg-blue-600 text-white font-semibold shadow-sm transition' 
-      : 'px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+      : 'px-2.5 py-1 rounded-lg text-xs bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition border border-slate-200 dark:border-slate-700';
     confBtn.className = status === 'confirmed' 
       ? 'px-2.5 py-1 rounded-lg text-xs bg-emerald-600 text-white font-semibold shadow-sm transition' 
-      : 'px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-emerald-400 hover:bg-emerald-950/60 transition border border-transparent hover:border-emerald-500/30';
+      : 'px-2.5 py-1 rounded-lg text-xs bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 transition border border-emerald-200 dark:border-emerald-500/30';
     vetBtn.className = status === 'vetted' 
       ? 'px-2.5 py-1 rounded-lg text-xs bg-amber-600 text-white font-semibold shadow-sm transition' 
-      : 'px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-amber-400 hover:bg-amber-950/60 transition border border-transparent hover:border-amber-500/30';
+      : 'px-2.5 py-1 rounded-lg text-xs bg-slate-100 dark:bg-slate-800 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/60 transition border border-amber-200 dark:border-amber-500/30';
   }
 
   renderDays();
@@ -393,25 +409,32 @@ function renderDays() {
             </div>
           </div>
 
-          <!-- Taxi / Grab Driver Assist Box -->
+          <!-- Taxi / Grab Driver Assist Box (High Visibility Driver Screen) -->
           ${grab.dropoff || dropLocal ? `
-            <div class="driver-assist-box p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-              <div class="min-w-0 flex-1">
-                <div class="text-[11px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 mb-0.5 flex items-center gap-1">
-                  <span>🚕</span> Show Driver Destination (Grab / Taxi):
-                </div>
-                <div class="text-slate-900 dark:text-white font-bold text-sm truncate">${grab.dropoff || ''}</div>
-                ${dropLocal ? `<div class="driver-native-text mt-0.5 select-all">${dropLocal}</div>` : ''}
+            <div class="driver-assist-box p-3.5 sm:p-5 flex flex-col gap-3 text-xs">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
+                  <span>🚕</span> <span>Show Screen to Driver (Grab / Taxi)</span>
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-200/80 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 font-bold">Local Script</span>
               </div>
-              <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto shrink-0 mt-2 sm:mt-0">
+              <div>
+                <div class="text-slate-800 dark:text-slate-200 font-semibold text-xs sm:text-sm mb-1">${grab.dropoff || ''}</div>
                 ${dropLocal ? `
-                  <button onclick="copyToClipboard('${escapedLocal}', 'Copied destination in local script for driver!')" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95">
+                  <div class="driver-native-text text-lg sm:text-2xl font-black p-3 rounded-xl bg-amber-100/80 dark:bg-amber-950/50 text-amber-950 dark:text-amber-100 select-all border border-amber-300 dark:border-amber-600/40 text-center tracking-wide leading-relaxed shadow-sm">
+                    ${dropLocal}
+                  </div>
+                ` : ''}
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                ${dropLocal ? `
+                  <button onclick="copyToClipboard('${escapedLocal}', 'Copied destination in local script for driver!')" class="w-full py-2.5 px-4 min-h-[42px] rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
                     <span>📋</span> Copy Driver Script
                   </button>
                 ` : ''}
                 ${grab.maps_url ? `
-                  <a href="${grab.maps_url}" target="_blank" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition">
-                    <span>📍</span> Open Maps ↗
+                  <a href="${grab.maps_url}" target="_blank" class="w-full py-2.5 px-4 min-h-[42px] rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
+                    <span>📍</span> Open Google Maps ↗
                   </a>
                 ` : ''}
               </div>
@@ -637,30 +660,27 @@ function renderDays() {
           </div>
         ` : ''}
 
-        <!-- Curated Daily Flow (Curated 3-Node Journey Grid) -->
-        <div>
-          <div class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm mb-2.5 flex items-center justify-between">
-            <span class="flex items-center gap-1.5">🗺️ Curated Daily Flow (Geographically Sequenced)</span>
-            <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">Paced &amp; Route-Optimized</span>
+        <!-- Curated Daily Flow (Connected Vertical Timeline) -->
+        <div class="bg-white dark:bg-slate-800/80 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-700/80 shadow-sm">
+          <div class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm mb-3 flex items-center justify-between">
+            <span class="flex items-center gap-1.5">🗺️ Daily Flow Timeline</span>
+            <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">Route Paced</span>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div class="flow-node-morning p-4 rounded-2xl text-xs sm:text-sm shadow-sm">
-              <div class="flex items-center gap-1.5 font-extrabold text-amber-900 dark:text-amber-300 mb-1.5">
-                <span>🌅</span> Morning Focus
-              </div>
-              <p class="text-slate-800 dark:text-slate-200 leading-relaxed">${day.curated_daily_flow.morning || 'Flexible exploration'}</p>
+          <div class="timeline-flow-container">
+            <div class="timeline-flow-item morning">
+              <div class="timeline-flow-dot">🌅</div>
+              <div class="text-xs font-bold text-amber-600 dark:text-amber-400 mb-0.5">Morning Focus</div>
+              <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed">${day.curated_daily_flow.morning || 'Flexible exploration'}</p>
             </div>
-            <div class="flow-node-afternoon p-4 rounded-2xl text-xs sm:text-sm shadow-sm">
-              <div class="flex items-center gap-1.5 font-extrabold text-blue-900 dark:text-sky-300 mb-1.5">
-                <span>☀️</span> Afternoon Highlight
-              </div>
-              <p class="text-slate-800 dark:text-slate-200 leading-relaxed">${day.curated_daily_flow.afternoon || 'Activity & transit'}</p>
+            <div class="timeline-flow-item afternoon">
+              <div class="timeline-flow-dot">☀️</div>
+              <div class="text-xs font-bold text-sky-600 dark:text-sky-400 mb-0.5">Afternoon Highlight</div>
+              <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed">${day.curated_daily_flow.afternoon || 'Activity & transit'}</p>
             </div>
-            <div class="flow-node-evening p-4 rounded-2xl text-xs sm:text-sm shadow-sm">
-              <div class="flex items-center gap-1.5 font-extrabold text-purple-900 dark:text-purple-300 mb-1.5">
-                <span>🌙</span> Evening Pacing
-              </div>
-              <p class="text-slate-800 dark:text-slate-200 leading-relaxed">${day.curated_daily_flow.evening || 'Dinner & unwind'}</p>
+            <div class="timeline-flow-item evening">
+              <div class="timeline-flow-dot">🌙</div>
+              <div class="text-xs font-bold text-purple-600 dark:text-purple-400 mb-0.5">Evening Pacing</div>
+              <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed">${day.curated_daily_flow.evening || 'Dinner & unwind'}</p>
             </div>
           </div>
         </div>
@@ -817,8 +837,8 @@ function scrollToDay(dayNum) {
     if (content) content.classList.remove('hidden');
     if (icon) icon.classList.add('rotate-180');
 
-    // Smooth scroll to card (offset for sticky header + scrubber ~ 140px)
-    const yOffset = window.innerWidth < 640 ? -110 : -140;
+    // Smooth scroll to card (offset for integrated sticky header + date strip ~ 100px)
+    const yOffset = window.innerWidth < 640 ? -104 : -112;
     const y = targetCard.getBoundingClientRect().top + window.pageYOffset + yOffset;
     window.scrollTo({ top: y, behavior: 'smooth' });
 
@@ -839,7 +859,7 @@ function scrollToCurrentActiveDay() {
 function updateActiveDayFromScroll() {
   if (!itineraryData) return;
   const days = itineraryData.days || [];
-  const scrollPos = window.scrollY + 200;
+  const scrollPos = window.scrollY + 130;
 
   for (let i = days.length - 1; i >= 0; i--) {
     const card = document.getElementById(`day-card-${days[i].day_number}`);
