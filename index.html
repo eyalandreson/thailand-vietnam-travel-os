@@ -48,6 +48,13 @@
       <span>Ask Gemini 3.8 Flash</span>
     </button>
 
+    <!-- Request Changes / Antigravity Agent Floating Button -->
+    <button onclick="openChangeRequestModal()" class="floating-cr-btn px-4 py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white rounded-full font-bold text-xs flex items-center gap-2 border border-emerald-400/50 shadow-2xl transition-all transform hover:scale-105 active:scale-95 shadow-emerald-500/30" title="Tell Antigravity about changes in plans or site">
+      <span class="text-sm">🛠️</span>
+      <span>Request Changes (Agent)</span>
+      <span id="floating-bridge-dot" class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+    </button>
+
     <!-- Jump to Today Button -->
     <button onclick="jumpToToday()" class="floating-today-btn px-4 py-2.5 bg-slate-800/95 hover:bg-slate-700 text-white rounded-full font-bold text-xs flex items-center gap-2 border border-slate-700/80 shadow-xl backdrop-blur-md transition-all transform hover:scale-105 active:scale-95">
       <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
@@ -80,6 +87,12 @@
         <!-- GEMINI 3.8 FLASH ASSISTANT BUTTON -->
         <button onclick="openGeminiModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-xs font-bold border border-blue-400/40 transition flex items-center gap-1.5 shadow-sm shadow-indigo-500/20" title="Ask Gemini 3.8 Flash about your itinerary">
           <span class="text-amber-300">✨</span> <span class="hidden lg:inline">Ask Gemini AI</span><span class="lg:hidden">Gemini</span>
+        </button>
+
+        <!-- ANTIGRAVITY AGENT / CHANGE REQUEST BUTTON -->
+        <button onclick="openChangeRequestModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold border border-emerald-400/40 transition flex items-center gap-1.5 shadow-sm shadow-emerald-500/20" title="Tell Antigravity about changes in plans or site">
+          <span>🛠️</span> <span class="hidden lg:inline">Agent Fix</span><span class="lg:hidden">Changes</span>
+          <span id="header-bridge-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
         </button>
 
         <button onclick="openPackingModal()" class="hidden sm:inline-flex px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition items-center gap-1.5 shadow-sm" title="Split Luggage & Packing Checklist">
@@ -701,6 +714,218 @@
     </div>
   </div>
 
+  <!-- ================================================================= -->
+  <!-- MODAL: ANTIGRAVITY AGENT HUB & TRAVELER CHANGE REQUEST            -->
+  <!-- ================================================================= -->
+  <div id="change-request-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-md hidden p-0 sm:p-4 modal-sheet-container">
+    <div class="travel-card modal-sheet-card rounded-2xl max-w-3xl w-full h-[94vh] sm:h-[86vh] flex flex-col border border-emerald-500/30 shadow-2xl relative overflow-hidden bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-t-3xl sm:rounded-2xl">
+      <div class="modal-drag-indicator sm:hidden mt-3 mb-0"></div>
+
+      <!-- MODAL HEADER -->
+      <div class="px-5 py-3.5 sm:py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-cyan-600 flex items-center justify-center text-white text-lg shadow-lg shadow-emerald-500/30">
+            🛠️
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white leading-none">Antigravity Agent Hub</h3>
+              <span id="bridge-connection-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-mono font-bold border border-emerald-300 dark:border-emerald-500/40 flex items-center gap-1">
+                <span id="bridge-connection-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span id="bridge-connection-text">Checking Bridge...</span>
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
+              <span>Tell Antigravity about changes in travel plans or site features to auto-fix</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="checkBridgeStatus(true)" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700 text-xs font-bold" title="Refresh Bridge Connection">
+            🔄
+          </button>
+          <button onclick="closeChangeRequestModal()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 dark:hover:bg-rose-900/40 text-slate-700 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-300 transition border border-slate-200 dark:border-slate-700 ml-1 text-sm font-bold" title="Close">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- TABS BAR -->
+      <div class="px-5 py-2.5 bg-slate-100/80 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2">
+          <button id="cr-tab-btn-submit" onclick="switchCrTab('submit')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-sm transition">
+            ✏️ New Request
+          </button>
+          <button id="cr-tab-btn-queue" onclick="switchCrTab('queue')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition flex items-center gap-1.5">
+            <span>📋 Queue &amp; History</span>
+            <span id="cr-queue-badge" class="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-200 dark:bg-slate-700 font-bold">0</span>
+          </button>
+          <button id="cr-tab-btn-directive" onclick="switchCrTab('directive')" class="hidden sm:inline-flex px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition items-center gap-1">
+            <span>⚡ Antigravity Directive</span>
+          </button>
+        </div>
+        <span class="text-[11px] text-slate-400 hidden sm:inline font-mono">
+          Antigravity 2.0 Connected
+        </span>
+      </div>
+
+      <!-- TAB 1: SUBMIT NEW CHANGE REQUEST -->
+      <div id="cr-tab-content-submit" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <form id="cr-form" onsubmit="handleCrSubmit(event)" class="space-y-4">
+          <!-- Category Selector -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">1. Change Category:</label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <label class="cr-category-card flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer bg-slate-50 dark:bg-slate-800/60 hover:border-emerald-500 transition">
+                <input type="radio" name="cr_category" value="plan" checked onchange="handleCrCategoryChange()" class="accent-emerald-600">
+                <div>
+                  <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-1">
+                    <span>🗓️</span> Travel Plan Change
+                  </div>
+                  <div class="text-[11px] text-slate-500 dark:text-slate-400">Hotel, flight, dates, route</div>
+                </div>
+              </label>
+              <label class="cr-category-card flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer bg-slate-50 dark:bg-slate-800/60 hover:border-emerald-500 transition">
+                <input type="radio" name="cr_category" value="site" onchange="handleCrCategoryChange()" class="accent-emerald-600">
+                <div>
+                  <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-1">
+                    <span>💻</span> Site / UI Change
+                  </div>
+                  <div class="text-[11px] text-slate-500 dark:text-slate-400">Features, styling, bug fixes</div>
+                </div>
+              </label>
+              <label class="cr-category-card flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer bg-slate-50 dark:bg-slate-800/60 hover:border-emerald-500 transition">
+                <input type="radio" name="cr_category" value="urgent" onchange="handleCrCategoryChange()" class="accent-rose-600">
+                <div>
+                  <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-1">
+                    <span>🚨</span> Urgent Disruption
+                  </div>
+                  <div class="text-[11px] text-slate-500 dark:text-slate-400">Flight delay, storm reroute</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Scope / Target Day -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">2. Target Day or Scope:</label>
+              <select id="cr-target-day-select" onchange="handleCrDaySelectChange()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 transition">
+                <option value="">Whole Trip / General Feature</option>
+                <!-- Populated dynamically by populateCrDayOptions() -->
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">3. Urgency / Priority:</label>
+              <select id="cr-priority-select" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 transition">
+                <option value="normal" selected>Normal (Standard automated cycle)</option>
+                <option value="high">High (Upcoming within 48 hours)</option>
+                <option value="urgent">🚨 Urgent (Immediate today / tomorrow)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Phase & Critic Helper Pill -->
+          <div id="cr-critic-hint-box" class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-300 flex items-start gap-2">
+            <span class="text-base">🛡️</span>
+            <div>
+              <span class="font-bold">Adversarial Critic Protection:</span>
+              <span id="cr-critic-hint-text">The agent will verify all updates against Phase constraints (Twin beds for Vietnam Phase 1, Romantic King bed for Thailand Phase 2, noise &amp; recent review screening &ge; 8.5/10).</span>
+            </div>
+          </div>
+
+          <!-- Quick Preset Chips -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">Quick Inspiration Chips:</label>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="applyCrPreset('hotel')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-700 transition">
+                🏨 Change Hotel / Homestay
+              </button>
+              <button type="button" onclick="applyCrPreset('flight')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-700 transition">
+                ✈️ Adjust Flight / Transit Time
+              </button>
+              <button type="button" onclick="applyCrPreset('restaurant')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-700 transition">
+                🍜 Add Restaurant / Street Food
+              </button>
+              <button type="button" onclick="applyCrPreset('rain')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-700 transition">
+                🌧️ Switch to Rain Plan B
+              </button>
+              <button type="button" onclick="applyCrPreset('ui')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-700 transition">
+                🎨 Site UI / Feature Request
+              </button>
+            </div>
+          </div>
+
+          <!-- Title -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">4. Short Title / Summary:</label>
+            <input type="text" id="cr-title-input" required placeholder="e.g. Switch Day 18 Koh Phangan villa to Panviman Resort" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition">
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">5. Instructions for Antigravity Agent (What should change?):</label>
+            <textarea id="cr-desc-input" rows="3" required placeholder="Describe the change in detail. For itinerary changes, mention target hotel, time adjustments, or activities. For site improvements, describe desired buttons, layout, or data formatting..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition"></textarea>
+          </div>
+
+          <!-- Submitter Name & Submit Actions -->
+          <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-slate-500">Submitter:</span>
+              <input type="text" id="cr-submitter-input" value="Eyal" class="w-28 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="copyCrDirectiveFromForm()" class="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold border border-slate-200 dark:border-slate-700 transition flex items-center justify-center gap-1.5" title="Copy formatted prompt for Antigravity chat or CLI">
+                <span>📋</span> Copy Directive
+              </button>
+              <button type="submit" id="cr-submit-btn" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold shadow-lg shadow-emerald-500/25 transition flex items-center justify-center gap-1.5">
+                <span>Dispatch to Agent</span> <span>🚀</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- TAB 2: REQUEST QUEUE & AGENT HISTORY -->
+      <div id="cr-tab-content-queue" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white">Active Requests &amp; Agent History</span>
+            <span id="cr-queue-filter-count" class="text-xs text-slate-400">0 tickets</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="loadChangeRequests(true)" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition">
+              🔄 Refresh
+            </button>
+          </div>
+        </div>
+
+        <div id="cr-queue-list" class="space-y-3">
+          <!-- Populated dynamically by renderChangeRequestQueue() -->
+        </div>
+      </div>
+
+      <!-- TAB 3: ANTIGRAVITY AGENT DIRECTIVE GENERATOR -->
+      <div id="cr-tab-content-directive" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-xs text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Antigravity 2.0 / CLI Direct Prompt</span>
+            <button onclick="copyGeneratedDirective()" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1">
+              <span>📋</span> Copy Prompt
+            </button>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            This formatted directive references `@core/itinerary_data.json` and instructs Antigravity to apply your requested changes, verify with the critic engine, and execute dual-sync.
+          </p>
+          <pre id="cr-directive-preview" class="p-3.5 rounded-xl bg-slate-900 text-slate-200 text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-72"></pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- MODAL: GEMINI 3.8 FLASH GROUNDED ASSISTANT -->
   <div id="gemini-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-md hidden p-0 sm:p-4 modal-sheet-container">
     <div class="travel-card modal-sheet-card rounded-2xl max-w-3xl w-full h-[92vh] sm:h-[84vh] flex flex-col border border-indigo-500/30 shadow-2xl relative overflow-hidden bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
@@ -852,6 +1077,10 @@
     <button onclick="scrollToCurrentActiveDay()" class="mobile-nav-item">
       <span class="text-base">📅</span>
       <span>Days</span>
+    </button>
+    <button onclick="openChangeRequestModal()" class="mobile-nav-item text-emerald-500">
+      <span class="text-base">🛠️</span>
+      <span>Fix</span>
     </button>
     <button onclick="openGeminiModal()" class="mobile-nav-item text-indigo-400">
       <span class="text-base">✨</span>

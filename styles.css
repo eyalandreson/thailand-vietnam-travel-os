@@ -666,3 +666,17 @@ body {
 .sticky-scrubber-strip::-webkit-scrollbar {
   display: none;
 }
+
+/* Antigravity Change Request Hub styling */
+.cr-category-card:has(input:checked) {
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.08);
+}
+.dark .cr-category-card:has(input:checked) {
+  border-color: #34d399;
+  background-color: rgba(16, 185, 129, 0.15);
+}
+.floating-cr-btn {
+  backdrop-filter: blur(8px);
+}
+
