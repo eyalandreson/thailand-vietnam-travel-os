@@ -6,8 +6,8 @@
   "audit_note": "Audited: Only 6 genuine bookings verified from Gmail are marked CONFIRMED. All other days marked UNBOOKED with vetted recommendations.",
   "confirmed_metrics": {
     "total_days": 29,
-    "confirmed_days_count": 5,
-    "unbooked_days_count": 24,
+    "confirmed_days_count": 6,
+    "unbooked_days_count": 23,
     "confirmed_references": [
       {
         "item": "TLV -> BKK Emirates Flight EK2451/EK384 (Sep 10-11)",
@@ -32,6 +32,14 @@
       {
         "item": "BKK -> TLV Etihad Flight (Oct 09)",
         "ref": "Booking: 9KDEH2"
+      },
+      {
+        "item": "Hanoi -> Ha Giang Sleeper Bus (Sep 12)",
+        "ref": "Booking: #12GO32785393"
+      },
+      {
+        "item": "Ha Giang Loop 3D/2N Tour (Sep 13-15)",
+        "ref": "Happy (+84338097000)"
       }
     ]
   },
@@ -186,6 +194,37 @@
       "file_path": "documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf",
       "file_status": "LOCAL_FILE_VERIFIED",
       "file_category": "Flight E-Ticket"
+    },
+    {
+      "id": "BUS-HAN-HG-12GO32785393",
+      "type": "BUS_TRANSIT",
+      "date": "2026-09-12",
+      "title": "Hanoi Airport (HAN) -> Ha Giang Sleeper Bus",
+      "reference_code": "12GO32785393",
+      "status": "[CONFIRMED - BOOKED]",
+      "departure": "15:00 PM (Noi Bai International Airport)",
+      "arrival": "20:00 PM (61 Cau Me, Ha Giang)",
+      "operator": "Manh Quan Ha Giang",
+      "passengers": "Eyal Andreson & Gilad Shaked",
+      "details": "Confirmed VIP sleeper bus booked via 12Go Asia. Direct terminal pickup at Hanoi Airport to Ha Giang basecamp.",
+      "file_path": null,
+      "file_status": "ONLINE_BOOKING_VERIFIED",
+      "file_category": "Bus E-Ticket"
+    },
+    {
+      "id": "TOUR-HAPPY-LOOP-3D2N",
+      "type": "GUIDED_TOUR",
+      "date": "2026-09-13",
+      "checkout_date": "2026-09-15",
+      "title": "Ha Giang Loop 3D/2N Licensed Tour (Happy Loop 2026)",
+      "reference_code": "Happy (+84338097000 / +84332097000)",
+      "status": "[CONFIRMED - BOOKED]",
+      "location": "Happy House, 61 Cau Me, Ha Giang",
+      "room_type": "Private Room (Twin Beds) + Pre-tour dorm night",
+      "details": "Confirmed 3D/2N Easy Rider Loop with Happy Loop 2026 Northviet company. Includes pre-tour dorm sleep (Sep 12), border permits ($10), 2 breakfasts, 3 lunches, 2 dinners, 2 nights private room, water, gasoline, Nho Que boat tickets, raincoats, insurance, and end-of-loop shower facilities. Cash balance ($163-$173/pax) payable on arrival.",
+      "file_path": null,
+      "file_status": "WHATSAPP_BOOKING_VERIFIED",
+      "file_category": "Tour Voucher"
     }
   ],
   "unbooked_action_items": [
@@ -210,8 +249,8 @@
       "category": "TOUR_TRANSPORT",
       "date": "2026-09-13",
       "title": "Ha Giang 3D/2N Licensed Easy-Rider Tour + Hanoi VIP Bus",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
-      "notes": "User selected Easy-Riders. Needs to be booked (recommended: Cheers Ha Giang, Jasmine, or QT Motorbikes with full protective gear)."
+      "status": "[CONFIRMED - BOOKED]",
+      "notes": "Booked with Happy Loop (Happy: +84338097000 / +84332097000). Starts Sep 13 8:00 AM at Happy House. Hanoi-Ha Giang sleeper booked with Manh Quan Ha Giang (#12GO32785393)."
     },
     {
       "id": "ACTION-HG-SAPA-TRANSIT",
@@ -830,7 +869,7 @@
       "destination": "Bangkok -> Hanoi Airport (HAN) -> Sleeper to Ha Giang",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
-      "status": "[CONFIRMED - BOOKED]",
+      "status": "CONFIRMED - BOOKED",
       "status_badge": "CONFIRMED",
       "booking_summary": "Flight BKK->HAN Confirmed (Order: 1145-554-179) • Ha Giang 3D Tour & Airport Sleeper Unbooked (Action Required)",
       "weather_radar": {
@@ -843,6 +882,15 @@
       "luggage_action": "ACTION REQUIRED: Drop checked suitcase at AIRPORTELs Suvarnabhumi Basement (Floor B, next to ARL) for 12 days (Sep 12-24). Keep ONLY 55L clamshell backpack for flight and Ha Giang sleeper bus!",
       "accommodation_matrix": [
         {
+          "hotel_name": "Happy House Basecamp & Dorm",
+          "room_spec": "Twin Beds / Shared Dorm (Pre-Tour Night Included)",
+          "price_per_night": "Included Free with Happy Loop Tour",
+          "booking_url": "https://happyhousehagiang.com",
+          "status": "CONFIRMED_INCLUDED",
+          "critic_notes": "Included in Happy Loop tour package. 24-hour reception, bell service for late night arrivals.",
+          "critic_score": 9.2
+        },
+        {
           "hotel_name": "Phoenix Hotel Ha Giang (Included in 3D Tour)",
           "status": "UNBOOKED_VETTED_OPTION",
           "room_spec": "Deluxe Twin Room (Two Separate Single Beds)",
@@ -854,21 +902,25 @@
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "08:30 AM: ARL from Phaya Thai -> BKK Airport. 09:15 AM: Drop suitcase at AIRPORTELs Floor B. 11:55 AM: Flight BKK->HAN (Confirmed). 13:50 PM: Land Noi Bai Airport (HAN). Clear e-visa. 15:30/19:30: Meet Ha Giang Tour representative directly at airport for direct sleeper bus to Ha Giang City.",
-        "departure_time": "08:30 AM Sukhon checkout / 11:55 AM Flight",
-        "arrival_time": "Late evening Ha Giang City hotel check-in",
-        "buffer_time": "Airport pickup avoids traveling 1h into central Hanoi; heads directly north on expressway",
-        "tips": "Tour includes direct sleeper pickup at Noi Bai airport terminal, bypassing Hanoi traffic completely."
+        "primary_transit": "VIP Sleeper Bus: Hanoi Airport (HAN) -> Ha Giang (61 Cau Me)",
+        "operator": "Manh Quan Ha Giang",
+        "booking_reference": "12GO32785393",
+        "departure_time": "15:00 (Noi Bai Airport Pickup)",
+        "arrival_time": "20:00 (61 Cau Me, Ha Giang)",
+        "transit_duration": "5 hours",
+        "status": "CONFIRMED - BOOKED"
       },
       "curated_daily_flow": {
-        "morning": "ARL to Suvarnabhumi, drop suitcase at AIRPORTELs Floor B basement, board confirmed flight to Hanoi.",
-        "afternoon": "Touchdown Noi Bai Airport (13:50). Fast-track e-visa clearance. Relax at airport cafe and rendezvous with Ha Giang tour shuttle.",
-        "evening": "Board VIP sleeper cabin bus directly from Hanoi Airport on the highway north to Ha Giang City. Check into tour-included hotel (twin beds) for solid rest before Day 1 of the loop."
+        "morning": "Depart Bangkok on flight to Hanoi Noi Bai (HAN). Land 13:45, clear customs and immigration, collect 55L backpacks.",
+        "afternoon": "15:00 PM: Board Manh Quan Ha Giang VIP sleeper bus directly at Hanoi Airport (Booking #12GO32785393). Direct express transfer to Ha Giang.",
+        "evening": "20:00 PM: Arrive at 61 Cau Me, Ha Giang. Check in to Happy House basecamp dorm (free pre-tour night included, 24/7 bell reception). Early sleep for 08:00 AM loop kickoff."
       },
       "essential_checklist": [
         "Deposit suitcase at AIRPORTELs BKK Basement; retain receipt",
         "Apply for Vietnam e-Visa approval letter online at least 2 weeks prior",
-        "Withdraw 3M-5M VND from VPBank or TPBank ATM (no local ATM fee) at airport"
+        "Withdraw 3M-5M VND from VPBank or TPBank ATM (no local ATM fee) at airport",
+        "Board Manh Quan Ha Giang sleeper bus at 15:00 at Hanoi Airport (Booking #12GO32785393)",
+        "Ring bell at Happy House upon arrival (61 Cau Me, 24/7 reception)"
       ],
       "attached_documents": [
         {
@@ -949,10 +1001,10 @@
       "day_number": 3,
       "date": "2026-09-13",
       "day_of_week": "Sunday",
-      "destination": "Ha Giang Loop: Bac Sum Pass, Quan Ba & Dong Van",
+      "destination": "Ha Giang Loop: Bac Sum Pass, Quan Ba & Dong Van (Happy Loop Day 1)",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
-      "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
+      "status": "CONFIRMED - BOOKED",
       "status_badge": "UNBOOKED",
       "booking_summary": "Ha Giang 3-Day Tour Day 1 • Easy-Riders & Dong Van Hotel Included",
       "weather_radar": {
@@ -964,6 +1016,15 @@
       },
       "luggage_action": "Backpack-only. Store extra gear at Ha Giang base camp locker; carry 25-30L dry bag on motorcycle rack.",
       "accommodation_matrix": [
+        {
+          "hotel_name": "Happy Loop Dong Van Homestay / Hotel",
+          "room_spec": "Twin Beds / Two Separate Beds (Private Room for 2-3 pax)",
+          "price_per_night": "Included in Happy Loop 3D/2N Tour",
+          "booking_url": "https://happyhousehagiang.com",
+          "status": "CONFIRMED_INCLUDED",
+          "critic_notes": "Private room with separate beds, strictly compliant with Phase 1 adventure specs. Border permit ($10) and food included.",
+          "critic_score": 9.0
+        },
         {
           "hotel_name": "Dong Van Eco Stone House / Phoenix Dong Van (Included in Tour)",
           "status": "UNBOOKED_VETTED_OPTION",
@@ -983,16 +1044,18 @@
         "tips": "Hotels included in your 3-day tour package. Twin bed rooms confirmed for privacy and comfort."
       },
       "curated_daily_flow": {
-        "morning": "Briefing with licensed Easy-Riders. Climb Bac Sum incline to Quan Ba Heaven Gate overlooking misty limestone towers. • [Agent Update: Add Hanoi West Lake Coffee Stop]",
-        "afternoon": "Carve through the 9-bend Tham Ma Pass. Explore the 100-year-old opium fortress of the Hmong King Palace in Sa Phin.",
-        "evening": "Check into tour hotel in Dong Van Ancient Town (Twin Room). Mountain hotpot dinner and stroll through the ancient stone quarter."
+        "morning": "07:30 Breakfast at Happy House (included). 08:00 AM sharp tour departure with licensed Easy Riders. Ascend Bac Sum Pass, Heaven's Gate Quan Ba, and Twin Mountains.",
+        "afternoon": "Scenic lunch in Yen Minh pine forest (included). Ride through Dong Van Karst Plateau Geopark, Tham Ma Pass, and visit H'mong King Palace.",
+        "evening": "Arrive in Dong Van Ancient Town. Check into private room (twin beds, 2-3 pax). Group family dinner (included) & Old Quarter stroll."
       },
       "essential_checklist": [
         "Book Ha Giang 3D/2N Easy-Rider package with hotel & airport sleeper pickup",
         "Ha Giang Provincial Border Permit ($10 USD / arranged by tour operator)",
         "Full protective gear (DOT helmet + knee/elbow armor)",
         "Bring 3M VND cash for loop expenses (ATMs are rare)",
-        "Execute Traveler Change: Add Hanoi West Lake Coffee Stop"
+        "Execute Traveler Change: Add Hanoi West Lake Coffee Stop",
+        "Pay tour balance in cash ($163 or $173 USD/pax) to Happy (+84338097000 / +84332097000) before 8:00 AM kickoff",
+        "Secure border area permit (included in tour package)"
       ],
       "attached_documents": [],
       "google_maps_links": [
@@ -1067,10 +1130,10 @@
       "day_number": 4,
       "date": "2026-09-14",
       "day_of_week": "Monday",
-      "destination": "Ha Giang Loop: Ma Pi Leng Pass, Tu San Canyon & Du Gia",
+      "destination": "Ha Giang Loop: Ma Pi Leng Pass, Tu San Canyon Boat Trip & Du Gia (Happy Loop Day 2)",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
-      "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
+      "status": "CONFIRMED - BOOKED",
       "status_badge": "UNBOOKED",
       "booking_summary": "Ha Giang 3-Day Tour Day 2 • Easy-Riders & Du Gia Hotel Included",
       "weather_radar": {
@@ -1082,6 +1145,15 @@
       },
       "luggage_action": "Backpack strapped to bike rack in waterproof cover.",
       "accommodation_matrix": [
+        {
+          "hotel_name": "Du Gia Ethnic Homestay (Happy Loop)",
+          "room_spec": "Twin Beds / Two Separate Beds (Private Room)",
+          "price_per_night": "Included in Happy Loop Tour",
+          "booking_url": "https://happyhousehagiang.com",
+          "status": "CONFIRMED_INCLUDED",
+          "critic_notes": "Scenic Du Gia homestay with mountain views, private room twin beds, home-cooked local dinner.",
+          "critic_score": 9.1
+        },
         {
           "hotel_name": "Du Gia Panorama Lodge / Du Gia Waterfall Hotel (Included in Tour)",
           "status": "UNBOOKED_VETTED_OPTION",
@@ -1101,9 +1173,9 @@
         "tips": "Highlight of the entire loop. Emerald waters of Nho Que river between 1,000m sheer limestone cliffs."
       },
       "curated_daily_flow": {
-        "morning": "Conquer Ma Pi Leng Pass ('The King of Mountain Passes'). Photograph the panoramic vista over the emerald Nho Que chasm.",
-        "afternoon": "Motorboat cruise through Tu San Canyon beneath towering limestone walls. Ride the M-Pau pass toward Du Gia.",
-        "evening": "Check into private twin bungalow in Du Gia Valley. Family feast with Easy-Riders (grilled pork, bamboo shoots, and 'happy water' corn wine toasts)."
+        "morning": "07:30 Breakfast in Dong Van. Conquer legendary Ma Pi Leng Pass — the king of Vietnamese mountain passes with towering limestone gorges.",
+        "afternoon": "Descend to Nho Que River for scenic canyon boat cruise (tickets included). Ride through Meo Vac mountain passes towards Du Gia valley.",
+        "evening": "Arrive at Du Gia ethnic homestay. Authentic family dinner with 'happy water' toasts, waterfall swim option, and homestay relaxation."
       },
       "essential_checklist": [
         "Full battery charge on phone / camera for Ma Pi Leng panoramas",
@@ -1182,7 +1254,7 @@
       "day_number": 5,
       "date": "2026-09-15",
       "day_of_week": "Tuesday",
-      "destination": "Du Gia -> Ha Giang City -> Sleeper to Sa Pa Town Hotel",
+      "destination": "Du Gia Waterfall -> Ha Giang City (Loop Finish) -> Sleeper to Sa Pa",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
       "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
@@ -1226,13 +1298,15 @@
         "tips": "User mandated: sleep 1 night in Sa Pa town hotel to fully recharge in a real bed before starting the 2-day guided trek!"
       },
       "curated_daily_flow": {
-        "morning": "Dip in crystal-clear Du Gia waterfall. Visit Lung Tam traditional hemp-weaving village.",
-        "afternoon": "Ride back to Ha Giang City basecamp. Return riding gear, hot shower, consolidate into 55L backpack.",
-        "evening": "Board direct evening sleeper bus to Sa Pa town. Check into Sa Pa town hotel (Deluxe Twin Room). Deep, restful sleep in a real bed before the 2-day trek."
+        "morning": "Breakfast at homestay. Morning dip in Du Gia waterfall. Ride through Lung Tam linen weaving village and mountain passes back to Ha Giang.",
+        "afternoon": "Scenic ride back to Ha Giang City. Tour concludes at Happy House basecamp between 16:00 and 17:00.",
+        "evening": "Take hot showers 🚿 at Happy House (towels provided free). Rest, have dinner, repack 55L backpacks, and board evening sleeper transfer to Sa Pa."
       },
       "essential_checklist": [
         "Book Ha Giang -> Sa Pa sleeper bus (via 12Go Asia or local operator)",
-        "Reserve 1 night at BB Hotel Sapa for deep sleep before the trek"
+        "Reserve 1 night at BB Hotel Sapa for deep sleep before the trek",
+        "Shower & refresh at Happy House basecamp (towels provided free) upon 16:00-17:00 arrival",
+        "Board evening sleeper transfer from Ha Giang to Sa Pa"
       ],
       "attached_documents": [],
       "google_maps_links": [

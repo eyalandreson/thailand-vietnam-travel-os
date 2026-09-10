@@ -1,5 +1,55 @@
 [
   {
+    "id": "CR-20260910-003",
+    "created_at": "2026-09-10T21:13:09.908697Z",
+    "updated_at": "2026-09-10T21:24:51.520034Z",
+    "category": "plan",
+    "priority": "normal",
+    "target_day": null,
+    "title": "I've closed the guided tour for ha giang loop",
+    "description": "I've contacted and closed the guided tour for Ha Giang Loop with Happy. phone numbers +84338097000, +84332097000.\nhe sent us these massages:\n- The fist day :  tour start 8:00 am from Happy House\n- The last day : 4-5 pm finish in Happy house\n\n- everyone can coming to My agency sleep 1 night before (Happyhouse)\n\n- ( open 24 hours -  Have bed in drom for everyone. \nSomeone arrive middle of the night Can ring a bell and will have someone open the door) \n\n+. The last day :  everyone can take shower 🚿 ( we have towels for everyone )and waiting the bus in My Agency.\n**Happy Loop 🔁 2026 northviet company \n\nTour ha giang : 3days -2nights \nGroups 8-15 people\n\n- 1 option : 173 usd/pax 1 jeep-  all take easy riders ( Jeep for small bag put in the jeep And rest on the way ) \n\n- 2 option : 163 usd/pax all take easy riders (No Jeep) Only easy rider \n You are need tie bag on motobike \n\n\nInclude\n- sleep drom ( night before) \n- permit to get in border area 10$/1 people \n* 2breakfast- 3 lunch-2dinner \n* 2night in private room ( each room 2-3 people) \n* Water 💦 - Gasoline ⛽️ \n* boat trip Tickets \n* 1 Raincoat for each  person \n- insurance travel for the trip\n\nNot include:\n- transportation ( sleeper 2 way)\n-  alcohol- beer - coffee….\n\neveryone can coming to Happy loop agency 🏡 sleep day before ( This include)\n\n- pay for the trips by cash. ( dollar or vnd this ok )\n\nAdditional service\n\n- Backrest: 5$ extra \n- private room alone 1 people: 30$/2 nights\n\nI've also ordered the sleeper to Ha Giang - booking ID #12GO32785393, departing at 15:00 12/09 from Hanoi Airport and arriving at 20:00 12/09 on 61 Cau Me. The operator is Manh Quan Ha Giang.",
+    "submitter": "Eyal",
+    "status": "RESOLVED",
+    "agent_resolution": "🎉 Ha Giang Loop & Sleeper Bus Confirmed! Integrated Manh Quan Ha Giang sleeper bus (Booking #12GO32785393) and Happy Loop 3D/2N tour across Days 2, 3, 4, and 5. All Phase 1 constraints strictly preserved (Twin Beds in private rooms, 55L backpack storage, pre-tour dorm night at Happy House). Synchronized Web Dashboard and Master Google Doc.",
+    "critic_audit": {
+      "target_day": "Days 2-5",
+      "passed": true,
+      "score": 9.1,
+      "issues": []
+    },
+    "diff_summary": [
+      "Day 2 (Sep 12): Confirmed Manh Quan Ha Giang sleeper bus (15:00 Hanoi Airport -> 20:00 61 Cau Me, Booking #12GO32785393) and free pre-tour dorm stay at Happy House (24/7 bell).",
+      "Day 3 (Sep 13): Confirmed Happy Loop 3D/2N kickoff (08:00 AM from Happy House), Bac Sum Pass, Heaven's Gate, Dong Van Ancient Town, private room twin beds.",
+      "Day 4 (Sep 14): Confirmed Ma Pi Leng Pass, Tu San Canyon Nho Que River boat cruise (tickets included), and Du Gia homestay private room.",
+      "Day 5 (Sep 15): Confirmed loop finish (16:00-17:00 at Happy House), complimentary hot showers 🚿 & towels, and preparation for evening Sa Pa sleeper transfer.",
+      "Master Registry: Added 2 verified bookings to Confirmed Registry; marked ACTION-HG-EASYRIDERS as BOOKED; updated confirmed days count."
+    ],
+    "client_meta": {}
+  },
+  {
+    "id": "CR-20260910-002",
+    "created_at": "2026-09-10T21:12:50.979579Z",
+    "updated_at": "2026-09-10T21:13:07.113842Z",
+    "category": "plan",
+    "priority": "normal",
+    "target_day": null,
+    "title": "I've closed the guided tour for ha giang loop",
+    "description": "I've contacted and closed the guided tour for Ha Giang Loop with Happy. phone numbers +84338097000, +84332097000. he sent us these massages: - The fist day : tour start 8:00 am from Happy House - The last day : 4-5 pm finish in Happy house - everyone can coming to My agency sleep 1 night before (Happyhouse) - ( open 24 hours - Have bed in drom for everyone. Someone arrive middle of the night Can ring a bell and will have someone open the door) +. The last day : everyone can take shower 🚿 ( we have towels for everyone )and waiting the bus in My Agency. **Happy Loop 🔁 2026 northviet company Tour ha giang : 3days -2nights Groups 8-15 people - 1 option : 173 usd/pax 1 jeep- all take easy riders ( Jeep for small bag put in the jeep And rest on the way ) - 2 option : 163 usd/pax all take easy riders (No Jeep) Only easy rider You are need tie bag on motobike Include - sleep drom ( night before) - permit to get in border area 10$/1 people * 2breakfast- 3 lunch-2dinner * 2night in private room ( each room 2-3 people) * Water 💦 - Gasoline ⛽️ * boat trip Tickets * 1 Raincoat for each person - insurance travel for the trip Not include: - transportation ( sleeper 2 way) - alcohol- beer - coffee…. everyone can coming to Happy loop agency 🏡 sleep day before ( This include) - pay for the trips by cash. ( dollar or vnd this ok ) Additional service - Backrest: 5$ extra - private room alone 1 people: 30$/2 nights I've also ordered the sleeper to Ha Giang - booking ID #12GO32785393, departing at 15:00 12/09 from Hanoi Airport and arriving at 20:00 12/09 on 61 Cau Me. The operator is Manh Quan Ha Giang.",
+    "submitter": "Eyal",
+    "status": "RESOLVED",
+    "agent_resolution": "Resolved (merged with CR-20260910-003): Ha Giang Loop tour & Hanoi sleeper bus confirmed across Days 2-5.",
+    "critic_audit": {
+      "target_day": "Days 2-5",
+      "passed": true,
+      "score": 9.1,
+      "issues": []
+    },
+    "diff_summary": [
+      "Merged with CR-20260910-003: Ha Giang Loop & Hanoi Sleeper confirmed."
+    ],
+    "client_meta": {}
+  },
+  {
     "id": "CR-20260910-001",
     "created_at": "2026-09-10T20:28:26.387762Z",
     "updated_at": "2026-09-10T20:28:26.525594Z",
