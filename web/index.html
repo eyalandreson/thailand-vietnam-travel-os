@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#f8fafc">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -57,7 +57,7 @@
 
   <!-- TOP APP NAVIGATION BAR -->
   <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
       
       <!-- Brand & Title -->
       <div class="flex items-center gap-3 shrink-0">
@@ -66,7 +66,7 @@
         </div>
         <div>
           <h1 class="font-extrabold text-slate-900 dark:text-white text-sm sm:text-base leading-tight tracking-tight">Master Itinerary: Thailand &amp; Vietnam</h1>
-          <p class="text-xs text-blue-600 dark:text-cyan-400 font-semibold tracking-wide uppercase">Adaptive Travel OS • 29 Days (Sep 11 – Oct 09)</p>
+          <p class="text-[11px] sm:text-xs text-blue-600 dark:text-cyan-400 font-semibold tracking-wide uppercase truncate">29 Days • Sep 11 – Oct 09</p>
         </div>
       </div>
 
@@ -82,15 +82,15 @@
           <span class="text-amber-300">✨</span> <span class="hidden lg:inline">Ask Gemini AI</span><span class="lg:hidden">Gemini</span>
         </button>
 
-        <button onclick="openPackingModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm" title="Split Luggage & Packing Checklist">
+        <button onclick="openPackingModal()" class="hidden sm:inline-flex px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition items-center gap-1.5 shadow-sm" title="Split Luggage & Packing Checklist">
           <span>🧳</span> <span class="hidden md:inline">Packing</span>
         </button>
 
-        <button onclick="openCurrencyModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm" title="Live 4-Way Currency Converter (ILS/USD/THB/VND)">
+        <button onclick="openCurrencyModal()" class="hidden sm:inline-flex px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition items-center gap-1.5 shadow-sm" title="Live 4-Way Currency Converter (ILS/USD/THB/VND)">
           <span>💱</span> <span class="hidden md:inline">Currency</span>
         </button>
 
-        <button onclick="openTranslationsModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm" title="Offline Emergency & Taxi Phrasebook">
+        <button onclick="openTranslationsModal()" class="hidden sm:inline-flex px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition items-center gap-1.5 shadow-sm" title="Offline Emergency & Taxi Phrasebook">
           <span>🗣️</span> <span class="hidden md:inline">Phrases</span>
         </button>
 
@@ -109,7 +109,7 @@
   </header>
 
   <!-- MAIN APP CONTAINER -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3.5 sm:py-6 space-y-4 sm:space-y-6 pb-28 sm:pb-12">
 
     <!-- VIEW 1: INTERACTIVE APP VIEW -->
     <div id="app-view-container" class="space-y-6">
@@ -172,9 +172,9 @@
       </div>
 
       <!-- QUICK OPERATIONS STRIP -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+      <div class="flex sm:grid overflow-x-auto sm:overflow-visible sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 pb-2 sm:pb-0 scrollbar-none">
         <!-- Operation 1: Luggage Protocol -->
-        <button onclick="openLuggageModal()" class="travel-card rounded-2xl p-4 text-left hover:border-amber-500/50 transition border-l-4 border-amber-500 group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <button onclick="openLuggageModal()" class="travel-card shrink-0 w-64 sm:w-auto rounded-2xl p-3.5 sm:p-4 text-left hover:border-amber-500/50 transition border-l-4 border-amber-500 group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
           <div class="flex items-center justify-between w-full">
             <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
               <span>🧳</span> BKK Luggage Drop
@@ -186,7 +186,7 @@
         </button>
 
         <!-- Operation 2: Sep 24 Connection Risk Radar -->
-        <button onclick="openPriceRadarModal()" class="travel-card rounded-2xl p-4 text-left hover:border-rose-500/50 transition border-l-4 border-rose-500 group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <button onclick="openPriceRadarModal()" class="travel-card shrink-0 w-64 sm:w-auto rounded-2xl p-3.5 sm:p-4 text-left hover:border-rose-500/50 transition border-l-4 border-rose-500 group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
           <div class="flex items-center justify-between w-full">
             <span class="text-xs font-bold text-red-400 flex items-center gap-1.5">
               <span>✈️</span> Sep 24 Risk Radar
@@ -198,7 +198,7 @@
         </button>
 
         <!-- Operation 3: Route Resilience -->
-        <button onclick="openRouteModal()" class="travel-card rounded-2xl p-4 text-left hover:border-sky-500/50 transition border-l-4 border-sky-500 group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <button onclick="openRouteModal()" class="travel-card shrink-0 w-64 sm:w-auto rounded-2xl p-3.5 sm:p-4 text-left hover:border-sky-500/50 transition border-l-4 border-sky-500 group flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
           <div class="flex items-center justify-between w-full">
             <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
               <span>🔄</span> Route Resilience
@@ -210,7 +210,7 @@
         </button>
 
         <!-- Operation 4: Ha Giang Easy-Riders -->
-        <div class="travel-card rounded-2xl p-4 text-left border-l-4 border-emerald-500 flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="travel-card shrink-0 w-64 sm:w-auto rounded-2xl p-3.5 sm:p-4 text-left border-l-4 border-emerald-500 flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
           <div class="flex items-center justify-between w-full">
             <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
               <span>🏍️</span> Ha Giang 3D Tour
@@ -306,7 +306,7 @@
       </div>
 
       <!-- STICKY 29-DAY TIMELINE SCRUBBER -->
-      <div class="sticky top-16 z-30 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md py-3 px-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md transition-colors">
+      <div class="sticky top-14 sm:top-16 z-30 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md py-2 sm:py-3 px-2.5 sm:px-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
         <div class="flex items-center justify-between mb-1.5 px-1">
           <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
             <span>🧭</span> <span>Quick Day Scrubber</span>
@@ -365,7 +365,7 @@
   </main>
 
   <!-- MODAL: DYNAMIC SPLIT-LUGGAGE PACKING CHECKLIST -->
-  <div id="packing-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-4">
+  <div id="packing-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
     <div class="glass-card rounded-2xl max-w-2xl w-full p-6 border border-slate-700 shadow-2xl relative max-h-[90vh] flex flex-col">
       <button onclick="closePackingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       
@@ -418,7 +418,7 @@
   </div>
 
   <!-- MODAL: LIVE 4-WAY CURRENCY CONVERTER -->
-  <div id="currency-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-4">
+  <div id="currency-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
     <div class="glass-card rounded-2xl max-w-xl w-full p-6 border border-slate-700 shadow-2xl relative max-h-[90vh] overflow-y-auto">
       <button onclick="closeCurrencyModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       
@@ -503,7 +503,7 @@
   </div>
 
   <!-- MODAL: OFFLINE EMERGENCY & TAXI PHRASEBOOK -->
-  <div id="translations-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-4">
+  <div id="translations-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
     <div class="travel-card rounded-2xl max-w-3xl w-full p-6 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative max-h-[90vh] flex flex-col bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
       <button onclick="closeTranslationsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       
@@ -568,7 +568,7 @@
   </div>
 
   <!-- MODAL: DOCUMENT PREVIEW -->
-  <div id="doc-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-4">
+  <div id="doc-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
     <div class="travel-card rounded-2xl max-w-lg w-full p-6 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
       <button onclick="closeDocModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       <h3 id="modal-doc-title" class="text-base font-bold text-slate-900 dark:text-white mb-4 pr-6">Document Details</h3>
@@ -581,8 +581,8 @@
   </div>
 
   <!-- MODAL: BKK -> USM FLIGHT CONNECTION & PRICE RADAR -->
-  <div id="price-radar-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-4">
-    <div class="travel-card rounded-2xl max-w-xl w-full p-6 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+  <div id="price-radar-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
+    <div class="travel-card modal-sheet-card rounded-2xl max-w-xl w-full p-5 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
       <button onclick="closePriceRadarModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       
       <div class="flex items-center gap-2 mb-3">
@@ -641,8 +641,8 @@
   </div>
 
   <!-- MODAL: ROUTE RESILIENCE & SEQUENCING (A vs B) -->
-  <div id="route-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-4">
-    <div class="travel-card rounded-2xl max-w-2xl w-full p-6 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+  <div id="route-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
+    <div class="travel-card modal-sheet-card rounded-2xl max-w-2xl w-full p-5 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
       <button onclick="closeRouteModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       
       <div class="flex items-center gap-2 mb-3">
@@ -689,8 +689,8 @@
   </div>
 
   <!-- MODAL: LUGGAGE PROTOCOL -->
-  <div id="luggage-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-4">
-    <div class="travel-card rounded-2xl max-w-xl w-full p-6 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+  <div id="luggage-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
+    <div class="travel-card modal-sheet-card rounded-2xl max-w-xl w-full p-5 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
       <button onclick="closeLuggageModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
       
       <div class="flex items-center gap-2 mb-3">
@@ -737,7 +737,7 @@
 
   <!-- MODAL: GEMINI 3.8 FLASH GROUNDED ASSISTANT -->
   <div id="gemini-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-md hidden p-2 sm:p-4">
-    <div class="travel-card rounded-2xl max-w-3xl w-full h-[90vh] sm:h-[84vh] flex flex-col border border-indigo-500/30 shadow-2xl relative overflow-hidden bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+    <div class="travel-card modal-sheet-card rounded-2xl max-w-3xl w-full h-[92vh] sm:h-[84vh] flex flex-col border border-indigo-500/30 shadow-2xl relative overflow-hidden bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
       
       <!-- MODAL HEADER -->
       <div class="px-5 py-4 border-b border-slate-800 bg-slate-50 dark:bg-gradient-to-r dark:from-slate-900 dark:via-indigo-950/40 dark:to-slate-900 flex items-center justify-between shrink-0">

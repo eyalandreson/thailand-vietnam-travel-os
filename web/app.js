@@ -403,14 +403,14 @@ function renderDays() {
                 <div class="text-slate-900 dark:text-white font-bold text-sm truncate">${grab.dropoff || ''}</div>
                 ${dropLocal ? `<div class="driver-native-text mt-0.5 select-all">${dropLocal}</div>` : ''}
               </div>
-              <div class="flex items-center gap-2 shrink-0">
+              <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto shrink-0 mt-2 sm:mt-0">
                 ${dropLocal ? `
-                  <button onclick="copyToClipboard('${escapedLocal}', 'Copied destination in local script for driver!')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition active:scale-95">
-                    <span>📋</span> Copy Script
+                  <button onclick="copyToClipboard('${escapedLocal}', 'Copied destination in local script for driver!')" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95">
+                    <span>📋</span> Copy Driver Script
                   </button>
                 ` : ''}
                 ${grab.maps_url ? `
-                  <a href="${grab.maps_url}" target="_blank" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition">
+                  <a href="${grab.maps_url}" target="_blank" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition">
                     <span>📍</span> Open Maps ↗
                   </a>
                 ` : ''}
@@ -449,14 +449,14 @@ function renderDays() {
               <span class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Daily Attraction &amp; Experience Hub</span>
             </div>
             
-            <div class="flex items-center gap-2">
+            <div class="grid grid-cols-2 gap-1.5 w-full sm:w-auto">
               <button id="btn-plan-a-${day.day_number}" onclick="toggleExperience(${day.day_number}, 'primary')" 
-                      class="plan-tab-btn ${isModeB ? 'plan-tab-inactive' : 'plan-tab-active-a'} px-3.5 py-2 text-xs flex items-center gap-1.5">
-                <span>🌟</span> Plan A: Main Plan
+                      class="plan-tab-btn ${isModeB ? 'plan-tab-inactive' : 'plan-tab-active-a'} px-3 py-2 text-xs flex items-center justify-center gap-1.5">
+                <span>🌟</span> Plan A: Main
               </button>
               <button id="btn-plan-b-${day.day_number}" onclick="toggleExperience(${day.day_number}, 'contingency')" 
-                      class="plan-tab-btn ${isModeB ? 'plan-tab-active-b' : 'plan-tab-inactive'} px-3.5 py-2 text-xs flex items-center gap-1.5">
-                <span>☔</span> Plan B: Contingency
+                      class="plan-tab-btn ${isModeB ? 'plan-tab-active-b' : 'plan-tab-inactive'} px-3 py-2 text-xs flex items-center justify-center gap-1.5">
+                <span>☔</span> Plan B: Rain
               </button>
             </div>
           </div>
@@ -566,15 +566,15 @@ function renderDays() {
     card.className = 'travel-card rounded-2xl overflow-hidden mb-5 transition-all duration-200 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md';
     card.innerHTML = `
       <!-- Card Header (Always Visible) -->
-      <div onclick="toggleDay(${day.day_number})" class="p-5 sm:p-6 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 select-none transition-colors">
+      <div onclick="toggleDay(${day.day_number})" class="p-3.5 sm:p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 select-none transition-colors">
         <div class="flex items-center gap-3.5 sm:gap-5 flex-wrap sm:flex-nowrap">
-          <div class="flex flex-col items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-black border border-blue-200 dark:border-blue-800/60 shrink-0 shadow-sm">
-            <span class="text-[9px] sm:text-[10px] uppercase font-bold text-blue-500 dark:text-blue-400 leading-tight">DAY</span>
-            <span class="text-base sm:text-lg leading-tight">${day.day_number < 10 ? '0' + day.day_number : day.day_number}</span>
+          <div class="flex flex-col items-center justify-center w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-black border border-blue-200 dark:border-blue-800/60 shrink-0 shadow-sm">
+            <span class="text-[8px] sm:text-[10px] uppercase font-bold text-blue-500 dark:text-blue-400 leading-none">DAY</span>
+            <span class="text-sm sm:text-lg leading-tight font-black">${day.day_number < 10 ? '0' + day.day_number : day.day_number}</span>
           </div>
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <h3 class="font-black text-base sm:text-xl text-slate-900 dark:text-white tracking-tight">${day.destination}</h3>
+              <h3 class="font-extrabold text-sm sm:text-lg text-slate-900 dark:text-white tracking-tight leading-tight break-words">${day.destination}</h3>
               <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${badgeClass}">${day.status}</span>
               <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold border ${phaseColor} hidden sm:inline-block">${day.phase_short || day.phase}</span>
             </div>
@@ -593,7 +593,7 @@ function renderDays() {
       </div>
 
       <!-- Card Content (Expandable) -->
-      <div id="day-content-${day.day_number}" class="day-content-block p-5 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 space-y-4">
+      <div id="day-content-${day.day_number}" class="day-content-block p-3.5 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 space-y-3.5 sm:space-y-4">
         ${specialBanner}
 
         <!-- Weather & Attire Radar -->
@@ -818,7 +818,7 @@ function scrollToDay(dayNum) {
     if (icon) icon.classList.add('rotate-180');
 
     // Smooth scroll to card (offset for sticky header + scrubber ~ 140px)
-    const yOffset = -140;
+    const yOffset = window.innerWidth < 640 ? -110 : -140;
     const y = targetCard.getBoundingClientRect().top + window.pageYOffset + yOffset;
     window.scrollTo({ top: y, behavior: 'smooth' });
 
