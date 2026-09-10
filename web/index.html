@@ -103,9 +103,9 @@
           <span>⚡</span> <span class="font-bold">Tools</span> <span class="text-[10px] text-blue-400 dark:text-sky-400">▾</span>
         </button>
 
-        <!-- AGENT FIX / CHANGE REQUEST BUTTON (Desktop Only) -->
-        <button onclick="openChangeRequestModal()" class="hidden sm:inline-flex px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold border border-emerald-400/40 transition items-center gap-1.5 shadow-sm shadow-emerald-500/20" title="Tell Antigravity about changes in plans or site">
-          <span>🛠️</span> <span>Agent Fix</span>
+        <!-- CLOUD AGENT / CHANGE REQUEST BUTTON (Desktop Only) -->
+        <button onclick="openChangeRequestModal()" class="hidden sm:inline-flex px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold border border-emerald-400/40 transition items-center gap-1.5 shadow-sm shadow-emerald-500/20" title="Request travel plan or site changes with Cloud Agent (0% PC battery)">
+          <span>☁️</span> <span>Cloud Agent</span>
           <span id="header-bridge-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
         </button>
 
@@ -961,14 +961,14 @@
           </div>
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white leading-none">Antigravity Agent Hub</h3>
+              <h3 class="text-base font-bold text-slate-900 dark:text-white leading-none">Cloud Agent Hub</h3>
               <span id="bridge-connection-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-mono font-bold border border-emerald-300 dark:border-emerald-500/40 flex items-center gap-1">
                 <span id="bridge-connection-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span id="bridge-connection-text">Checking Bridge...</span>
+                <span id="bridge-connection-text">☁️ Cloud Agent: Ready</span>
               </span>
             </div>
             <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
-              <span>Tell Antigravity about changes in travel plans or site features to auto-fix</span>
+              <span>Autonomous Cloud AI: Instant plan & site fixes across mobile & desktop with zero pairing</span>
             </p>
           </div>
         </div>
@@ -977,7 +977,7 @@
           <button onclick="enableBrowserNotifications()" class="px-2.5 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50 text-amber-800 dark:text-amber-300 transition border border-amber-300 dark:border-amber-700/50 text-xs font-bold flex items-center gap-1 shadow-sm" title="Enable Completion Alerts (Desktop & Mobile)">
             <span>🔔</span> <span class="hidden sm:inline">Alerts</span>
           </button>
-          <button onclick="checkBridgeStatus(true)" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700 text-xs font-bold" title="Refresh Bridge Connection">
+          <button onclick="checkBridgeStatus(true)" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700 text-xs font-bold" title="Refresh Cloud Agent Status">
             🔄
           </button>
           <button onclick="closeChangeRequestModal()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 dark:hover:bg-rose-900/40 text-slate-700 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-300 transition border border-slate-200 dark:border-slate-700 ml-1 text-sm font-bold" title="Close">
@@ -996,15 +996,12 @@
             <span>📋 Queue &amp; History</span>
             <span id="cr-queue-badge" class="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-200 dark:bg-slate-700 font-bold">0</span>
           </button>
-          <button id="cr-tab-btn-mobile" onclick="switchCrTab('mobile')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition flex items-center gap-1.5">
-            <span>📱 Mobile AI (0% PC Battery)</span>
-          </button>
           <button id="cr-tab-btn-directive" onclick="switchCrTab('directive')" class="hidden sm:inline-flex px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition items-center gap-1">
-            <span>⚡ Directive</span>
+            <span>⚡ Prompt / Directive</span>
           </button>
         </div>
         <span class="text-[11px] text-slate-400 hidden sm:inline font-mono">
-          Antigravity 2.0 Connected
+          Zero-Pairing Cloud Service
         </span>
       </div>
 
@@ -1119,7 +1116,7 @@
                 <span>📋</span> Copy Directive
               </button>
               <button type="submit" id="cr-submit-btn" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold shadow-lg shadow-emerald-500/25 transition flex items-center justify-center gap-1.5">
-                <span>Dispatch to Agent</span> <span>🚀</span>
+                <span>Dispatch to Cloud Agent</span> <span>🚀</span>
               </button>
             </div>
           </div>
@@ -1158,68 +1155,6 @@
             This formatted directive references `@core/itinerary_data.json` and instructs Antigravity to apply your requested changes, verify with the critic engine, and execute dual-sync.
           </p>
           <pre id="cr-directive-preview" class="p-3.5 rounded-xl bg-slate-900 text-slate-200 text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-72"></pre>
-        </div>
-      </div>
-
-      <!-- TAB 4: MOBILE INSTANT FIX (0% PC BATTERY) -->
-      <div id="cr-tab-content-mobile" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-        <div class="bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-cyan-500/10 p-4 rounded-2xl border border-emerald-500/30 space-y-2">
-          <div class="flex items-center gap-2.5">
-            <span class="text-2xl">📱</span>
-            <div>
-              <h4 class="font-extrabold text-sm text-slate-900 dark:text-white">Instant Mobile AI Agent (0% Computer Battery)</h4>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Run autonomous travel plan updates directly from your phone in Vietnam or Thailand with your computer turned off.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mobile AI Engine Status:</span>
-            <span id="mobile-engine-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700">
-              Checking...
-            </span>
-          </div>
-
-          <!-- Desktop view: 1-click generate pairing link -->
-          <div id="mobile-pair-desktop-section" class="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-700">
-            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              <b>Pair your phone in 5 seconds:</b> Click below to generate your private mobile pairing link. You can send it to your phone via WhatsApp, Telegram, or email:
-            </p>
-            <div>
-              <button id="cr-mobile-pair-btn" onclick="generateMobilePairLink()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5">
-                <span>📱</span> Generate Mobile Pairing Link
-              </button>
-            </div>
-
-            <div id="cr-mobile-pair-output" class="hidden space-y-2 pt-2">
-              <div class="flex items-center gap-2">
-                <input id="cr-mobile-pair-url" type="text" readonly class="flex-1 px-3 py-2 text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl select-all" />
-                <button onclick="copyMobilePairUrl()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition shrink-0">
-                  📋 Copy Link
-                </button>
-              </div>
-              <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
-                ✓ Send and open this link on your phone once. Your phone will instantly pair and be ready for autonomous changes with 0% PC battery usage!
-              </p>
-            </div>
-          </div>
-
-          <!-- Manual Key Configuration (For Mobile Users) -->
-          <div class="pt-3 border-t border-slate-200 dark:border-slate-700 space-y-2">
-            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">
-              Or configure Gemini API Key directly on this device:
-            </label>
-            <div class="flex items-center gap-2">
-              <input id="mobile-gemini-key-input" type="password" placeholder="AIzaSy..." class="flex-1 px-3 py-2 text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500" />
-              <button onclick="saveManualGeminiKey()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition shrink-0">
-                Save Key
-              </button>
-            </div>
-            <p class="text-[10px] text-slate-400">
-              Your key stays safely stored in your browser's private local storage. When you tap "Dispatch to Agent", your phone connects directly to Gemini Flash in ~1.5s, updates your day plan, and saves it locally.
-            </p>
-          </div>
         </div>
       </div>
 
@@ -1379,8 +1314,8 @@
       <span>Days</span>
     </button>
     <button onclick="openChangeRequestModal()" class="mobile-nav-item text-emerald-500">
-      <span class="text-base">🛠️</span>
-      <span>Fix</span>
+      <span class="text-base">☁️</span>
+      <span>Cloud Fix</span>
     </button>
     <button onclick="openGeminiModal()" class="mobile-nav-item text-indigo-400">
       <span class="text-base">✨</span>

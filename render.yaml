@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: travel-os-cloud-agent
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python cloud_server.py 8080
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GITHUB_PAT
+        sync: false
