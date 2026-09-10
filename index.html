@@ -10,6 +10,7 @@
   <title>Master Itinerary: Thailand & Vietnam [Adaptive Travel OS]</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
   <script src="itinerary_data.js"></script>
   <script src="app.js" defer></script>
 </head>
@@ -18,11 +19,20 @@
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="toast-container"></div>
 
-  <!-- FLOATING TODAY JUMP BUTTON -->
-  <button onclick="jumpToToday()" class="floating-today-btn px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold text-xs flex items-center gap-2 border border-blue-400/50 shadow-2xl">
-    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-    <span>📍 Jump to Today</span>
-  </button>
+  <!-- FLOATING ACTION CONTROLS -->
+  <div class="fixed bottom-6 right-6 z-40 flex flex-col sm:flex-row items-end sm:items-center gap-2.5 pointer-events-auto">
+    <!-- Ask Gemini 3.8 Flash Floating Button -->
+    <button onclick="openGeminiModal()" class="floating-gemini-btn px-4 py-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-full font-bold text-xs flex items-center gap-2 border border-blue-400/50 shadow-2xl transition-all transform hover:scale-105 active:scale-95 shadow-indigo-500/30">
+      <span class="text-amber-300 text-sm animate-pulse">✨</span>
+      <span>Ask Gemini 3.8 Flash</span>
+    </button>
+
+    <!-- Jump to Today Button -->
+    <button onclick="jumpToToday()" class="floating-today-btn px-4 py-2.5 bg-slate-800/95 hover:bg-slate-700 text-white rounded-full font-bold text-xs flex items-center gap-2 border border-slate-700/80 shadow-xl backdrop-blur-md transition-all transform hover:scale-105 active:scale-95">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+      <span>📍 Jump to Today</span>
+    </button>
+  </div>
 
   <!-- TOP APP NAVIGATION BAR -->
   <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
@@ -39,8 +49,13 @@
         </div>
       </div>
 
-      <!-- UTILITY ACTION TOOLS (Packing, Currency, Translations) -->
+      <!-- UTILITY ACTION TOOLS (Packing, Currency, Translations, Gemini) -->
       <div class="flex items-center gap-1.5 sm:gap-2">
+        <!-- GEMINI 3.8 FLASH ASSISTANT BUTTON -->
+        <button onclick="openGeminiModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-xs font-bold border border-blue-400/50 transition flex items-center gap-1.5 shadow-md shadow-indigo-500/20" title="Ask Gemini 3.8 Flash about your itinerary">
+          <span class="text-amber-300">✨</span> <span class="hidden lg:inline">Ask Gemini 3.8 Flash</span><span class="lg:hidden">Gemini AI</span>
+        </button>
+
         <button onclick="openPackingModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 hover:border-blue-500/50 transition flex items-center gap-1.5 shadow-sm" title="Split Luggage & Packing Checklist">
           <span>🧳</span> <span class="hidden md:inline">Packing</span>
         </button>
@@ -691,6 +706,146 @@
       <div class="mt-5 flex justify-end">
         <button onclick="closeLuggageModal()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition">Got It</button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GEMINI 3.8 FLASH GROUNDED ASSISTANT -->
+  <div id="gemini-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden p-2 sm:p-4">
+    <div class="glass-card rounded-2xl max-w-3xl w-full h-[90vh] sm:h-[84vh] flex flex-col border border-indigo-500/40 shadow-2xl relative overflow-hidden bg-slate-900/95">
+      
+      <!-- MODAL HEADER -->
+      <div class="px-5 py-4 border-b border-slate-800 bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white text-lg shadow-lg shadow-indigo-500/30">
+            ✨
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-bold text-white leading-none">Gemini 3.8 Flash Assistant</h3>
+              <span id="gemini-active-model-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-950 border border-indigo-500/40 text-indigo-300 font-mono font-bold">
+                gemini-3.8-flash
+              </span>
+            </div>
+            <p class="text-[11px] text-cyan-400 mt-1 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>100% Grounded on 29 Days Itinerary, Hard Anchors & Utilities</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Settings Drawer Toggle -->
+          <button onclick="toggleGeminiSettings()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700" title="Model & API Key Settings">
+            ⚙️
+          </button>
+          <!-- Clear Conversation Button -->
+          <button onclick="clearGeminiChat()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700" title="Clear Chat History">
+            🗑️
+          </button>
+          <!-- Close Modal -->
+          <button onclick="closeGeminiModal()" class="p-2 rounded-lg bg-slate-800 hover:bg-rose-900/40 text-slate-300 hover:text-rose-300 transition border border-slate-700 ml-1 text-sm font-bold" title="Close">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- SETTINGS DRAWER (COLLAPSIBLE) -->
+      <div id="gemini-settings-drawer" class="hidden px-5 py-3.5 bg-slate-950 border-b border-slate-800 space-y-3 shrink-0 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-indigo-300 uppercase tracking-wider text-[11px]">AI Model & Credentials</span>
+          <span class="text-[11px] text-slate-400">Stored locally in your browser</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Model Selector -->
+          <div>
+            <label class="block text-slate-400 text-[11px] mb-1 font-medium">Target Gemini Model:</label>
+            <select id="gemini-model-select" onchange="saveGeminiModelPreference()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:border-indigo-500 focus:outline-none">
+              <option value="gemini-3.8-flash" selected>gemini-3.8-flash (Primary - High Performance)</option>
+              <option value="gemini-2.5-flash">gemini-2.5-flash (Fast & Stable)</option>
+              <option value="gemini-flash-latest">gemini-flash-latest</option>
+            </select>
+          </div>
+
+          <!-- API Key Input -->
+          <div>
+            <label class="block text-slate-400 text-[11px] mb-1 font-medium">Gemini API Key:</label>
+            <div class="flex gap-1.5">
+              <input type="password" id="gemini-api-key-input" placeholder="Enter Gemini API key..." class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white text-xs font-mono focus:border-indigo-500 focus:outline-none">
+              <button type="button" onclick="toggleKeyVisibility()" class="px-2 bg-slate-800 hover:bg-slate-700 rounded text-slate-300 text-xs">👁️</button>
+              <button type="button" onclick="saveGeminiApiKey()" class="px-3 bg-indigo-600 hover:bg-indigo-500 rounded text-white font-bold text-xs">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK QUESTION CHIPS CAROUSEL -->
+      <div class="px-4 py-2.5 bg-slate-900/60 border-b border-slate-800/80 overflow-x-auto flex items-center gap-2 shrink-0 scrollbar-none">
+        <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider shrink-0 mr-1">💡 Ask:</span>
+        <button type="button" onclick="sendQuickPrompt('What is our plan for Sa Pa with the Mamas, where do we stay, and what do we eat?')" class="quick-chip whitespace-nowrap px-3 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 text-slate-300 hover:text-indigo-200 border border-slate-700 hover:border-indigo-500/50 text-[11px] transition">
+          🌾 Sa Pa Mamas Trek & Homestay
+        </button>
+        <button type="button" onclick="sendQuickPrompt('What are all 6 confirmed Gmail bookings and their PNR / confirmation codes?')" class="quick-chip whitespace-nowrap px-3 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 text-slate-300 hover:text-indigo-200 border border-slate-700 hover:border-indigo-500/50 text-[11px] transition">
+          ✈️ 6 Confirmed Gmail Anchors
+        </button>
+        <button type="button" onclick="sendQuickPrompt('How does the sleeper bus from Hanoi Airport to Ha Giang work on Day 2?')" class="quick-chip whitespace-nowrap px-3 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 text-slate-300 hover:text-indigo-200 border border-slate-700 hover:border-indigo-500/50 text-[11px] transition">
+          🚌 Hanoi Airport Sleeper Bus
+        </button>
+        <button type="button" onclick="sendQuickPrompt('Where is my checked suitcase stored in Bangkok and when do I retrieve it?')" class="quick-chip whitespace-nowrap px-3 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 text-slate-300 hover:text-indigo-200 border border-slate-700 hover:border-indigo-500/50 text-[11px] transition">
+          🧳 BKK Airportel Luggage Protocol
+        </button>
+        <button type="button" onclick="sendQuickPrompt('What is Plan B if Ha Giang or Lan Ha Bay has heavy storms?')" class="quick-chip whitespace-nowrap px-3 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 text-slate-300 hover:text-indigo-200 border border-slate-700 hover:border-indigo-500/50 text-[11px] transition">
+          🌧️ Rainy Day Plan B Options
+        </button>
+        <button type="button" onclick="sendQuickPrompt('Which ATMs in Vietnam have zero withdrawal fees and how much cash should I carry?')" class="quick-chip whitespace-nowrap px-3 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 text-slate-300 hover:text-indigo-200 border border-slate-700 hover:border-indigo-500/50 text-[11px] transition">
+          🏧 Zero-Fee ATMs & Cash Rules
+        </button>
+      </div>
+
+      <!-- CHAT MESSAGES THREAD (SCROLLABLE) -->
+      <div id="gemini-chat-messages" class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
+        <!-- Messages dynamically inserted by app.js -->
+      </div>
+
+      <!-- TYPING / LOADING INDICATOR -->
+      <div id="gemini-typing-indicator" class="hidden px-5 py-2 text-xs text-indigo-300 flex items-center gap-2 border-t border-slate-800/60 bg-slate-950/40">
+        <div class="flex gap-1">
+          <span class="w-2 h-2 rounded-full bg-indigo-400 animate-bounce" style="animation-delay: 0ms"></span>
+          <span class="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style="animation-delay: 150ms"></span>
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style="animation-delay: 300ms"></span>
+        </div>
+        <span id="gemini-typing-text">Gemini 3.8 Flash is analyzing your travel OS dataset...</span>
+      </div>
+
+      <!-- INPUT BAR -->
+      <div class="p-3 sm:p-4 border-t border-slate-800 bg-slate-900/90 shrink-0">
+        <form id="gemini-chat-form" onsubmit="handleGeminiSubmit(event)" class="flex items-end gap-2">
+          <div class="flex-1 relative">
+            <textarea 
+              id="gemini-chat-input" 
+              rows="1" 
+              placeholder="Ask Gemini 3.8 Flash anything about your trip (hotels, flights, routes, packing)..." 
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none resize-none max-h-32 transition"
+              onkeydown="handleGeminiInputKeydown(event)"
+            ></textarea>
+          </div>
+          <button 
+            type="submit" 
+            id="gemini-submit-btn" 
+            class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-sm shadow-lg shadow-indigo-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 shrink-0"
+          >
+            <span>Send</span>
+            <span>➤</span>
+          </button>
+        </form>
+        <div class="flex items-center justify-between text-[11px] text-slate-500 mt-2 px-1">
+          <span>Shift+Enter for new line • Enter to send</span>
+          <span class="flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Grounded Engine Online
+          </span>
+        </div>
+      </div>
+
     </div>
   </div>
 

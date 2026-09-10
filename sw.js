@@ -1,9 +1,10 @@
 // Service Worker: Adaptive Travel OS Offline Resilience Engine
-const CACHE_NAME = 'travel-os-v3.1';
+const CACHE_NAME = 'travel-os-v3.2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './styles.css',
+  './config.js',
   './app.js',
   './itinerary_data.js',
   './data.json',
@@ -46,6 +47,11 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Pass through non-GET requests (e.g. POST to Gemini API) and cross-origin calls directly to network
+  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
   const requestUrl = new URL(event.request.url);
 
   // Stale-While-Revalidate strategy for app shell and assets

@@ -56,6 +56,7 @@ function initApp() {
   setupEventListeners();
   initPackingChecklist();
   initCurrencyDefaults();
+  initGeminiAssistant();
 }
 
 function renderHeaderMetrics() {
@@ -1153,3 +1154,509 @@ function closeRouteModal() {
   const modal = document.getElementById('route-modal');
   if (modal) modal.classList.add('hidden');
 }
+
+// =============================================================
+// GEMINI 3.8 FLASH GROUNDED TRAVEL ASSISTANT
+// =============================================================
+
+let geminiConversation = []; // [{ role: "user" | "model", parts: [{ text: "..." }] }]
+let geminiIsLoading = false;
+let geminiActiveModel = 'gemini-3.8-flash';
+
+function initGeminiAssistant() {
+  // 1. Resolve active model from storage or config
+  const savedModel = localStorage.getItem('travel_os_gemini_model');
+  geminiActiveModel = savedModel || (window.TRAVEL_OS_CONFIG ? window.TRAVEL_OS_CONFIG.defaultModel : 'gemini-3.8-flash');
+  
+  const modelSelect = document.getElementById('gemini-model-select');
+  if (modelSelect) modelSelect.value = geminiActiveModel;
+  
+  updateModelBadge(geminiActiveModel);
+
+  // 2. Prefill API key input if available
+  const apiKeyInput = document.getElementById('gemini-api-key-input');
+  const resolvedKey = getResolvedGeminiKey();
+  if (apiKeyInput && resolvedKey) {
+    apiKeyInput.value = resolvedKey;
+  }
+
+  // 3. Restore chat history or show welcome message
+  const savedHistory = sessionStorage.getItem('travel_os_gemini_history');
+  if (savedHistory) {
+    try {
+      geminiConversation = JSON.parse(savedHistory);
+      renderAllGeminiMessages();
+    } catch (e) {
+      geminiConversation = [];
+      showInitialGeminiWelcome();
+    }
+  } else {
+    showInitialGeminiWelcome();
+  }
+}
+
+function getResolvedGeminiKey() {
+  if (window.TRAVEL_OS_CONFIG && typeof window.TRAVEL_OS_CONFIG.getApiKey === 'function') {
+    return window.TRAVEL_OS_CONFIG.getApiKey();
+  }
+  return localStorage.getItem('travel_os_gemini_key') || '';
+}
+
+function showInitialGeminiWelcome() {
+  const welcome = `Hello Eyal! I am **Gemini 3.8 Flash**, your autonomous Travel Operations Assistant.
+
+I am **100% grounded in real time** on your complete **Thailand & Vietnam 29-Day Travel OS**:
+- **6 Verified Hard Anchors**: Emirates flight \`G5M8CF\`, Thailand TDAC arrival card \`#30C4358\`, Sukhon Hotel Agoda \`697155847\`, Mytrip flights \`1145-554-179\` (BKK-HAN & HAN-BKK), and Etihad flight \`9KDEH2\`.
+- **Ha Giang 3-Day Loop**: Direct Hanoi Airport sleeper pickup on Day 2, licensed easy-riders, and private twin-bed rooms included (*Dong Van Eco Stone House* & *Du Gia Panorama Lodge*).
+- **Sa Pa Rest & Mamas Trek**: Direct sleeper bus from Ha Giang to Sa Pa, 1 night deep sleep at *BB Hotel Sapa*, followed by a 2-day trek guided on foot by local Black Hmong Mamas, staying at their village wooden stilt homestay in Ta Van, and eating authentic homecooked food by the open hearth.
+- **Sequence A Triangle**: Sa Pa ➔ Direct VIP coach to Ninh Binh (*Tam Coc Garden Resort*) ➔ Cat Ba Island (*Lan Ha Bay*) ➔ Hanoi Old Quarter.
+- **Bangkok AIRPORTELs Locker**: Checked suitcase deposited morning of Sep 12 at BKK Floor B; strictly 55L backpack for northern Vietnam; retrieved Sep 24 before flying to Koh Samui.
+- **Phase 2 Gulf Islands**: Romantic King sanctuaries in Koh Samui (*Hansar*), Koh Phangan (*Santhiya*), and Koh Tao (*Dusit Buncha*).
+- **Utilities**: 4-way currency rates, TPBank/VPBank zero-fee ATMs, Grab taxi helpers, and Plan B rainy-day contingencies for every day!
+
+Ask me anything about your dates, bookings, packing, or daily plans!`;
+
+  geminiConversation = [
+    { role: "model", parts: [{ text: welcome }] }
+  ];
+  renderAllGeminiMessages();
+}
+
+function updateModelBadge(model) {
+  const badge = document.getElementById('gemini-active-model-badge');
+  if (badge) badge.innerText = model;
+}
+
+function openGeminiModal() {
+  const modal = document.getElementById('gemini-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    scrollGeminiToBottom();
+    const input = document.getElementById('gemini-chat-input');
+    if (input) setTimeout(() => input.focus(), 100);
+  }
+}
+
+function closeGeminiModal() {
+  const modal = document.getElementById('gemini-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function toggleGeminiSettings() {
+  const drawer = document.getElementById('gemini-settings-drawer');
+  if (drawer) drawer.classList.toggle('hidden');
+}
+
+function saveGeminiModelPreference() {
+  const select = document.getElementById('gemini-model-select');
+  if (!select) return;
+  geminiActiveModel = select.value;
+  localStorage.setItem('travel_os_gemini_model', geminiActiveModel);
+  updateModelBadge(geminiActiveModel);
+  showToast(`Switched Gemini model to ${geminiActiveModel}`);
+}
+
+function saveGeminiApiKey() {
+  const input = document.getElementById('gemini-api-key-input');
+  if (!input) return;
+  const key = input.value.trim();
+  if (key) {
+    localStorage.setItem('travel_os_gemini_key', key);
+    showToast('Gemini API key saved to browser!');
+  } else {
+    localStorage.removeItem('travel_os_gemini_key');
+    showToast('Reset to default Gemini API key.');
+  }
+}
+
+function toggleKeyVisibility() {
+  const input = document.getElementById('gemini-api-key-input');
+  if (!input) return;
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function clearGeminiChat() {
+  sessionStorage.removeItem('travel_os_gemini_history');
+  showInitialGeminiWelcome();
+  showToast('Chat history cleared.');
+}
+
+function sendQuickPrompt(promptText) {
+  const input = document.getElementById('gemini-chat-input');
+  if (input) {
+    input.value = promptText;
+    handleGeminiSubmit(new Event('submit'));
+  }
+}
+
+function handleGeminiInputKeydown(event) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    handleGeminiSubmit(event);
+  }
+}
+
+function renderAllGeminiMessages() {
+  const container = document.getElementById('gemini-chat-messages');
+  if (!container) return;
+  container.innerHTML = '';
+
+  geminiConversation.forEach((msg, idx) => {
+    const text = msg.parts?.[0]?.text || '';
+    appendMessageElement(msg.role, text, idx);
+  });
+
+  scrollGeminiToBottom();
+}
+
+function appendMessageElement(role, text, index) {
+  const container = document.getElementById('gemini-chat-messages');
+  if (!container) return;
+
+  const msgDiv = document.createElement('div');
+  msgDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+
+  if (role === 'user') {
+    msgDiv.innerHTML = `
+      <div class="max-w-[85%] sm:max-w-[75%] bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm shadow-md">
+        <p class="whitespace-pre-wrap">${escapeHtml(text)}</p>
+      </div>
+    `;
+  } else {
+    const htmlContent = renderMarkdownToHtml(text);
+    msgDiv.innerHTML = `
+      <div class="max-w-[95%] sm:max-w-[88%] bg-slate-800/90 border border-slate-700/80 rounded-2xl rounded-tl-sm p-4 text-slate-100 shadow-xl space-y-2 relative group">
+        <div class="flex items-center justify-between border-b border-slate-700/50 pb-2 text-[11px] text-slate-400">
+          <div class="flex items-center gap-1.5 font-semibold text-indigo-300">
+            <span>✨</span> <span>Gemini 3.8 Flash</span>
+          </div>
+          <button type="button" onclick="copyGeminiMessage(this)" class="opacity-70 hover:opacity-100 px-2 py-0.5 rounded bg-slate-700/60 hover:bg-slate-700 text-[10px] text-slate-300 transition flex items-center gap-1" title="Copy answer">
+            <span>📋</span> <span>Copy</span>
+          </button>
+        </div>
+        <div class="gemini-markdown text-slate-200">
+          ${htmlContent}
+        </div>
+      </div>
+    `;
+  }
+
+  container.appendChild(msgDiv);
+}
+
+function scrollGeminiToBottom() {
+  const container = document.getElementById('gemini-chat-messages');
+  if (container) {
+    container.scrollTop = container.scrollHeight;
+  }
+}
+
+function copyGeminiMessage(btn) {
+  const parent = btn.closest('.group');
+  const content = parent.querySelector('.gemini-markdown')?.innerText || '';
+  navigator.clipboard.writeText(content).then(() => {
+    const oldText = btn.innerHTML;
+    btn.innerHTML = '<span>✓</span> <span>Copied!</span>';
+    setTimeout(() => { btn.innerHTML = oldText; }, 2000);
+  });
+}
+
+function updateTypingIndicator(statusText = null) {
+  const indicator = document.getElementById('gemini-typing-indicator');
+  const textEl = document.getElementById('gemini-typing-text');
+  if (!indicator) return;
+  
+  if (geminiIsLoading) {
+    indicator.classList.remove('hidden');
+    if (textEl && statusText) textEl.innerText = statusText;
+    scrollGeminiToBottom();
+  } else {
+    indicator.classList.add('hidden');
+  }
+}
+
+async function handleGeminiSubmit(e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  if (geminiIsLoading) return;
+
+  const input = document.getElementById('gemini-chat-input');
+  if (!input) return;
+  const userText = input.value.trim();
+  if (!userText) return;
+
+  const apiKey = getResolvedGeminiKey();
+  if (!apiKey) {
+    toggleGeminiSettings();
+    showToast('Please enter your Gemini API key in settings!');
+    return;
+  }
+
+  // Clear input
+  input.value = '';
+
+  // 1. Add user message to conversation
+  geminiConversation.push({
+    role: "user",
+    parts: [{ text: userText }]
+  });
+  appendMessageElement('user', userText, geminiConversation.length - 1);
+  scrollGeminiToBottom();
+
+  // 2. Set loading state
+  geminiIsLoading = true;
+  updateTypingIndicator(`Gemini 3.8 Flash is analyzing your travel OS dataset...`);
+  const submitBtn = document.getElementById('gemini-submit-btn');
+  if (submitBtn) submitBtn.disabled = true;
+
+  try {
+    // 3. Build grounding system prompt from live itinerary dataset
+    const systemPrompt = buildMasterGroundingSystemPrompt(itineraryData);
+
+    // Format conversation history for Gemini API
+    const apiContents = geminiConversation.map(msg => ({
+      role: msg.role === 'model' ? 'model' : 'user',
+      parts: [{ text: msg.parts[0].text }]
+    }));
+
+    // 4. Call Gemini API with auto-retry and fallback
+    const result = await callGeminiApiWithRetry(systemPrompt, apiContents, geminiActiveModel, apiKey, 1);
+    
+    let answerText = result.text;
+    if (result.modelUsed !== geminiActiveModel) {
+      answerText = `> *Note: Answered via ${result.modelUsed} fallback due to temporary spike on ${geminiActiveModel}.*\n\n` + answerText;
+    }
+
+    // 5. Add model response to conversation
+    geminiConversation.push({
+      role: "model",
+      parts: [{ text: answerText }]
+    });
+
+    appendMessageElement('model', answerText, geminiConversation.length - 1);
+
+    // Persist session history
+    sessionStorage.setItem('travel_os_gemini_history', JSON.stringify(geminiConversation));
+
+  } catch (err) {
+    console.error('Gemini error:', err);
+    const errorMsg = `⚠️ **Assistant Error**: ${err.message || 'Failed to connect to Gemini API.'}\n\n*Tips: Check your internet connection or inspect your Gemini API key in settings (⚙️).*`;
+    appendMessageElement('model', errorMsg, geminiConversation.length);
+  } finally {
+    geminiIsLoading = false;
+    updateTypingIndicator();
+    if (submitBtn) submitBtn.disabled = false;
+    scrollGeminiToBottom();
+  }
+}
+
+async function callGeminiApiWithRetry(systemInstruction, conversation, model, apiKey, attempt = 1) {
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  
+  const payload = {
+    system_instruction: {
+      parts: [{ text: systemInstruction }]
+    },
+    contents: conversation,
+    generationConfig: {
+      temperature: 0.2,
+      topP: 0.95,
+      maxOutputTokens: 2048
+    }
+  };
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 28000);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (response.status === 200) {
+      const data = await response.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) return { text, modelUsed: model, attempts: attempt };
+      throw new Error("Empty candidate received from Gemini API");
+    }
+
+    // Handle temporary 503 high demand or 429 rate limit with exponential backoff
+    if ((response.status === 503 || response.status === 429) && attempt <= 3) {
+      const delayMs = attempt * 1500;
+      updateTypingIndicator(`Gemini 3.8 Flash high demand spike. Retrying in ${(delayMs / 1000).toFixed(1)}s (Attempt ${attempt}/3)...`);
+      await new Promise(r => setTimeout(r, delayMs));
+      return await callGeminiApiWithRetry(systemInstruction, conversation, model, apiKey, attempt + 1);
+    }
+
+    // If 3 retries on gemini-3.8-flash failed with 503, fallback to gemini-2.5-flash
+    if (model === 'gemini-3.8-flash' && (response.status === 503 || response.status === 429)) {
+      updateTypingIndicator(`Routing to stable Gemini 2.5 Flash fallback...`);
+      return await callGeminiApiWithRetry(systemInstruction, conversation, 'gemini-2.5-flash', apiKey, 1);
+    }
+
+    const errBody = await response.text();
+    throw new Error(`Gemini API error (Status ${response.status}): ${errBody.slice(0, 160)}`);
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      throw new Error("Request timed out after 28 seconds.");
+    }
+    throw err;
+  }
+}
+
+function buildMasterGroundingSystemPrompt(data) {
+  if (!data) return "You are an AI assistant for a 29-day trip to Thailand & Vietnam.";
+
+  const days = data.days || [];
+  
+  let daysSummary = "";
+  days.forEach(d => {
+    const hotels = (d.accommodation_matrix || []).map(h => `${h.hotel_name} (${h.room_spec || 'Twin/King'})`).join(", ");
+    const exp = d.experiences || d.daily_experience_hub || {};
+    const primaryTitle = exp.primary?.title || exp.primary_plan?.title || d.destination;
+    const contTitle = exp.contingency?.title || exp.contingency_plan?.title || "Indoor alternative";
+    const trigger = exp.contingency?.trigger || exp.contingency_plan?.trigger_condition || "Heavy Rain / Storm";
+    const transit = d.door_to_door_logistics?.primary_transit || "Local transit";
+
+    daysSummary += `DAY ${d.day_number} (${d.date}, ${d.day_of_week}) - ${d.destination} [${d.status_badge}]
+- Phase: ${d.phase}
+- Stay: ${hotels || 'Transit/Overnight'}
+- Primary Experience: ${primaryTitle}
+- Rainy-Day Plan B: ${contTitle} (Trigger: ${trigger})
+- Transit & Luggage: ${transit} | Luggage: ${d.luggage_action || 'Backpack'}
+\n`;
+  });
+
+  return `You are Gemini 3.8 Flash, the Autonomous Travel Operations Engine & Ground Assistant for Eyal Andreson's 29-day trip to Thailand & Vietnam.
+
+CORE OPERATIONAL AXIOMS:
+1. "Hard Anchors, Fluid Routes": Treat ONLY Gmail-verified bookings as fixed immutable anchors. Never hallucinate, invent, or drop confirmed bookings.
+2. Grounded Truth: You have full access to the live itinerary database below. Answer questions accurately, concisely, and factually.
+3. Bed Specifications: Phase 1 (Days 1–14, Guys Trip) strictly enforces Twin Beds / 2 Separate Beds. Phase 2 (Days 15–29, Couples Sanctuary) enforces King Bed / Romantic Ocean View.
+
+TRIP MASTER PROFILE:
+- Title: ${data.title || 'Master Itinerary: Thailand & Vietnam'}
+- Duration: 29 Days (${data.days?.[0]?.date || '2026-09-11'} to ${data.days?.[data.days?.length - 1]?.date || '2026-10-09'})
+- Travelers: Eyal Andreson + Friend (Phase 1: Days 1–14); Eyal Andreson + Girlfriend Maria Miriam Malayev (Phase 2: Days 15–29)
+
+6 VERIFIED GMAIL HARD ANCHORS (IMMUTABLE):
+1. Sep 10–11: Emirates Flight EK2451 / EK384 (TLV -> DXB -> BKK), PNR: G5M8CF (lands BKK 12:05 PM Sep 11)
+2. Sep 11: Thailand Digital Arrival Card (TDAC) #30C4358 (valid entry Sep 11)
+3. Sep 11–12: Sukhon Hotel Bangkok (Agoda Ref: 697155847), 1 Deluxe Twin Room, Phaya Thai BTS
+4. Sep 12: Mytrip Flight BKK -> HAN, Order: 1145-554-179 (dep 11:55 AM, arr 13:50 PM Noi Bai HAN)
+5. Sep 24: Mytrip Flight HAN -> BKK, Order: 1145-554-179 (dep 12:50 PM, arr 14:45 PM Suvarnabhumi BKK)
+6. Oct 09: Etihad Flight BKK -> AUH -> TLV, PNR: 9KDEH2 (dep 20:45 PM BKK)
+
+CRITICAL BAGGAGE & LUGGAGE PROTOCOL:
+- Facility: AIRPORTELs Suvarnabhumi Airport (BKK) Floor B (Basement Level next to Airport Rail Link train counters).
+- Protocol: On morning of Sep 12, travelers take ARL train to BKK Floor B and deposit checked suitcase containing girlfriend's resort items.
+- Vietnam Leg: Strictly 1x 55L clamshell backpack per traveler.
+- Retrieval: On Sep 24, flight HAN-BKK lands at 14:45. Clear customs, take elevator to Floor B, retrieve suitcase, proceed to Domestic check-in to fly to Koh Samui.
+
+NORTHERN VIETNAM SPECIFICS:
+- Day 2 (Sep 12): Lands HAN 13:50 -> Direct VIP sleeper bus pickup at Hanoi Noi Bai Airport / Expressway bus stop (bypasses Hanoi city traffic) -> Ha Giang City basecamp.
+- Days 3–5 (Sep 13–15): Ha Giang 3-Day Loop Tour with licensed easy-riders. Hotels with private twin rooms INCLUDED: Dong Van Eco Stone House & Du Gia Panorama Lodge. Ma Pi Leng Pass, Tu San canyon cruise, Du Gia waterfall.
+- Day 5 Evening (Sep 15): Direct evening sleeper bus from Ha Giang to Sa Pa town (~5 hrs). Sleep 1 night in a real bed at BB Hotel Sapa.
+- Days 6–7 (Sep 16–17): 2-Day Trek guided on foot by local Black Hmong Mamas. Muong Hoa valley, Y Linh Ho, Lao Chai terraces, Ta Van village. Stay at Mama's village wooden stilt homestay in Ta Van and eat authentic homecooked family feast around open hearth. Day 7 bamboo forest trek, farewell lunch with Mama, shuttle to Sa Pa town.
+- Day 7 (Sep 17): Direct VIP Express Highway Coach Sa Pa -> Ninh Binh (Tam Coc Garden Resort) (6 hrs). Avoids the 10-hr slog to Cat Ba.
+
+PHASE 2 GULF OF THAILAND:
+- Koh Samui (Days 14–18): Hansar Samui Resort (King Sea View), Bophut Fisherman's Village, Ang Thong Marine Park.
+- Koh Phangan (Days 18–22): Santhiya Koh Phangan Resort & Spa (Supreme Deluxe Ocean View), Bottle Beach, night markets.
+- Koh Tao (Days 22–25): Dusit Buncha Resort (Romantic Sunset Villa), Nang Yuan Island, Shark Bay snorkeling.
+- Bangkok (Days 25–29): Grande Centre Point Hotel Terminal 21 (Executive King), Wat Pho, rooftop dining.
+
+MONEY & BANKING RULES:
+- Vietnam Zero-Fee ATMs: TPBank and VPBank ATMs have 0% local withdrawal fee.
+- Thailand ATM Fee: Fixed 220 THB on all foreign cards. Withdraw 20,000–30,000 THB in one go.
+- Currency rules: THB / 10 ≈ ILS. VND: drop 4 zeros and multiply by 1.45 ≈ ILS.
+
+29-DAY COMPLETE DAILY CALENDAR:
+${daysSummary}
+
+When answering, be helpful, organized, and precise with dates, locations, booking codes, and practical travel tips.`;
+}
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function renderMarkdownToHtml(md) {
+  if (!md) return '';
+
+  let html = md;
+
+  // Escape raw HTML tags
+  html = html.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  // Markdown tables
+  html = html.replace(/((?:\|[^\n]+\|\r?\n)+)/g, (tableMatch) => {
+    const lines = tableMatch.trim().split('\n').map(l => l.trim()).filter(l => l.startsWith('|') && l.endsWith('|'));
+    if (lines.length < 2) return tableMatch;
+
+    let tableHtml = '<div class="overflow-x-auto my-2"><table class="gemini-table">';
+    let isHeader = true;
+
+    lines.forEach((line, idx) => {
+      // Skip separator line (|---|---|)
+      if (/^\|[-:\s|]+\|$/.test(line)) {
+        isHeader = false;
+        return;
+      }
+      const cells = line.split('|').slice(1, -1).map(c => c.trim());
+      tableHtml += '<tr>';
+      cells.forEach(cell => {
+        tableHtml += isHeader 
+          ? `<th>${cell}</th>` 
+          : `<td>${cell}</td>`;
+      });
+      tableHtml += '</tr>';
+    });
+
+    tableHtml += '</table></div>';
+    return tableHtml;
+  });
+
+  // Headers (###, ##, #)
+  html = html.replace(/^### (.*$)/gim, '<h3 class="text-indigo-300 font-bold mt-3 mb-1 text-sm">$1</h3>');
+  html = html.replace(/^## (.*$)/gim, '<h2 class="text-white font-bold mt-4 mb-2 text-base border-b border-slate-700 pb-1">$1</h2>');
+  html = html.replace(/^# (.*$)/gim, '<h1 class="text-white font-extrabold mt-4 mb-2 text-lg">$1</h1>');
+
+  // Blockquotes
+  html = html.replace(/^\> (.*$)/gim, '<blockquote class="border-l-2 border-indigo-500 pl-3 py-1 my-1 text-slate-300 italic bg-indigo-950/20 rounded-r">$1</blockquote>');
+
+  // Bold (**text**) & Italic (*text*)
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
+  html = html.replace(/\*(.*?)\*/g, '<em class="text-slate-300 italic">$1</em>');
+
+  // Inline code (`code`)
+  html = html.replace(/`([^`]+)`/g, '<code class="bg-slate-900 border border-slate-700 px-1.5 py-0.5 rounded text-cyan-300 font-mono text-xs">$1</code>');
+
+  // Links ([text](url))
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-cyan-300 underline underline-offset-2">$1</a>');
+
+  // Unordered lists (- or *)
+  html = html.replace(/(?:^|\n)[-*] (.*)/g, (match, item) => {
+    return `\n<li class="ml-4 list-disc text-slate-200">${item}</li>`;
+  });
+
+  // Numbered lists (1. item)
+  html = html.replace(/(?:^|\n)(\d+)\. (.*)/g, (match, num, item) => {
+    return `\n<li class="ml-4 list-decimal text-slate-200">${item}</li>`;
+  });
+
+  // Paragraph breaks
+  html = html.replace(/\n\n+/g, '</p><p class="mt-2">');
+
+  return `<p>${html}</p>`;
+}
+

@@ -196,7 +196,7 @@ body {
     background: #fff !important;
     color: #000 !important;
   }
-  .no-print, .floating-today-btn, #toast-container {
+  .no-print, .floating-today-btn, .floating-gemini-btn, #toast-container {
     display: none !important;
   }
   .glass-card {
@@ -209,3 +209,93 @@ body {
     box-shadow: none !important;
   }
 }
+
+/* Gemini 3.8 Flash Assistant Styling */
+.floating-gemini-btn {
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5), 0 8px 10px -6px rgba(147, 51, 234, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.floating-gemini-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 14px 28px -5px rgba(99, 102, 241, 0.6), 0 10px 10px -5px rgba(147, 51, 234, 0.5);
+}
+
+.gemini-markdown {
+  line-height: 1.6;
+  font-size: 0.85rem;
+}
+.gemini-markdown h1, .gemini-markdown h2, .gemini-markdown h3 {
+  font-weight: 700;
+  color: #f8fafc;
+  margin-top: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+.gemini-markdown h3 {
+  font-size: 0.95rem;
+  color: #818cf8;
+}
+.gemini-markdown p {
+  margin-bottom: 0.5rem;
+}
+.gemini-markdown ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+.gemini-markdown ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+.gemini-markdown li {
+  margin-bottom: 0.25rem;
+}
+.gemini-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+  font-size: 0.8rem;
+}
+.gemini-markdown th, .gemini-markdown td {
+  border: 1px solid rgba(71, 85, 105, 0.6);
+  padding: 6px 10px;
+  text-align: left;
+}
+.gemini-markdown th {
+  background: rgba(30, 41, 59, 0.9);
+  color: #a5b4fc;
+}
+.gemini-markdown td {
+  background: rgba(15, 23, 42, 0.6);
+}
+.gemini-markdown strong {
+  color: #f8fafc;
+  font-weight: 700;
+}
+.gemini-markdown code {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #67e8f9;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8em;
+}
+.gemini-markdown blockquote {
+  border-left: 3px solid #6366f1;
+  padding-left: 10px;
+  margin: 6px 0;
+  color: #cbd5e1;
+  font-style: italic;
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 0 6px 6px 0;
+}
+.gemini-markdown a {
+  color: #38bdf8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.gemini-markdown a:hover {
+  color: #7dd3fc;
+}
+
