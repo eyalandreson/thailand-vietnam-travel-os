@@ -886,7 +886,7 @@
           "room_spec": "Twin Beds / Shared Dorm (Pre-Tour Night Included)",
           "price_per_night": "Included Free with Happy Loop Tour",
           "booking_url": "https://happyhousehagiang.com",
-          "status": "CONFIRMED_INCLUDED",
+          "status": "INCLUDED_IN_TOUR",
           "critic_notes": "Included in Happy Loop tour package. 24-hour reception, bell service for late night arrivals.",
           "critic_score": 9.2
         },
@@ -1021,7 +1021,7 @@
           "room_spec": "Twin Beds / Two Separate Beds (Private Room for 2-3 pax)",
           "price_per_night": "Included in Happy Loop 3D/2N Tour",
           "booking_url": "https://happyhousehagiang.com",
-          "status": "CONFIRMED_INCLUDED",
+          "status": "INCLUDED_IN_TOUR",
           "critic_notes": "Private room with separate beds, strictly compliant with Phase 1 adventure specs. Border permit ($10) and food included.",
           "critic_score": 9.0
         },
@@ -1150,7 +1150,7 @@
           "room_spec": "Twin Beds / Two Separate Beds (Private Room)",
           "price_per_night": "Included in Happy Loop Tour",
           "booking_url": "https://happyhousehagiang.com",
-          "status": "CONFIRMED_INCLUDED",
+          "status": "INCLUDED_IN_TOUR",
           "critic_notes": "Scenic Du Gia homestay with mountain views, private room twin beds, home-cooked local dinner.",
           "critic_score": 9.1
         },
