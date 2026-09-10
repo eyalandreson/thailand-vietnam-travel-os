@@ -34,152 +34,155 @@ DAY_EXPERIENCES = {
     },
     2: {
         'primary': {
-            'title': 'Hoan Kiem Lake, Ngoc Son Island & Bun Cha Ta 14 Hang Buom',
-            'type': 'Historic Old Quarter & Signature Feast',
-            'duration': '4 hrs',
-            'opening_hours': 'Ngoc Son Temple: 08:00 - 18:00 (Lake pedestrianized on weekends)',
-            'cost_estimate': '30,000 VND temple entry + ~120,000 VND Bun Cha feast',
-            'time_sensitive_tip': 'On Saturday evening, the entire perimeter of Hoan Kiem Lake is closed to cars and motorbikes, creating an energetic pedestrian night festival with live traditional music.',
+            'title': 'Noi Bai Airport Arrival & Direct VIP Sleeper Transit to Ha Giang City',
+            'type': 'Airport Rendezvous & Northbound Sleeper Cabin',
+            'duration': 'Flight: 1h 55m | Sleeper Bus from Airport: 5h 00m',
+            'opening_hours': 'Airport pickup ~15:30 or 19:30; Ha Giang hotel check-in upon arrival',
+            'cost_estimate': 'Ha Giang 3D Tour Package (Includes Airport Sleeper, Hotels, Easy-Riders, Meals)',
+            'time_sensitive_tip': 'Landing at Noi Bai (HAN) at 13:50 PM. Deplane, clear e-visa customs. Meet Ha Giang tour driver directly at Terminal 2. The sleeper bus picks up right at the airport highway junction, bypassing downtown Hanoi gridlock entirely! Arrive in Ha Giang City and check into your tour hotel for a great night of sleep in twin beds before the loop starts tomorrow.',
             'links': [
-                {'label': 'Hoan Kiem Lake Pin', 'url': 'https://maps.google.com/?q=Hoan+Kiem+Lake+Hanoi', 'type': 'maps'},
-                {'label': 'Bun Cha Ta 14 Hang Buom', 'url': 'https://maps.google.com/?q=Bun+Cha+Ta+14+Hang+Buom+Hanoi', 'type': 'maps'}
+                {'label': 'Noi Bai Airport Pin', 'url': 'https://maps.google.com/?q=Noi+Bai+International+Airport', 'type': 'maps'},
+                {'label': 'Ha Giang 3D Tour Booking', 'url': 'https://cheershagiang.com/', 'type': 'booking'}
             ]
         },
         'contingency': {
-            'title': 'Vietnam National Fine Arts Museum & Egg Coffee at Cafe Giang',
-            'type': 'Indoor Art & Heritage Cafe Sanctuary',
-            'duration': '2.5 hrs',
-            'cost_estimate': '40,000 VND museum + 35,000 VND egg coffee',
-            'trigger': 'Continuous drizzle or high humidity upon Hanoi arrival',
-            'time_sensitive_tip': 'Cafe Giang (39 Nguyen Huu Huan) is the historic birthplace of Vietnamese egg coffee since 1946; upstairs covered seating is charming on rainy afternoons.',
+            'title': 'Noi Bai Airport VIP Transit Lounge & Private Express Limousine Van',
+            'type': 'Sheltered Airport Rest & Highway Limousine Van',
+            'duration': '4.5 hrs transfer',
+            'cost_estimate': 'Included in Tour package upgrade',
+            'trigger': 'Flight delay or evening arrival needing faster private highway transfer',
+            'time_sensitive_tip': 'Private 9-seater DCar VIP limousine van takes only 4.5 hours directly from the terminal to your Ha Giang City hotel with plush reclining leather massage seats.',
             'links': [
-                {'label': 'Vietnam Fine Arts Museum', 'url': 'https://maps.google.com/?q=Vietnam+National+Museum+of+Fine+Arts', 'type': 'maps'},
-                {'label': 'Cafe Giang Map', 'url': 'https://maps.google.com/?q=Cafe+Giang+Nguyen+Huu+Huan', 'type': 'maps'}
+                {'label': 'Phoenix Hotel Ha Giang', 'url': 'https://maps.google.com/?q=Phoenix+Hotel+Ha+Giang', 'type': 'maps'}
             ]
         }
     },
     3: {
         'primary': {
-            'title': 'Bac Sum Switchbacks, Heaven Gate & Nam Dam Red Dao Herbal Soak',
-            'type': 'Alpine Motorcade & Ethnic Homestay',
-            'duration': '4 hrs ride (14:00 - 18:00)',
-            'opening_hours': 'Scenic pass open daylight hours',
-            'cost_estimate': 'Ha Giang Provincial Border Permit: 250,000 VND ($10 USD)',
-            'time_sensitive_tip': 'User confirmed Easy-Riders. Fasten chin strap securely and verify your knee/elbow armor fit before climbing the Bac Sum incline.',
+            'title': 'Ha Giang Loop (Day 1): Bac Sum Pass, Heaven Gate & Dong Van Hotel Check-in',
+            'type': 'Licensed Easy-Rider Alpine Tour (Hotels Included)',
+            'duration': 'Full Day (08:30 - 17:30)',
+            'opening_hours': 'Scenic mountain roads open daylight hours',
+            'cost_estimate': 'All-inclusive in 3D Tour (Easy-Rider, fuel, hotel, lunch & dinner)',
+            'time_sensitive_tip': 'Your 3-day tour includes private hotel rooms with twin beds (Dong Van Eco Stone House / Phoenix Dong Van). Gear up with DOT full-face helmet, knee and elbow armor. Ride Bac Sum pass, Quan Ba Heaven Gate, and Tham Ma switchbacks before reaching Dong Van Ancient Town.',
             'links': [
                 {'label': 'Bac Sum Pass Viewpoint', 'url': 'https://maps.google.com/?q=Doc+Bac+Sum+Ha+Giang', 'type': 'maps'},
-                {'label': 'Quan Ba Heaven Gate', 'url': 'https://maps.google.com/?q=Quan+Ba+Heaven+Gate', 'type': 'maps'}
+                {'label': 'Quan Ba Heaven Gate', 'url': 'https://maps.google.com/?q=Quan+Ba+Heaven+Gate', 'type': 'maps'},
+                {'label': 'Dong Van Ancient Town', 'url': 'https://maps.google.com/?q=Dong+Van+Ancient+Town', 'type': 'maps'}
             ]
         },
         'contingency': {
-            'title': 'Nam Dam Cultural Museum & Covered Earth-Lodge Herbal Workshop',
-            'type': 'Sheltered Village Sanctuary',
-            'duration': '3 hrs',
-            'cost_estimate': '100,000 VND private herbal bath',
-            'trigger': 'Dense mountain cloud cover or rain making road paint slick',
-            'time_sensitive_tip': 'Dao Lodge features a warm central open fireplace and covered wooden balconies overlooking the misty karst valley.',
-            'links': [
-                {'label': 'Dao Lodge Nam Dam', 'url': 'https://maps.google.com/?q=Dao+Lodge+Nam+Dam+Ha+Giang', 'type': 'maps'}
-            ]
-        }
-    },
-    4: {
-        'primary': {
-            'title': 'Ma Pi Leng Sky Path & Tu San Emerald Canyon Boat Cruise',
-            'type': 'Iconic Mountain Pass & Deepest Canyon in SEA',
-            'duration': '5 - 6 hrs',
-            'opening_hours': 'Nho Que boat pier: 07:30 - 17:00',
-            'cost_estimate': '120,000 VND boat ticket per person',
-            'time_sensitive_tip': 'Have your Easy-Rider stop at the Ma Pi Leng monumental viewpoint monument for panoramic photos before heading down the steep switchbacks to the canyon pier.',
-            'links': [
-                {'label': 'Ma Pi Leng Viewpoint', 'url': 'https://maps.google.com/?q=Ma+Pi+Leng+Pass', 'type': 'maps'},
-                {'label': 'Tu San Canyon Pier', 'url': 'https://maps.google.com/?q=Nho+Que+River+Boat+Pier', 'type': 'maps'}
-            ]
-        },
-        'contingency': {
-            'title': 'Dong Van Ancient Town Fort & Hmong Royal Palace (Sa Phin)',
-            'type': 'Sheltered Historical Citadel Tour',
-            'duration': '3 hrs',
-            'cost_estimate': '30,000 VND palace entrance',
-            'trigger': 'High wind or rain warnings on the cliffside Sky Path',
-            'time_sensitive_tip': 'The Hmong King Palace (Dinh Vua Meo) was built with fortified opium storage vaults and Chinese-French architecture; fully covered interior courtyards.',
+            'title': 'Dong Van Ancient Fort Heritage Walk & Covered Hmong King Palace (Sa Phin)',
+            'type': 'Sheltered Mountain Citadel & Fort Tour',
+            'duration': '3.5 hrs',
+            'cost_estimate': 'Included in Tour',
+            'trigger': 'High mountain fog or rain reducing visibility on high ridges',
+            'time_sensitive_tip': 'Hmong King Palace (Dinh Vua Meo) in Sa Phin features sheltered stone courtyards and heated tea rooms.',
             'links': [
                 {'label': 'Hmong King Palace Map', 'url': 'https://maps.google.com/?q=Dinh+Vua+Meo+Ha+Giang', 'type': 'maps'}
             ]
         }
     },
-    5: {
+    4: {
         'primary': {
-            'title': 'Du Gia Valley Waterfall Swim & Scenic Hoang Lien Son Transit',
-            'type': 'Alpine River Dip & Mountain Cross-Country',
-            'duration': '4 hrs ride + 5.5 hrs bus',
-            'opening_hours': 'Morning waterfall access',
-            'cost_estimate': 'Free waterfall + 350,000 VND VIP mountain bus to Sa Pa',
-            'time_sensitive_tip': 'Wear swimwear under trekking shorts for quick dip at Du Gia. Consolidate into 55L clamshell backpack at Ha Giang base before boarding the mountain bus.',
+            'title': 'Ha Giang Loop (Day 2): Ma Pi Leng Pass, Tu San Canyon Boat & Du Gia Hotel',
+            'type': 'Legendary Pass, Emerald River Cruise & Valley Hotel',
+            'duration': 'Full Day (08:00 - 17:30)',
+            'opening_hours': 'Nho Que boat pier: 07:30 - 17:00',
+            'cost_estimate': 'All-inclusive in 3D Tour (Private Twin Room in Du Gia, boat pass, meals)',
+            'time_sensitive_tip': 'Highlight of the loop! Stop at the Ma Pi Leng monument, descend to the river for the motorboat cruise through Tu San Chasm (deepest canyon in SEA), then ride over mountain ridges to your private twin bungalow in Du Gia.',
             'links': [
-                {'label': 'Du Gia Waterfall Map', 'url': 'https://maps.google.com/?q=Du+Gia+Waterfall', 'type': 'maps'},
-                {'label': 'Eco Palms House Sa Pa', 'url': 'https://maps.google.com/?q=Eco+Palms+House+Sapa', 'type': 'maps'}
+                {'label': 'Ma Pi Leng Viewpoint', 'url': 'https://maps.google.com/?q=Ma+Pi+Leng+Pass', 'type': 'maps'},
+                {'label': 'Tu San Canyon Pier', 'url': 'https://maps.google.com/?q=Nho+Que+River+Boat+Pier', 'type': 'maps'},
+                {'label': 'Du Gia Valley View', 'url': 'https://maps.google.com/?q=Du+Gia+Ha+Giang', 'type': 'maps'}
             ]
         },
         'contingency': {
-            'title': 'Covered Meo Vac Market & Direct Enclosed Shuttle via Lao Cai',
-            'type': 'Sheltered Transit Alternative',
-            'duration': '5 hrs',
-            'cost_estimate': 'Standard bus fare',
-            'trigger': 'High river water levels at Du Gia or muddy bypass roads',
-            'time_sensitive_tip': 'Taking the direct enclosed VIP minibus avoids all open-air road spray while crossing the high mountain passes into Lao Cai.',
+            'title': 'Covered Meo Vac Market Walk & Traditional Clay-Lodge Herbal Bath',
+            'type': 'Indoor Cultural Market & Herbal Recovery',
+            'duration': '3 hrs',
+            'cost_estimate': 'Included in Tour',
+            'trigger': 'Heavy rain warnings on the cliffside Sky Path',
+            'time_sensitive_tip': 'Meo Vac clay lodges feature covered dining halls and medicinal herb baths infused with eucalyptus and ginger.',
             'links': [
                 {'label': 'Meo Vac Market Map', 'url': 'https://maps.google.com/?q=Meo+Vac+Market', 'type': 'maps'}
             ]
         }
     },
+    5: {
+        'primary': {
+            'title': 'Ha Giang Loop (Day 3: Du Gia to Base) & Sleeper Bus to Sa Pa Hotel (1 Night Sleep)',
+            'type': 'Waterfall Swim, Return Loop & Sleeper Transit to Sa Pa',
+            'duration': '4 hrs loop ride + 5 hrs evening sleeper bus',
+            'opening_hours': 'Du Gia waterfall morning; sleeper bus departs ~18:30 PM',
+            'cost_estimate': 'Included tour return + ~350,000 VND Ha Giang to Sa Pa sleeper bus',
+            'time_sensitive_tip': 'Finish Day 3 of the loop at Ha Giang basecamp (~15:30). Take a warm shower, pack your 55L backpack, and board the direct evening sleeper bus to Sa Pa town! Arrive in Sa Pa, check into your town hotel (e.g. BB Hotel Sapa / Pao\'s Sapa) for a full night of solid, deep sleep in twin beds before the 2-day trek begins tomorrow.',
+            'links': [
+                {'label': 'Du Gia Waterfall Map', 'url': 'https://maps.google.com/?q=Du+Gia+Waterfall', 'type': 'maps'},
+                {'label': 'Sa Pa Town Center', 'url': 'https://maps.google.com/?q=Sapa+Town+Square', 'type': 'maps'},
+                {'label': 'BB Hotel Sapa', 'url': 'https://maps.google.com/?q=BB+Hotel+Sapa', 'type': 'maps'}
+            ]
+        },
+        'contingency': {
+            'title': 'Lung Tam Traditional Hemp Cooperative & Covered Highway Minibus to Sa Pa',
+            'type': 'Sheltered Artisan Workshop & Direct Transfer',
+            'duration': '4.5 hrs transfer',
+            'cost_estimate': 'Standard transport fare',
+            'trigger': 'Muddy mountain roads at Du Gia or rain during loop finish',
+            'time_sensitive_tip': 'Lung Tam village features covered loom workshops where Hmong women weave hemp textiles using indigo dyes.',
+            'links': [
+                {'label': 'Lung Tam Weaving Village', 'url': 'https://maps.google.com/?q=Hop+Tac+Xa+Lanh+Lung+Tam', 'type': 'maps'}
+            ]
+        }
+    },
     6: {
         'primary': {
-            'title': 'Muong Hoa Golden Rice Terraces Trek (Lao Chai -> Ta Van)',
-            'type': 'Signature Golden Harvest Valley Trek',
-            'duration': '6 hrs (12 km loop)',
-            'opening_hours': '08:30 - 15:30',
-            'cost_estimate': '75,000 VND valley entrance fee + local guide tip (300k-500k VND)',
-            'time_sensitive_tip': 'Mid-to-late September is Sa Pa golden harvest: terraced rice slopes turn intense amber-gold. Trek with a local Black Hmong guide directly from Eco Palms House.',
+            'title': '2-Day Guided Trek with Local Mamas (Day 1: Muong Hoa Valley to Ta Van Homestay)',
+            'type': 'Authentic Ethnic Minority Guided Trek & Village Homestay',
+            'duration': '6 hrs guided trail trek (09:00 - 15:30)',
+            'opening_hours': 'Trek departs 09:00 AM from Sa Pa hotel',
+            'cost_estimate': 'Guided trek package + homestay (~$40-$50 USD / 1M-1.2M VND per person including all meals)',
+            'time_sensitive_tip': 'Wake up refreshed from your Sa Pa hotel. Meet your local Hmong Mama guide (authentic community trekking). Trek off-the-beaten-track ridge trails through Y Linh Ho and Lao Chai into Ta Van village. Stay at the Mama\'s family wooden homestay (twin mattresses with warm duvets). Cook and eat with the Mama: an authentic woodfire family feast (free-range roasted chicken, bamboo shoots, wild mountain greens, spring rolls, and happy water corn wine)!',
             'links': [
                 {'label': 'Muong Hoa Valley Trailhead', 'url': 'https://maps.google.com/?q=Muong+Hoa+Valley+Sapa', 'type': 'maps'},
+                {'label': 'Lao Chai Village', 'url': 'https://maps.google.com/?q=Lao+Chai+Village+Sapa', 'type': 'maps'},
                 {'label': 'Ta Van Village Map', 'url': 'https://maps.google.com/?q=Ta+Van+Village+Sapa', 'type': 'maps'}
             ]
         },
         'contingency': {
-            'title': 'Fansipan Legend Cable Car & Red Dao Barrel Herbal Bath',
-            'type': 'Enclosed World-Record Cable Car & Spa',
+            'title': 'Ta Van Covered Village Cultural Center & Traditional Herbal Foot Soak',
+            'type': 'Sheltered Mountain Hamlet Sanctuary',
             'duration': '4 hrs',
-            'cost_estimate': '850,000 VND cable car ticket + 150,000 VND herbal bath',
-            'trigger': 'Heavy rain making downhill dirt trails slick and hazardous',
-            'time_sensitive_tip': 'The Fansipan cable car glides safely above rain clouds into the surreal summit temples. Follow with a warm wooden-barrel medicinal herbal bath.',
+            'cost_estimate': 'Included in homestay hospitality',
+            'trigger': 'Heavy monsoon downpours making steep earthen trails slick',
+            'time_sensitive_tip': 'The Mama leads along lower paved stone pathways directly to the homestay, followed by hot Red Dao herbal foot baths and hearthside cooking.',
             'links': [
-                {'label': 'Sun World Fansipan Legend', 'url': 'https://maps.google.com/?q=Sun+World+Fansipan+Legend', 'type': 'booking'}
+                {'label': 'Ta Van Homestay', 'url': 'https://maps.google.com/?q=Ta+Van+Homestay+Sapa', 'type': 'maps'}
             ]
         }
     },
     7: {
         'primary': {
-            'title': 'Bicycle Ride Through Tam Coc Karst Valleys & Bich Dong Pagoda',
-            'type': 'Rural Cycling & Ancient Mountain Temple',
-            'duration': '3.5 hrs (14:00 - 17:30)',
-            'opening_hours': 'Bich Dong Pagoda open daylight hours (free entry)',
-            'cost_estimate': 'Free complimentary bicycles from Tam Coc Garden',
-            'time_sensitive_tip': 'Sequence A delivers you to Tam Coc by 13:30 PM via direct highway express coach (saving a 10h slog!). Late afternoon cycling through lotus ponds is serene and crowd-free.',
+            'title': '2-Day Trek with Mamas (Day 2: Bamboo Forests & Waterfalls) -> Express Coach to Ninh Binh',
+            'type': 'Guided Trail Walk, Farewell Lunch with Mama & Sequence A Highway Coach',
+            'duration': '4 hrs morning trek + 6 hrs afternoon express coach',
+            'opening_hours': 'Trek finishes 13:30; Express coach departs ~15:30-16:00',
+            'cost_estimate': 'Trek package + 450,000 VND VIP express coach to Ninh Binh',
+            'time_sensitive_tip': 'Wake up to misty mountain views. Enjoy Mama\'s homemade banana pancakes and mountain tea. Trek through dense giant bamboo forests to Giang Ta Chai waterfall and Red Dao village. Enjoy a farewell lunch with Mama, transfer back to Sa Pa town to shower and collect bags, then board the direct express coach to Ninh Binh (Tam Coc)! Arrive in Tam Coc for check-in at Tam Coc Garden Resort.',
             'links': [
-                {'label': 'Bich Dong Pagoda Pin', 'url': 'https://maps.google.com/?q=Bich+Dong+Pagoda+Ninh+Binh', 'type': 'maps'},
+                {'label': 'Giang Ta Chai Waterfall Pin', 'url': 'https://maps.google.com/?q=Giang+Ta+Chai+Waterfall', 'type': 'maps'},
                 {'label': 'Tam Coc Garden Resort', 'url': 'https://maps.google.com/?q=Tam+Coc+Garden+Resort+Ninh+Binh', 'type': 'maps'}
             ]
         },
         'contingency': {
-            'title': 'Thung Nham Bird Valley Covered Pavilions & Farm-to-Table Cooking',
-            'type': 'Sheltered Wildlife & Culinary Session',
-            'duration': '3 hrs',
-            'cost_estimate': '100,000 VND entry + resort dining',
-            'trigger': 'Afternoon downpour in Ninh Binh',
-            'time_sensitive_tip': 'Thung Nham bird sanctuary features roofed viewing platforms where thousands of storks return to nest at dusk regardless of rain.',
+            'title': 'Giang Ta Chai Covered Tea House & Afternoon Highway Express Coach',
+            'type': 'Sheltered Scenic Valley Route',
+            'duration': '3 hrs morning + coach transit',
+            'cost_estimate': 'Standard transport',
+            'trigger': 'High river swell or slick waterfall rocks',
+            'time_sensitive_tip': 'Short direct trail through the valley directly to vehicle pickup point for a clean, dry transfer back to Sa Pa town before the Ninh Binh coach.',
             'links': [
-                {'label': 'Thung Nham Bird Valley', 'url': 'https://maps.google.com/?q=Thung+Nham+Bird+Park', 'type': 'maps'}
+                {'label': 'Tam Coc Garden Resort', 'url': 'https://maps.google.com/?q=Tam+Coc+Garden+Resort+Ninh+Binh', 'type': 'maps'}
             ]
         }
     },
@@ -768,73 +771,73 @@ DAY_TRANSPORTS = {
         }
     },
     2: {
-        'route': 'Bangkok (Sukhon) -> BKK Basement -> Hanoi Noi Bai (HAN) -> Old Quarter',
-        'transit_type': 'ARL Train + International Flight (Mytrip 1145-554-179) + Express Bus/Grab',
-        'pickup_hub': 'Sukhon Hotel -> BKK Level 4 Check-in -> Hanoi Noi Bai Terminal 2',
-        'dropoff_terminal': 'La Siesta Classic Ma May (Hanoi Old Quarter)',
-        'duration': 'Flight: 1h 55m | Airport transfer: 45m',
-        'baggage_allowance': 'Checked suitcase locked at BKK Floor B AIRPORTELs; strictly 55L backpack for flight',
-        'booking_provider': 'Confirmed Mytrip E-Ticket (Order: 1145-554-179)',
+        'route': 'Bangkok (Sukhon) -> BKK Basement -> Hanoi Airport (HAN) -> Sleeper to Ha Giang City',
+        'transit_type': 'International Flight (Mytrip 1145-554-179) + Direct Airport VIP Sleeper Bus',
+        'pickup_hub': 'Sukhon Hotel -> BKK Level 4 Check-in -> Hanoi Noi Bai Airport (Terminal 2)',
+        'dropoff_terminal': 'Ha Giang City Tour Hotel (Phoenix Hotel / Tour Base)',
+        'duration': 'Flight: 1h 55m | Direct Airport Sleeper: 5h 00m',
+        'baggage_allowance': 'Checked suitcase in BKK Floor B AIRPORTELs; strictly 55L backpack for flight and sleeper bus',
+        'booking_provider': 'Confirmed Mytrip E-Ticket (Order: 1145-554-179) + Ha Giang Tour Airport Sleeper',
         'booking_url': 'documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf',
         'grab_helper': {
             'pickup': 'Noi Bai International Airport Terminal 2',
-            'dropoff': 'La Siesta Classic Ma May Hotel',
-            'dropoff_local': 'Khách sạn La Siesta Classic, 94 Mã Mây, Hoàn Kiếm, Hà Nội',
-            'maps_url': 'https://maps.google.com/?q=La+Siesta+Classic+Ma+May+Hanoi'
+            'dropoff': 'Noi Bai Expressway Bus Point (Ha Giang Sleeper Pickup)',
+            'dropoff_local': 'Điểm đón xe giường nằm đi Hà Giang tại sân bay Nội Bài',
+            'maps_url': 'https://maps.google.com/?q=Noi+Bai+International+Airport'
         }
     },
     3: {
-        'route': 'Hanoi Old Quarter -> Ha Giang City Basecamp',
-        'transit_type': 'VIP Limousine Cabin Sleeper Bus',
-        'pickup_hub': 'Hanoi Old Quarter Hotel Doorstep (07:30 AM pickup)',
-        'dropoff_terminal': 'Ha Giang City Easy-Rider Base (Cheers / QT Motorbikes)',
-        'duration': '5h 30m - 6h 00m via Tuyen Quang expressway',
-        'baggage_allowance': '55L backpack in bus luggage hold; store spare items at base, take 25L dry bag on bike',
-        'booking_provider': '12Go Asia / Truly Ha Giang / Bang Phan',
-        'booking_url': 'https://12go.asia/en/travel/hanoi/ha-giang?date=2026-09-13',
+        'route': 'Ha Giang City -> Bac Sum Pass -> Quan Ba -> Tham Ma Pass -> Dong Van',
+        'transit_type': '3-Day Ha Giang Tour: Licensed Easy-Riders (Hotels Included)',
+        'pickup_hub': 'Ha Giang City Tour Base (08:30 AM)',
+        'dropoff_terminal': 'Dong Van Ancient Town Hotel (Twin Room Included)',
+        'duration': 'Scenic motorcade with guided stops across 145 km',
+        'baggage_allowance': 'Bungee-strapped waterproof pack on rear motorcycle rack',
+        'booking_provider': 'Ha Giang 3D Tour Operator (Cheers Ha Giang / QT / Road Kings)',
+        'booking_url': 'https://cheershagiang.com/',
         'grab_helper': None
     },
     4: {
-        'route': 'Ha Giang City -> Quan Ba -> Dong Van -> Ma Pi Leng -> Meo Vac',
-        'transit_type': 'Licensed Easy-Rider Motorcade (QL4C Highway)',
-        'pickup_hub': 'Nam Dam Ethnic Village Lodge',
-        'dropoff_terminal': 'Meo Vac Town / Clay House Homestay',
-        'duration': 'Scenic riding with stops across 140 km alpine road',
-        'baggage_allowance': 'Bungee-strapped waterproof bag on rear motorcycle rack',
-        'booking_provider': 'Licensed Tour Operator (Cheers Ha Giang / QT)',
+        'route': 'Dong Van -> Ma Pi Leng Pass -> Tu San Canyon Boat -> Meo Vac -> Du Gia',
+        'transit_type': 'Licensed Easy-Riders + Nho Que Motorboat Cruise (Hotels Included)',
+        'pickup_hub': 'Dong Van Hotel Doorstep (08:00 AM)',
+        'dropoff_terminal': 'Du Gia Valley Hotel / Private Bungalow (Twin Beds Included)',
+        'duration': 'Full-day scenic ride & canyon cruise',
+        'baggage_allowance': 'Waterproof bag on bike rack',
+        'booking_provider': 'Ha Giang 3D Tour Operator',
         'booking_url': 'https://cheershagiang.com/',
         'grab_helper': None
     },
     5: {
-        'route': 'Meo Vac -> Du Gia Valley -> Ha Giang City -> Sa Pa',
-        'transit_type': 'Easy-Rider scenic transfer + Mountain VIP Minibus',
-        'pickup_hub': 'Meo Vac (08:00) -> Ha Giang City (14:00) -> Bus Terminal (15:30)',
-        'dropoff_terminal': 'Eco Palms House / Sa Pa Town Center (21:00)',
-        'duration': 'Minibus transit: 5.5 hrs via Lao Cai highway',
-        'baggage_allowance': '55L clamshell backpack in minibus luggage bay',
-        'booking_provider': '12Go Asia / Truly Mountain Shuttle',
+        'route': 'Du Gia -> Ha Giang Basecamp -> Direct Sleeper Bus to Sa Pa Town Hotel',
+        'transit_type': 'Easy-Rider return leg + Direct Evening Sleeper Bus to Sa Pa',
+        'pickup_hub': 'Du Gia (08:00 AM) -> Ha Giang Base (15:30 PM) -> Sa Pa Sleeper (18:30 PM)',
+        'dropoff_terminal': 'Sa Pa Town Center Hotel (BB Hotel Sapa / Pao\'s Sapa) - 1 Night Deep Sleep',
+        'duration': 'Ha Giang to Sa Pa Sleeper: ~5h 00m (Arrives Sa Pa ~23:30 PM)',
+        'baggage_allowance': '55L clamshell backpack in bus luggage bay',
+        'booking_provider': '12Go Asia / Truly Ha Giang / Bang Phan / Quang Nghi Sleeper',
         'booking_url': 'https://12go.asia/en/travel/ha-giang/sapa?date=2026-09-15',
         'grab_helper': None
     },
     6: {
-        'route': 'Sa Pa -> Muong Hoa Valley Trek -> Lao Chai -> Ta Van Loop',
-        'transit_type': 'Trek on Foot with Local Black Hmong Guide + 4WD Return',
-        'pickup_hub': 'Eco Palms House Trailhead (08:30 AM)',
-        'dropoff_terminal': 'Eco Palms House Bungalow (15:30 PM)',
-        'duration': '6 hrs guided trail walk',
-        'baggage_allowance': 'Daypack only; 55L pack safely in bungalow',
-        'booking_provider': 'Eco Palms House Guided Trekking',
-        'booking_url': 'https://ecopalmshouse.com/',
+        'route': 'Sa Pa Town Hotel -> 2-Day Trek Guided by Mamas -> Ta Van Village Homestay',
+        'transit_type': 'Guided Mountain Trail Trek on Foot with Local Hmong Mama',
+        'pickup_hub': 'Sa Pa Town Hotel Lobby (09:00 AM departure on foot)',
+        'dropoff_terminal': 'Mama\'s Village Homestay (Ta Van / Hau Thao Village)',
+        'duration': '6 hrs guided trail walk through Muong Hoa Valley',
+        'baggage_allowance': 'Daypack for overnight at homestay; 55L pack safely transferred or stored',
+        'booking_provider': 'Local Ethnic Minority Guide (Sapa Sisters / Mama Mu Community Trek)',
+        'booking_url': 'https://sapasisters.com/',
         'grab_helper': None
     },
     7: {
-        'route': 'Sa Pa -> Ninh Binh (Tam Coc) [Sequence A Express Triangle]',
-        'transit_type': 'Direct VIP Express Sleeper Coach',
-        'pickup_hub': 'Sa Pa Town Center / Eco Palms transfer (07:30 AM)',
-        'dropoff_terminal': 'Tam Coc Garden Resort / Wharf Doorstep (13:30 PM)',
-        'duration': '6h 00m flat via direct highway (Avoids 10h Cat Ba slog!)',
+        'route': 'Ta Van Mama\'s Homestay -> Bamboo Forest Trek -> Sa Pa -> Direct VIP Coach to Ninh Binh',
+        'transit_type': 'Guided Trail Walk + Shuttle to Town + Direct Highway VIP Express Coach',
+        'pickup_hub': 'Ta Van Homestay (09:00 AM) -> Sa Pa Town (14:00 PM) -> Express Coach (15:30 PM)',
+        'dropoff_terminal': 'Tam Coc Garden Resort / Wharf Doorstep, Ninh Binh (21:30 PM)',
+        'duration': 'Morning trek 4 hrs | Highway Express Coach to Ninh Binh: 6 hrs',
         'baggage_allowance': '55L backpack in undercarriage luggage compartment',
-        'booking_provider': '12Go Asia / The Long Travel / Truly Bus',
+        'booking_provider': '12Go Asia / The Long Travel / Daily Limousine Express',
         'booking_url': 'https://12go.asia/en/travel/sapa/ninh-binh?date=2026-09-17',
         'grab_helper': None
     },
