@@ -50,7 +50,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// -------------------------------------------------------------
+// THEME MANAGER (Light & Dark Mode)
+// -------------------------------------------------------------
+function initTheme() {
+  const saved = localStorage.getItem('travel_os_theme');
+  const isDark = saved === 'dark';
+  if (isDark) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+  updateThemeButton(isDark);
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('travel_os_theme', isDark ? 'dark' : 'light');
+  updateThemeButton(isDark);
+}
+
+function updateThemeButton(isDark) {
+  const icon = document.getElementById('theme-toggle-icon');
+  const text = document.getElementById('theme-toggle-text');
+  if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+  if (text) text.textContent = isDark ? 'Light' : 'Dark';
+}
+
 function initApp() {
+  initTheme();
   renderHeaderMetrics();
   renderTimelineScrubber();
   renderDays();
@@ -251,9 +279,9 @@ function renderDays() {
 
   if (filtered.length === 0) {
     container.innerHTML = `
-      <div class="glass-card rounded-2xl p-8 text-center text-slate-400">
-        <p class="text-lg font-semibold text-slate-300">No itinerary days match your current filter.</p>
-        <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-xs font-semibold">Reset Filters</button>
+      <div class="travel-card rounded-2xl p-10 text-center text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <p class="text-lg font-bold text-slate-800 dark:text-slate-200">No itinerary days match your filter.</p>
+        <button onclick="resetFilters()" class="mt-4 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-sm transition">Reset Filters</button>
       </div>
     `;
     return;
@@ -268,32 +296,34 @@ function renderDays() {
     }
 
     const isPhase1 = day.phase.includes('Vietnam') || day.day_number <= 13;
-    const phaseColor = isPhase1 ? 'text-amber-400 border-amber-500/30' : 'text-pink-400 border-pink-500/30';
+    const phaseColor = isPhase1 
+      ? 'text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-500/30' 
+      : 'text-pink-800 dark:text-pink-300 bg-pink-50 dark:bg-pink-950/40 border-pink-300 dark:border-pink-500/30';
     const bedIcon = isPhase1 ? '🛏️ Twin Beds (Guys Trip)' : '👑 Romantic King (Couple Trip)';
 
-    // Accommodations
+    // Accommodations Matrix
     let hotelsHtml = '';
     (day.accommodation_matrix || []).forEach(h => {
       const isHotelBooked = h.status === 'CONFIRMED_BOOKED';
       const hotelBadge = isHotelBooked 
-        ? `<span class="text-[11px] px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 font-bold border border-emerald-500/40">✓ CONFIRMED BOOKING</span>`
-        : `<span class="text-[11px] px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 font-semibold border border-amber-500/40">UNBOOKED RECOMMENDATION</span>`;
+        ? `<span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-300 dark:border-emerald-500/40">✓ Confirmed Booking</span>`
+        : `<span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 font-semibold border border-amber-300 dark:border-amber-500/40">Vetted Option</span>`;
 
       hotelsHtml += `
-        <div class="bg-slate-900/60 rounded-xl p-3 border border-slate-700/60 flex flex-col justify-between">
+        <div class="bg-white dark:bg-slate-800/80 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/80 shadow-sm flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between flex-wrap gap-1">
-              <a href="${h.booking_url}" target="_blank" class="font-semibold text-blue-400 hover:underline text-sm flex items-center gap-1">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <a href="${h.booking_url}" target="_blank" class="font-bold text-blue-600 dark:text-blue-400 hover:underline text-sm sm:text-base flex items-center gap-1">
                 ${h.hotel_name} <span class="text-xs">↗</span>
               </a>
               ${hotelBadge}
             </div>
-            <p class="text-xs text-slate-300 mt-1"><b>Room:</b> ${h.room_spec}</p>
-            <p class="text-xs text-slate-400 mt-1 italic">${h.critic_notes}</p>
+            <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 mt-1.5 font-medium"><b>Room:</b> ${h.room_spec}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 italic leading-relaxed">${h.critic_notes}</p>
           </div>
-          <div class="mt-3 pt-2 border-t border-slate-800 flex justify-between items-center text-xs">
-            <span class="text-emerald-400 font-medium">${h.price_per_night}</span>
-            <a href="${h.booking_url}" target="_blank" class="px-2.5 py-1 bg-blue-600/80 hover:bg-blue-600 text-white rounded text-xs font-semibold transition">View Deal</a>
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/60 flex justify-between items-center text-xs">
+            <span class="text-emerald-700 dark:text-emerald-400 font-extrabold text-sm">${h.price_per_night}</span>
+            <a href="${h.booking_url}" target="_blank" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow-sm">View Deal ↗</a>
           </div>
         </div>
       `;
@@ -304,13 +334,13 @@ function renderDays() {
     (day.attached_documents || []).forEach(doc => {
       const isVerified = Boolean(doc.file_path);
       docsHtml += `
-        <button onclick="openDocModal('${doc.doc_id}')" class="doc-pill text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer ${isVerified ? 'bg-emerald-950/40 border-emerald-600/50 hover:border-emerald-400' : 'bg-slate-800/80 border-slate-700 hover:border-blue-400'} border transition">
+        <button onclick="openDocModal('${doc.doc_id}')" class="doc-pill text-xs px-3 py-2 rounded-xl flex items-center gap-2 cursor-pointer ${isVerified ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-600/50 text-emerald-900 dark:text-emerald-200' : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200'} border transition shadow-sm">
           <span>${isVerified ? '📄' : '📎'}</span>
-          <span class="font-medium text-slate-200">${doc.title}</span>
-          <span class="text-blue-300 text-[11px] font-mono">(${doc.ref})</span>
+          <span class="font-bold">${doc.title}</span>
+          <span class="text-blue-600 dark:text-blue-300 text-xs font-mono">(${doc.ref})</span>
           ${isVerified 
-            ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-900/60 text-emerald-300 border border-emerald-500/50 font-semibold">✓ Download PDF</span>` 
-            : `<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-300 border border-amber-600/40">File Pending</span>`}
+            ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 font-bold">✓ PDF</span>` 
+            : `<span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 font-semibold">Pending</span>`}
         </button>
       `;
     });
@@ -319,7 +349,7 @@ function renderDays() {
     let mapsHtml = '';
     (day.google_maps_links || []).forEach(m => {
       mapsHtml += `
-        <a href="${m.url}" target="_blank" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition border border-slate-700/60">
+        <a href="${m.url}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold transition border border-slate-200 dark:border-slate-700 shadow-sm">
           <span>📍</span> ${m.label} <span class="text-[10px] text-slate-400">↗</span>
         </a>
       `;
@@ -336,27 +366,27 @@ function renderDays() {
       const escapedLocal = dropLocal.replace(/'/g, "\\'");
 
       transportHtml = `
-        <div class="mb-4 bg-slate-900/90 border border-sky-600/40 rounded-xl p-4 shadow-sm">
-          <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+        <div class="bg-white dark:bg-slate-800/90 border border-sky-200 dark:border-sky-500/30 rounded-2xl p-4 sm:p-5 shadow-sm mb-4">
+          <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
             <div class="flex items-center gap-2">
-              <span class="text-base">🚆</span>
-              <span class="font-bold text-sky-300 text-xs sm:text-sm">${routeTitle}</span>
+              <span class="text-lg">🚆</span>
+              <span class="font-extrabold text-slate-900 dark:text-sky-300 text-sm sm:text-base">${routeTitle}</span>
             </div>
-            <span class="text-[11px] px-2 py-0.5 rounded bg-sky-950 text-sky-300 border border-sky-500/40 font-semibold">
+            <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-500/40 font-bold">
               ${trans.transit_type || 'Transit Module'}
             </span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300 mb-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300 mb-3">
             <div class="space-y-1">
-              <p><span class="text-slate-400 font-medium">Pickup Hub:</span> <b>${trans.pickup_hub || 'TBD'}</b></p>
-              <p><span class="text-slate-400 font-medium">Drop-off Terminal:</span> <b>${trans.dropoff_terminal || 'TBD'}</b></p>
-              <p><span class="text-slate-400 font-medium">Est. Duration:</span> <span class="text-amber-300 font-semibold">${trans.duration || 'N/A'}</span></p>
+              <p><span class="text-slate-500 dark:text-slate-400 font-medium">Pickup Hub:</span> <b class="text-slate-900 dark:text-white">${trans.pickup_hub || 'TBD'}</b></p>
+              <p><span class="text-slate-500 dark:text-slate-400 font-medium">Drop-off Terminal:</span> <b class="text-slate-900 dark:text-white">${trans.dropoff_terminal || 'TBD'}</b></p>
+              <p><span class="text-slate-500 dark:text-slate-400 font-medium">Est. Duration:</span> <span class="text-amber-700 dark:text-amber-300 font-bold">${trans.duration || 'N/A'}</span></p>
             </div>
             <div class="space-y-1">
-              <p><span class="text-slate-400 font-medium">Baggage Allowance:</span> ${trans.baggage_allowance || 'Standard'}</p>
-              <p><span class="text-slate-400 font-medium">Booking / Provider:</span> 
-                <a href="${trans.booking_url || '#'}" target="_blank" class="text-sky-400 hover:underline font-bold inline-flex items-center gap-1">
+              <p><span class="text-slate-500 dark:text-slate-400 font-medium">Baggage:</span> ${trans.baggage_allowance || 'Standard'}</p>
+              <p><span class="text-slate-500 dark:text-slate-400 font-medium">Provider:</span> 
+                <a href="${trans.booking_url || '#'}" target="_blank" class="text-blue-600 dark:text-sky-400 hover:underline font-bold inline-flex items-center gap-1">
                   ${provider} ↗
                 </a>
               </p>
@@ -365,22 +395,22 @@ function renderDays() {
 
           <!-- Taxi / Grab Driver Assist Box -->
           ${grab.dropoff || dropLocal ? `
-            <div class="bg-slate-950/80 p-3 rounded-xl border border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+            <div class="driver-assist-box p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-1.5 text-amber-400 font-semibold text-[11px] mb-0.5">
-                  <span>🚕</span> Taxi / Grab Driver Assist:
+                <div class="text-[11px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 mb-0.5 flex items-center gap-1">
+                  <span>🚕</span> Show Driver Destination (Grab / Taxi):
                 </div>
-                <div class="text-white font-semibold truncate text-[13px]">${grab.dropoff || ''}</div>
-                ${dropLocal ? `<div class="text-amber-300 text-xs font-medium font-sans mt-0.5 tracking-wide">${dropLocal}</div>` : ''}
+                <div class="text-slate-900 dark:text-white font-bold text-sm truncate">${grab.dropoff || ''}</div>
+                ${dropLocal ? `<div class="driver-native-text mt-0.5 select-all">${dropLocal}</div>` : ''}
               </div>
               <div class="flex items-center gap-2 shrink-0">
                 ${dropLocal ? `
-                  <button onclick="copyToClipboard('${escapedLocal}', 'Copied destination in local script for driver!')" class="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
-                    <span>📋</span> Copy Driver Script
+                  <button onclick="copyToClipboard('${escapedLocal}', 'Copied destination in local script for driver!')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition active:scale-95">
+                    <span>📋</span> Copy Script
                   </button>
                 ` : ''}
                 ${grab.maps_url ? `
-                  <a href="${grab.maps_url}" target="_blank" class="px-3 py-1.5 rounded-lg bg-sky-900/40 hover:bg-sky-900/70 text-sky-200 border border-sky-500/40 text-xs font-semibold flex items-center gap-1.5 transition">
+                  <a href="${grab.maps_url}" target="_blank" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition">
                     <span>📍</span> Open Maps ↗
                   </a>
                 ` : ''}
@@ -391,7 +421,7 @@ function renderDays() {
       `;
     }
 
-    // Experiences Hub (Plan A vs Plan B)
+    // Daily Attraction & Experience Hub (Plan A vs Plan B)
     let experienceHtml = '';
     const exp = day.experiences;
     if (exp && exp.primary && exp.contingency) {
@@ -400,78 +430,78 @@ function renderDays() {
       const isModeB = dayExperienceModes[day.day_number] === 'contingency';
 
       const pLinks = (p.links || []).map(l => `
-        <a href="${l.url}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs border border-emerald-500/30">
+        <a href="${l.url}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-700 transition">
           <span>${l.type === 'booking' ? '🎟️' : '📍'}</span> ${l.label} ↗
         </a>
       `).join('');
 
       const cLinks = (c.links || []).map(l => `
-        <a href="${l.url}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs border border-amber-500/30">
+        <a href="${l.url}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-700 transition">
           <span>${l.type === 'booking' ? '🎟️' : '📍'}</span> ${l.label} ↗
         </a>
       `).join('');
 
       experienceHtml = `
-        <div class="mb-4 bg-slate-900/70 border border-slate-700/70 rounded-xl p-4">
+        <div class="mb-4 bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl p-4 sm:p-5 shadow-sm">
           <!-- Experience Hub Header & Toggle Buttons -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-2 border-b border-slate-800">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
             <div class="flex items-center gap-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Daily Attraction & Experience Hub</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Daily Attraction &amp; Experience Hub</span>
             </div>
             
             <div class="flex items-center gap-2">
               <button id="btn-plan-a-${day.day_number}" onclick="toggleExperience(${day.day_number}, 'primary')" 
-                      class="plan-tab-btn ${isModeB ? 'plan-tab-inactive' : 'plan-tab-active-a'} px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5">
-                <span>🌟</span> Plan A: Main Experience
+                      class="plan-tab-btn ${isModeB ? 'plan-tab-inactive' : 'plan-tab-active-a'} px-3.5 py-2 text-xs flex items-center gap-1.5">
+                <span>🌟</span> Plan A: Main Plan
               </button>
               <button id="btn-plan-b-${day.day_number}" onclick="toggleExperience(${day.day_number}, 'contingency')" 
-                      class="plan-tab-btn ${isModeB ? 'plan-tab-active-b' : 'plan-tab-inactive'} px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5">
-                <span>☔</span> Plan B: Agile Contingency
+                      class="plan-tab-btn ${isModeB ? 'plan-tab-active-b' : 'plan-tab-inactive'} px-3.5 py-2 text-xs flex items-center gap-1.5">
+                <span>☔</span> Plan B: Contingency
               </button>
             </div>
           </div>
 
           <!-- PLAN A CONTENT BLOCK -->
-          <div id="exp-primary-${day.day_number}" class="${isModeB ? 'hidden' : ''} space-y-2.5 text-xs">
+          <div id="exp-primary-${day.day_number}" class="${isModeB ? 'hidden' : ''} space-y-3 text-xs sm:text-sm">
             <div class="flex items-center justify-between flex-wrap gap-2">
-              <h4 class="font-bold text-emerald-300 text-sm">${p.title}</h4>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-semibold">${p.type}</span>
+              <h4 class="font-extrabold text-emerald-700 dark:text-emerald-400 text-base">${p.title}</h4>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-500/40">${p.type}</span>
             </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-slate-300">
-              <p><span class="text-slate-400">Duration:</span> <b>${p.duration}</b></p>
-              <p><span class="text-slate-400">Hours:</span> <b>${p.opening_hours || 'Flexible'}</b></p>
-              <p><span class="text-slate-400">Est. Cost:</span> <span class="text-emerald-400 font-semibold">${p.cost_estimate}</span></p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-slate-700 dark:text-slate-300 font-medium">
+              <p><span class="text-slate-500 dark:text-slate-400">Duration:</span> <b>${p.duration}</b></p>
+              <p><span class="text-slate-500 dark:text-slate-400">Hours:</span> <b>${p.opening_hours || 'Flexible'}</b></p>
+              <p><span class="text-slate-500 dark:text-slate-400">Est. Cost:</span> <span class="text-emerald-700 dark:text-emerald-400 font-bold">${p.cost_estimate}</span></p>
             </div>
 
-            <div class="bg-emerald-950/30 p-2.5 rounded-lg border border-emerald-500/30 text-emerald-200">
-              <span class="font-bold text-emerald-300">💡 Time-Sensitive Tip:</span> ${p.time_sensitive_tip}
+            <div class="bg-emerald-50 dark:bg-emerald-950/30 p-3 rounded-xl border border-emerald-200 dark:border-emerald-500/30 text-emerald-900 dark:text-emerald-200 text-xs sm:text-sm leading-relaxed">
+              <span class="font-bold text-emerald-800 dark:text-emerald-300">💡 Insider Tip:</span> ${p.time_sensitive_tip}
             </div>
 
-            ${pLinks ? `<div class="flex flex-wrap gap-1.5 pt-1">${pLinks}</div>` : ''}
+            ${pLinks ? `<div class="flex flex-wrap gap-2 pt-1">${pLinks}</div>` : ''}
           </div>
 
           <!-- PLAN B CONTENT BLOCK (CONTINGENCY / RAINY-DAY) -->
-          <div id="exp-contingency-${day.day_number}" class="${isModeB ? '' : 'hidden'} space-y-2.5 text-xs">
+          <div id="exp-contingency-${day.day_number}" class="${isModeB ? '' : 'hidden'} space-y-3 text-xs sm:text-sm">
             <div class="flex items-center justify-between flex-wrap gap-2">
-              <h4 class="font-bold text-amber-300 text-sm">${c.title}</h4>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/40 font-semibold">${c.type}</span>
+              <h4 class="font-extrabold text-amber-700 dark:text-amber-400 text-base">${c.title}</h4>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold border border-amber-200 dark:border-amber-500/40">${c.type}</span>
             </div>
 
-            <div class="bg-amber-950/40 p-2 rounded-lg border border-amber-600/40 text-amber-300 font-medium">
+            <div class="bg-amber-50 dark:bg-amber-950/40 p-2.5 rounded-xl border border-amber-200 dark:border-amber-600/40 text-amber-900 dark:text-amber-300 text-xs font-semibold">
               <span>⚠️ Trigger Condition:</span> ${c.trigger}
             </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
-              <p><span class="text-slate-400">Duration:</span> <b>${c.duration}</b></p>
-              <p><span class="text-slate-400">Est. Cost:</span> <span class="text-amber-400 font-semibold">${c.cost_estimate}</span></p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-700 dark:text-slate-300 font-medium">
+              <p><span class="text-slate-500 dark:text-slate-400">Duration:</span> <b>${c.duration}</b></p>
+              <p><span class="text-slate-500 dark:text-slate-400">Est. Cost:</span> <span class="text-amber-700 dark:text-amber-400 font-bold">${c.cost_estimate}</span></p>
             </div>
 
-            <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 text-slate-300">
-              <span class="font-bold text-amber-300">💡 Contingency Advice:</span> ${c.time_sensitive_tip}
+            <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
+              <span class="font-bold text-amber-700 dark:text-amber-300">💡 Contingency Advice:</span> ${c.time_sensitive_tip}
             </div>
 
-            ${cLinks ? `<div class="flex flex-wrap gap-1.5 pt-1">${cLinks}</div>` : ''}
+            ${cLinks ? `<div class="flex flex-wrap gap-2 pt-1">${cLinks}</div>` : ''}
           </div>
         </div>
       `;
@@ -481,28 +511,28 @@ function renderDays() {
     let specialBanner = '';
     if (day.day_number === 2) {
       specialBanner = `
-        <div class="bg-amber-950/40 border-l-4 border-amber-500 p-3 rounded-r-lg mb-3 text-xs text-amber-200 flex items-start gap-2">
-          <span class="text-lg">🧳</span>
+        <div class="bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-500 p-4 rounded-r-2xl mb-4 text-xs sm:text-sm text-amber-900 dark:text-amber-200 flex items-start gap-3 shadow-sm">
+          <span class="text-2xl">🧳</span>
           <div>
-            <b>BKK Airport Suitcase Drop (Floor B Basement):</b> Deposit checked suitcase at AIRPORTELs Suvarnabhumi basement before 11:55 flight. 55L clamshell backpack only for Vietnam!
+            <b class="font-bold">BKK Airport Suitcase Drop (Floor B Basement):</b> Deposit checked suitcase at AIRPORTELs Suvarnabhumi basement before 11:55 flight. Strictly 55L clamshell backpack only for Vietnam!
           </div>
         </div>
       `;
     } else if (day.day_number === 14) {
       specialBanner = `
-        <div class="bg-purple-950/40 border-l-4 border-purple-500 p-3.5 rounded-r-xl mb-3 text-xs text-purple-200 space-y-1">
+        <div class="bg-purple-50 dark:bg-purple-950/40 border-l-4 border-purple-600 p-4 rounded-r-2xl mb-4 text-xs sm:text-sm text-purple-950 dark:text-purple-200 space-y-1.5 shadow-sm">
           <div class="flex items-center justify-between flex-wrap gap-2">
-            <span class="font-bold text-white flex items-center gap-1.5">
-              <span>✈️</span> Transition Day & Flight Connection Risk Radar
+            <span class="font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>✈️</span> Transition Day &amp; Connection Risk Radar
             </span>
-            <span class="text-[10px] px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-500/50 font-bold">PG 169 HIGH RISK</span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-500/50 font-bold">PG 169 HIGH RISK</span>
           </div>
-          <p class="text-slate-300 leading-relaxed">
+          <p class="leading-relaxed">
             Hanoi flight lands at 14:45. Friend departs. Retrieve checked suitcase at <b>AIRPORTELs Suvarnabhumi Basement (Floor B)</b>. Reunite with girlfriend at arrivals.
           </p>
-          <p class="text-amber-300 font-medium">
-            ⚠️ <b>Connection Audit:</b> PG 169 (17:15) leaves only 2h 30m total (immigration + Floor B luggage + 16:30 check-in cutoff). <b>Recommended Stress-Free Connection: PG 177 (19:30) or PG 181 (20:00)</b> with 4h 45m buffer and free Boutique Lounge access!
-            <button onclick="openPriceRadarModal()" class="ml-2 underline text-cyan-300 font-bold hover:text-white">Open Risk Radar →</button>
+          <p class="font-medium text-amber-800 dark:text-amber-300">
+            ⚠️ <b>Connection Audit:</b> PG 169 (17:15) leaves only 2h 30m total. <b>Recommended Stress-Free Connection: PG 177 (19:30) or PG 181 (20:00)</b> with 4h 45m buffer!
+            <button onclick="openPriceRadarModal()" class="ml-2 underline text-blue-600 dark:text-cyan-300 font-bold hover:opacity-80">Open Risk Radar →</button>
           </p>
         </div>
       `;
@@ -524,7 +554,7 @@ function renderDays() {
                  class="daily-task-checkbox mt-0.5" 
                  ${isChecked ? 'checked' : ''} 
                  onchange="toggleDailyTask(${day.day_number}, ${idx}, this)">
-          <span class="daily-task-text text-slate-300 group-hover:text-white transition-colors leading-snug ${isChecked ? 'checked' : ''}">
+          <span class="daily-task-text group-hover:text-slate-900 dark:group-hover:text-white transition-colors leading-snug ${isChecked ? 'checked' : ''}">
             ${task}
           </span>
         </label>
@@ -533,24 +563,25 @@ function renderDays() {
 
     const card = document.createElement('div');
     card.id = `day-card-${day.day_number}`;
-    card.className = 'glass-card rounded-2xl overflow-hidden transition-all duration-200';
+    card.className = 'travel-card rounded-2xl overflow-hidden mb-5 transition-all duration-200 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md';
     card.innerHTML = `
       <!-- Card Header (Always Visible) -->
-      <div onclick="toggleDay(${day.day_number})" class="p-4 sm:p-5 flex items-center justify-between cursor-pointer hover:bg-slate-800/40 select-none">
-        <div class="flex items-center gap-3 sm:gap-4 flex-wrap sm:flex-nowrap">
-          <div class="flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600/30 to-indigo-600/20 text-blue-300 font-extrabold text-sm border border-blue-500/40 shadow-inner shrink-0">
-            D${day.day_number < 10 ? '0' + day.day_number : day.day_number}
+      <div onclick="toggleDay(${day.day_number})" class="p-5 sm:p-6 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 select-none transition-colors">
+        <div class="flex items-center gap-3.5 sm:gap-5 flex-wrap sm:flex-nowrap">
+          <div class="flex flex-col items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-black border border-blue-200 dark:border-blue-800/60 shrink-0 shadow-sm">
+            <span class="text-[9px] sm:text-[10px] uppercase font-bold text-blue-500 dark:text-blue-400 leading-tight">DAY</span>
+            <span class="text-base sm:text-lg leading-tight">${day.day_number < 10 ? '0' + day.day_number : day.day_number}</span>
           </div>
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <h3 class="font-bold text-base sm:text-lg text-white">${day.destination}</h3>
-              <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold ${badgeClass}">${day.status}</span>
-              <span class="text-xs px-2.5 py-0.5 rounded-full border ${phaseColor} hidden sm:inline-block">${day.phase_short || day.phase}</span>
+              <h3 class="font-black text-base sm:text-xl text-slate-900 dark:text-white tracking-tight">${day.destination}</h3>
+              <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${badgeClass}">${day.status}</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold border ${phaseColor} hidden sm:inline-block">${day.phase_short || day.phase}</span>
             </div>
-            <div class="text-xs text-slate-400 mt-1 flex items-center gap-3 flex-wrap">
-              <span>📅 ${day.day_of_week}, ${day.date}</span>
-              <span>🌤️ ${day.weather_radar.temp_range}, ${day.weather_radar.condition}</span>
-              <span class="text-slate-300 font-medium">${bedIcon}</span>
+            <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1.5 flex items-center gap-2.5 flex-wrap">
+              <span>📅 <b>${day.day_of_week}</b>, ${day.date}</span>
+              <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">🌤️ ${day.weather_radar.temp_range} · ${day.weather_radar.condition}</span>
+              <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold">${bedIcon}</span>
             </div>
           </div>
         </div>
@@ -562,28 +593,28 @@ function renderDays() {
       </div>
 
       <!-- Card Content (Expandable) -->
-      <div id="day-content-${day.day_number}" class="day-content-block p-4 sm:p-6 border-t border-slate-700/60 bg-slate-900/40">
+      <div id="day-content-${day.day_number}" class="day-content-block p-5 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 space-y-4">
         ${specialBanner}
 
         <!-- Weather & Attire Radar -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 text-xs">
-          <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700/50">
-            <div class="font-bold text-slate-300 mb-1 flex items-center gap-1.5">
-              <span>🌦️</span> Weather & Attire Radar
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+          <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/70 shadow-sm">
+            <div class="font-bold text-slate-900 dark:text-white mb-1.5 flex items-center gap-1.5">
+              <span>🌦️</span> Weather &amp; Attire Radar
             </div>
-            <div class="text-slate-400">
+            <div class="text-slate-600 dark:text-slate-300 leading-relaxed text-xs sm:text-sm">
               <b>Forecast:</b> ${day.weather_radar.temp_range} • Rain: ${day.weather_radar.precipitation_pct} • Humidity: ${day.weather_radar.humidity}<br>
-              <span class="text-sky-300 font-medium">👔 Attire: ${day.weather_radar.attire_advice}</span>
+              <span class="text-blue-700 dark:text-sky-300 font-semibold">👔 Attire: ${day.weather_radar.attire_advice}</span>
             </div>
           </div>
 
-          <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-700/50">
-            <div class="font-bold text-slate-300 mb-1 flex items-center gap-1.5">
+          <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/70 shadow-sm">
+            <div class="font-bold text-slate-900 dark:text-white mb-1.5 flex items-center gap-1.5">
               <span>🚗</span> Door-to-Door Logistics
             </div>
-            <div class="text-slate-400">
-              <span class="text-slate-200">${day.door_to_door_logistics.primary_transit}</span><br>
-              <span class="text-slate-400 text-[11px]">Dep: ${day.door_to_door_logistics.departure_time} | Arr: ${day.door_to_door_logistics.arrival_time} | Buffer: ${day.door_to_door_logistics.buffer_time}</span>
+            <div class="text-slate-600 dark:text-slate-300 leading-relaxed text-xs sm:text-sm">
+              <span class="text-slate-900 dark:text-white font-semibold">${day.door_to_door_logistics.primary_transit}</span><br>
+              <span class="text-slate-500 dark:text-slate-400 text-xs">Dep: ${day.door_to_door_logistics.departure_time} | Arr: ${day.door_to_door_logistics.arrival_time} | Buffer: ${day.door_to_door_logistics.buffer_time}</span>
             </div>
           </div>
         </div>
@@ -596,9 +627,9 @@ function renderDays() {
 
         <!-- Attached Documents -->
         ${docsHtml ? `
-          <div class="mb-4">
-            <div class="text-xs font-bold text-slate-300 mb-1.5 flex items-center gap-1">
-              <span>📎</span> Mail Vouchers & Attached Passes for this Day:
+          <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/70 shadow-sm">
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5">
+              <span>📎</span> Mail Vouchers &amp; Attached Passes:
             </div>
             <div class="flex flex-wrap gap-2">
               ${docsHtml}
@@ -607,39 +638,39 @@ function renderDays() {
         ` : ''}
 
         <!-- Curated Daily Flow (Curated 3-Node Journey Grid) -->
-        <div class="mb-4">
-          <div class="font-bold text-slate-300 text-xs mb-2 flex items-center justify-between">
+        <div>
+          <div class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm mb-2.5 flex items-center justify-between">
             <span class="flex items-center gap-1.5">🗺️ Curated Daily Flow (Geographically Sequenced)</span>
-            <span class="text-[10px] text-slate-400 font-mono">Paced & Route-Optimized</span>
+            <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">Paced &amp; Route-Optimized</span>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-            <div class="flow-node-morning p-3 rounded-xl border text-xs">
-              <div class="flex items-center gap-1.5 font-bold text-amber-300 mb-1">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="flow-node-morning p-4 rounded-2xl text-xs sm:text-sm shadow-sm">
+              <div class="flex items-center gap-1.5 font-extrabold text-amber-900 dark:text-amber-300 mb-1.5">
                 <span>🌅</span> Morning Focus
               </div>
-              <p class="text-slate-300 leading-relaxed text-[12px]">${day.curated_daily_flow.morning || 'Flexible exploration'}</p>
+              <p class="text-slate-800 dark:text-slate-200 leading-relaxed">${day.curated_daily_flow.morning || 'Flexible exploration'}</p>
             </div>
-            <div class="flow-node-afternoon p-3 rounded-xl border text-xs">
-              <div class="flex items-center gap-1.5 font-bold text-sky-300 mb-1">
+            <div class="flow-node-afternoon p-4 rounded-2xl text-xs sm:text-sm shadow-sm">
+              <div class="flex items-center gap-1.5 font-extrabold text-blue-900 dark:text-sky-300 mb-1.5">
                 <span>☀️</span> Afternoon Highlight
               </div>
-              <p class="text-slate-300 leading-relaxed text-[12px]">${day.curated_daily_flow.afternoon || 'Activity & transit'}</p>
+              <p class="text-slate-800 dark:text-slate-200 leading-relaxed">${day.curated_daily_flow.afternoon || 'Activity & transit'}</p>
             </div>
-            <div class="flow-node-evening p-3 rounded-xl border text-xs">
-              <div class="flex items-center gap-1.5 font-bold text-purple-300 mb-1">
+            <div class="flow-node-evening p-4 rounded-2xl text-xs sm:text-sm shadow-sm">
+              <div class="flex items-center gap-1.5 font-extrabold text-purple-900 dark:text-purple-300 mb-1.5">
                 <span>🌙</span> Evening Pacing
               </div>
-              <p class="text-slate-300 leading-relaxed text-[12px]">${day.curated_daily_flow.evening || 'Dinner & unwind'}</p>
+              <p class="text-slate-800 dark:text-slate-200 leading-relaxed">${day.curated_daily_flow.evening || 'Dinner & unwind'}</p>
             </div>
           </div>
         </div>
 
         <!-- Accommodation Matrix -->
         ${hotelsHtml ? `
-          <div class="mb-4">
-            <div class="text-xs font-bold text-slate-300 mb-2 flex items-center justify-between">
+          <div>
+            <div class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mb-2.5 flex items-center justify-between">
               <span class="flex items-center gap-1.5">🏨 Vetted Accommodations (Critic Passed &ge; 8.5)</span>
-              <span class="text-[11px] text-slate-400">${isPhase1 ? 'Enforced: Twin Beds' : 'Enforced: King / Ocean View'}</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">${isPhase1 ? 'Enforced: Twin Beds' : 'Enforced: King / Ocean View'}</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               ${hotelsHtml}
@@ -648,22 +679,22 @@ function renderDays() {
         ` : ''}
 
         <!-- Essential Checklist & Google Maps -->
-        <div class="pt-3.5 border-t border-slate-800/80 flex flex-col md:flex-row justify-between gap-4 text-xs">
+        <div class="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between gap-4 text-xs sm:text-sm">
           <div class="flex-1">
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="font-bold text-slate-200 flex items-center gap-1.5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <span>✓</span> Operational Checklist
               </span>
-              <span class="text-[10px] text-slate-400">Tap to track completion</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Tap to track completion</span>
             </div>
-            <div class="space-y-1 bg-slate-900/40 p-2.5 rounded-xl border border-slate-800/60">
+            <div class="space-y-1 bg-white dark:bg-slate-800/70 p-3 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
               ${checklistHtml || '<p class="text-slate-400 italic">No special actions required for this day.</p>'}
             </div>
           </div>
-          <div class="md:w-64">
-            <span class="font-bold text-slate-200 block mb-1.5">📍 Fast Navigation:</span>
-            <div class="flex flex-wrap gap-1.5">
-              ${mapsHtml || '<span class="text-slate-400 text-[11px]">Local routes</span>'}
+          <div class="md:w-72">
+            <span class="font-extrabold text-slate-900 dark:text-white block mb-2">📍 Fast Navigation:</span>
+            <div class="flex flex-wrap gap-2">
+              ${mapsHtml || '<span class="text-slate-400 text-xs">Local routes</span>'}
             </div>
           </div>
         </div>
@@ -727,19 +758,20 @@ function renderTimelineScrubber() {
   const days = itineraryData.days || [];
   days.forEach(day => {
     const isPhase1 = day.phase.includes('Vietnam') || day.day_number <= 13;
-    const dotColor = isPhase1 ? 'bg-amber-400' : 'bg-pink-400';
+    const dotColor = isPhase1 ? 'bg-amber-500' : 'bg-pink-500';
     const shortDate = day.date ? day.date.slice(5).replace('-', '/') : '';
+    const dayStr = day.day_number < 10 ? '0' + day.day_number : day.day_number;
 
     const pill = document.createElement('button');
     pill.id = `scrubber-pill-${day.day_number}`;
     pill.className = `timeline-day-pill ${day.day_number === 1 ? 'active' : ''}`;
     pill.setAttribute('title', `Day ${day.day_number}: ${day.destination} (${day.date})`);
     pill.innerHTML = `
-      <div class="flex items-center gap-1 font-bold">
-        <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span>
-        <span>D${day.day_number < 10 ? '0' + day.day_number : day.day_number}</span>
+      <div class="flex items-center gap-1 font-bold text-xs">
+        <span class="w-2 h-2 rounded-full ${dotColor}"></span>
+        <span>D${dayStr}</span>
       </div>
-      <span class="text-[9px] text-slate-400 font-mono mt-0.5">${shortDate}</span>
+      <span class="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">${shortDate}</span>
     `;
     pill.onclick = () => scrollToDay(day.day_number);
     container.appendChild(pill);
@@ -995,17 +1027,17 @@ function renderPackingItems() {
     }
 
     return `
-      <div class="p-2.5 rounded-xl border ${isChecked ? 'bg-emerald-950/20 border-emerald-500/40' : 'bg-slate-900/60 border-slate-800'} flex items-start gap-3 transition">
+      <div class="p-3.5 rounded-2xl border ${isChecked ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-500/40' : 'bg-slate-50/70 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800'} flex items-start gap-3.5 transition shadow-sm">
         <input type="checkbox" id="chk-${item.id}" ${isChecked ? 'checked' : ''} onchange="togglePackingItem('${item.id}')" class="packing-checkbox mt-0.5 shrink-0">
         <label for="chk-${item.id}" class="flex-1 cursor-pointer select-none">
-          <div class="flex items-center justify-between flex-wrap gap-1">
-            <span class="font-bold text-xs ${isChecked ? 'text-emerald-300 line-through' : 'text-slate-100'}">${item.name}</span>
+          <div class="flex items-center justify-between flex-wrap gap-1.5">
+            <span class="font-bold text-sm ${isChecked ? 'text-emerald-700 dark:text-emerald-300 line-through' : 'text-slate-900 dark:text-slate-100'}">${item.name}</span>
             <div class="flex items-center gap-1.5">
-              <span class="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400">${item.cat}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold">${item.cat}</span>
               ${priorityBadge}
             </div>
           </div>
-          <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">${item.desc}</p>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">${item.desc}</p>
         </label>
       </div>
     `;
@@ -1180,41 +1212,41 @@ function renderTranslations() {
     const escapedVIPhonetic = (p.vi_phonetic || '').replace(/'/g, "\\'");
 
     return `
-      <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 space-y-3">
+      <div class="bg-white dark:bg-slate-900/80 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-sm">
         <div class="flex items-start justify-between gap-2">
-          <p class="font-bold text-white text-xs sm:text-sm leading-snug">${p.en}</p>
+          <p class="font-black text-slate-900 dark:text-white text-sm sm:text-base leading-snug">${p.en}</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <!-- Thai Card -->
-          <div class="bg-slate-950/70 p-2.5 rounded-lg border border-slate-800/80 flex flex-col justify-between">
+          <div class="bg-amber-50/70 dark:bg-slate-950/70 p-3.5 rounded-xl border border-amber-200 dark:border-slate-800/80 flex flex-col justify-between">
             <div>
-              <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Thai (ไทย)</span>
-              <p class="text-white font-bold text-sm mt-0.5 leading-relaxed">${p.th}</p>
-              <p class="text-slate-400 text-[11px] italic mt-0.5">(${p.th_phonetic})</p>
+              <span class="text-[10px] text-amber-800 dark:text-amber-400 font-bold uppercase tracking-wider">Thai (ไทย)</span>
+              <p class="text-slate-900 dark:text-white font-bold text-base mt-0.5 leading-relaxed">${p.th}</p>
+              <p class="text-slate-600 dark:text-slate-400 text-xs italic mt-0.5">(${p.th_phonetic})</p>
             </div>
-            <div class="mt-2 pt-2 border-t border-slate-800 flex items-center gap-1.5">
-              <button onclick="showFullscreenPhrase('${escapedEN}', '${escapedTH}', '${escapedTHPhonetic}')" class="px-2 py-1 bg-amber-950 text-amber-300 hover:bg-amber-900 rounded text-[11px] font-semibold border border-amber-500/30 flex items-center gap-1">
+            <div class="mt-3 pt-2 border-t border-amber-200/60 dark:border-slate-800 flex items-center gap-2">
+              <button onclick="showFullscreenPhrase('${escapedEN}', '${escapedTH}', '${escapedTHPhonetic}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm transition">
                 <span>📱</span> Driver Display
               </button>
-              <button onclick="copyToClipboard('${escapedTH}', 'Copied Thai phrase!')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]">
+              <button onclick="copyToClipboard('${escapedTH}', 'Copied Thai phrase!')" class="px-3 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 transition">
                 Copy
               </button>
             </div>
           </div>
 
           <!-- Vietnamese Card -->
-          <div class="bg-slate-950/70 p-2.5 rounded-lg border border-slate-800/80 flex flex-col justify-between">
+          <div class="bg-emerald-50/70 dark:bg-slate-950/70 p-3.5 rounded-xl border border-emerald-200 dark:border-slate-800/80 flex flex-col justify-between">
             <div>
-              <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Vietnamese (Tiếng Việt)</span>
-              <p class="text-white font-bold text-sm mt-0.5 leading-relaxed">${p.vi}</p>
-              <p class="text-slate-400 text-[11px] italic mt-0.5">(${p.vi_phonetic})</p>
+              <span class="text-[10px] text-emerald-800 dark:text-emerald-400 font-bold uppercase tracking-wider">Vietnamese (Tiếng Việt)</span>
+              <p class="text-slate-900 dark:text-white font-bold text-base mt-0.5 leading-relaxed">${p.vi}</p>
+              <p class="text-slate-600 dark:text-slate-400 text-xs italic mt-0.5">(${p.vi_phonetic})</p>
             </div>
-            <div class="mt-2 pt-2 border-t border-slate-800 flex items-center gap-1.5">
-              <button onclick="showFullscreenPhrase('${escapedEN}', '${escapedVI}', '${escapedVIPhonetic}')" class="px-2 py-1 bg-emerald-950 text-emerald-300 hover:bg-emerald-900 rounded text-[11px] font-semibold border border-emerald-500/30 flex items-center gap-1">
+            <div class="mt-3 pt-2 border-t border-emerald-200/60 dark:border-slate-800 flex items-center gap-2">
+              <button onclick="showFullscreenPhrase('${escapedEN}', '${escapedVI}', '${escapedVIPhonetic}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm transition">
                 <span>📱</span> Driver Display
               </button>
-              <button onclick="copyToClipboard('${escapedVI}', 'Copied Vietnamese phrase!')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]">
+              <button onclick="copyToClipboard('${escapedVI}', 'Copied Vietnamese phrase!')" class="px-3 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 transition">
                 Copy
               </button>
             </div>
@@ -1559,23 +1591,23 @@ function appendMessageElement(role, text, index) {
 
   if (role === 'user') {
     msgDiv.innerHTML = `
-      <div class="max-w-[85%] sm:max-w-[75%] bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm shadow-md">
+      <div class="max-w-[85%] sm:max-w-[75%] bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm shadow-sm font-medium">
         <p class="whitespace-pre-wrap">${escapeHtml(text)}</p>
       </div>
     `;
   } else {
     const htmlContent = renderMarkdownToHtml(text);
     msgDiv.innerHTML = `
-      <div class="max-w-[95%] sm:max-w-[88%] bg-slate-800/90 border border-slate-700/80 rounded-2xl rounded-tl-sm p-4 text-slate-100 shadow-xl space-y-2 relative group">
-        <div class="flex items-center justify-between border-b border-slate-700/50 pb-2 text-[11px] text-slate-400">
-          <div class="flex items-center gap-1.5 font-semibold text-indigo-300">
+      <div class="max-w-[95%] sm:max-w-[88%] bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-2xl rounded-tl-sm p-4 sm:p-5 text-slate-800 dark:text-slate-100 shadow-sm space-y-2 relative group">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700/50 pb-2 text-xs text-slate-500 dark:text-slate-400">
+          <div class="flex items-center gap-1.5 font-bold text-blue-600 dark:text-indigo-300">
             <span>✨</span> <span>Gemini 3.8 Flash</span>
           </div>
-          <button type="button" onclick="copyGeminiMessage(this)" class="opacity-70 hover:opacity-100 px-2 py-0.5 rounded bg-slate-700/60 hover:bg-slate-700 text-[10px] text-slate-300 transition flex items-center gap-1" title="Copy answer">
+          <button type="button" onclick="copyGeminiMessage(this)" class="opacity-80 hover:opacity-100 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-[11px] font-semibold text-slate-700 dark:text-slate-300 transition flex items-center gap-1" title="Copy answer">
             <span>📋</span> <span>Copy</span>
           </button>
         </div>
-        <div class="gemini-markdown text-slate-200">
+        <div class="gemini-markdown text-slate-700 dark:text-slate-200">
           ${htmlContent}
         </div>
       </div>
