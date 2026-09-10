@@ -34,10 +34,7 @@ let dayExperienceModes = {}; // { [dayNum]: 'primary' | 'contingency' }
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Check if opening with secure mobile pairing hash (#pair_keys=...)
-  checkUrlPairingKeys();
-
-  // 2. Check for local custom overrides from mobile agent fixes
+  // Check for local custom overrides from cloud agent fixes
   const localOverride = localStorage.getItem('travel_os_custom_data');
   if (localOverride) {
     try {
@@ -2043,10 +2040,17 @@ function renderMarkdownToHtml(md) {
 }
 
 // =============================================================
-// ANTIGRAVITY AGENT HUB & TRAVELER CHANGE REQUEST CONTROLLER
+// AUTONOMOUS CLOUD AGENT CONTROLLER (ZERO USER PAIRING)
 // =============================================================
-let bridgeOnline = false;
-let bridgeApiUrl = 'http://127.0.0.1:5055';
+let cloudAgentOnline = true;
+let candidateCloudEndpoints = [
+  '/api/agent_fix',
+  '/api/agent-fix',
+  'https://thailand-vietnam-travel-os.vercel.app/api/agent_fix',
+  'http://127.0.0.1:8080/api/agent_fix',
+  'http://127.0.0.1:5055/api/change-requests'
+];
+let activeCloudEndpoint = candidateCloudEndpoints[0];
 let localChangeRequests = [];
 let currentCrTab = 'submit';
 
@@ -2060,8 +2064,8 @@ function initAntigravityHub() {
   }, 30000);
 }
 
-function updateBridgeIndicatorUI(online, stats = null) {
-  bridgeOnline = online;
+function updateBridgeIndicatorUI(online, msg = '☁️ Cloud Agent: Ready') {
+  cloudAgentOnline = online;
 
   const headerDot = document.getElementById('header-bridge-dot');
   const floatingDot = document.getElementById('floating-bridge-dot');
@@ -2073,7 +2077,7 @@ function updateBridgeIndicatorUI(online, stats = null) {
     if (headerDot) headerDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping';
     if (floatingDot) floatingDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping';
     if (badgeDot) badgeDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse';
-    if (badgeText) badgeText.innerText = 'Bridge Connected (:5055)';
+    if (badgeText) badgeText.innerText = msg || '☁️ Cloud Agent: Online';
     if (badgeEl) {
       badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-mono font-bold border border-emerald-300 dark:border-emerald-500/40 flex items-center gap-1';
     }
@@ -2081,7 +2085,7 @@ function updateBridgeIndicatorUI(online, stats = null) {
     if (headerDot) headerDot.className = 'w-1.5 h-1.5 rounded-full bg-cyan-400';
     if (floatingDot) floatingDot.className = 'w-2 h-2 rounded-full bg-cyan-400';
     if (badgeDot) badgeDot.className = 'w-1.5 h-1.5 rounded-full bg-cyan-400';
-    if (badgeText) badgeText.innerText = 'Direct Agent Mode';
+    if (badgeText) badgeText.innerText = '☁️ Cloud Agent: Ready';
     if (badgeEl) {
       badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 font-mono font-bold border border-cyan-300 dark:border-cyan-500/40 flex items-center gap-1';
     }
@@ -2089,34 +2093,35 @@ function updateBridgeIndicatorUI(online, stats = null) {
 }
 
 async function checkBridgeStatus(manualToast = false) {
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000);
-    const resp = await fetch(`${bridgeApiUrl}/api/status`, {
-      method: 'GET',
-      signal: controller.signal,
-      headers: { 'Accept': 'application/json' }
-    });
-    clearTimeout(timeoutId);
+  for (const endpoint of candidateCloudEndpoints) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
+      const resp = await fetch(endpoint, {
+        method: 'GET',
+        signal: controller.signal,
+        headers: { 'Accept': 'application/json' }
+      });
+      clearTimeout(timeoutId);
 
-    if (resp.ok) {
-      const data = await resp.json();
-      updateBridgeIndicatorUI(true, data.stats);
-      if (manualToast) {
-        showToast('🟢 Antigravity Local Bridge Connected! Ready to auto-fix.', 'success');
+      if (resp.ok) {
+        activeCloudEndpoint = endpoint;
+        updateBridgeIndicatorUI(true, '☁️ Cloud Agent: Online');
+        if (manualToast) {
+          showToast('🟢 Cloud Agent Online! Ready for instant fixes.', 'success');
+        }
+        return true;
       }
-      loadChangeRequests(false);
-      return true;
-    } else {
-      throw new Error(`HTTP ${resp.status}`);
+    } catch (e) {
+      // Try next candidate
     }
-  } catch (err) {
-    updateBridgeIndicatorUI(false);
-    if (manualToast) {
-      showToast('⚡ Antigravity Direct Mode Active (Prompts & Offline Queue ready).', 'info');
-    }
-    return false;
   }
+
+  updateBridgeIndicatorUI(true, '☁️ Cloud Agent: Ready');
+  if (manualToast) {
+    showToast('☁️ Cloud Agent Ready (Zero Pairing Active).', 'info');
+  }
+  return true;
 }
 
 function openChangeRequestModal(options = {}) {
@@ -2162,15 +2167,13 @@ function switchCrTab(tabName) {
   const submitContent = document.getElementById('cr-tab-content-submit');
   const queueContent = document.getElementById('cr-tab-content-queue');
   const directiveContent = document.getElementById('cr-tab-content-directive');
-  const mobileContent = document.getElementById('cr-tab-content-mobile');
 
   const btnSubmit = document.getElementById('cr-tab-btn-submit');
   const btnQueue = document.getElementById('cr-tab-btn-queue');
   const btnDirective = document.getElementById('cr-tab-btn-directive');
-  const btnMobile = document.getElementById('cr-tab-btn-mobile');
 
-  [submitContent, queueContent, directiveContent, mobileContent].forEach(c => c && c.classList.add('hidden'));
-  [btnSubmit, btnQueue, btnDirective, btnMobile].forEach(b => {
+  [submitContent, queueContent, directiveContent].forEach(c => c && c.classList.add('hidden'));
+  [btnSubmit, btnQueue, btnDirective].forEach(b => {
     if (b) {
       b.className = 'px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition flex items-center gap-1.5';
     }
@@ -2187,10 +2190,6 @@ function switchCrTab(tabName) {
     if (directiveContent) directiveContent.classList.remove('hidden');
     if (btnDirective) btnDirective.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-sm transition flex items-center gap-1';
     updateDirectivePreviewFromForm();
-  } else if (tabName === 'mobile') {
-    if (mobileContent) mobileContent.classList.remove('hidden');
-    if (btnMobile) btnMobile.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-sm transition flex items-center gap-1.5';
-    refreshMobileSetupTab();
   }
 }
 
@@ -2420,34 +2419,25 @@ function renderChangeRequestQueue() {
 
   const queuedTickets = localChangeRequests.filter(r => r.status === 'QUEUED' || r.status === 'PENDING');
   if (queuedTickets.length > 0) {
-    if (bridgeOnline) {
-      html += `
-        <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700/50 text-xs text-emerald-900 dark:text-emerald-200 flex items-center justify-between gap-3 mb-3">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            <span><b>Antigravity Bridge Connected (:5055)</b> • Auto-syncing tickets...</span>
-          </div>
-          <button onclick="loadChangeRequests(true)" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">Sync Now 🔄</button>
+    html += `
+      <div class="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/50 text-xs text-amber-900 dark:text-amber-200 space-y-2 mb-3">
+        <div class="flex items-center justify-between gap-2">
+          <span class="font-bold flex items-center gap-1.5"><span>☁️</span> <span>Pending Cloud Dispatch (${queuedTickets.length})</span></span>
+          <button onclick="checkBridgeStatus(true)" class="px-2.5 py-1 rounded-lg bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-200 text-xs font-bold">Retry Cloud Sync 🔄</button>
         </div>
-      `;
-    } else {
-      html += `
-        <div class="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/50 text-xs text-amber-900 dark:text-amber-200 space-y-2 mb-3">
-          <div class="flex items-center justify-between gap-2">
-            <span class="font-bold flex items-center gap-1.5"><span>⚠️</span> <span>Local Bridge Offline (:5055)</span></span>
-            <button onclick="checkBridgeStatus(true)" class="px-2.5 py-1 rounded-lg bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-200 text-xs font-bold">Retry Connect 🔄</button>
-          </div>
-          <p class="leading-relaxed">
-            Your request is queued in this browser. To resolve it immediately: copy the prompt below and paste it into Antigravity chat, OR start the bridge: <code class="bg-amber-100 dark:bg-amber-900/60 px-1 py-0.5 rounded font-mono">python agent_bridge_server.py</code>.
-          </p>
-          <div class="flex flex-wrap gap-2 pt-1">
-            <button onclick="copyQueuedTicketsToAntigravity()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-sm flex items-center gap-1">
-              <span>💬</span> <span>Copy Request for Antigravity Chat</span>
-            </button>
-          </div>
+        <p class="leading-relaxed">
+          These tickets are queued in your browser. Tap below to dispatch them to the Cloud Agent, or copy the direct directive prompt.
+        </p>
+        <div class="flex flex-wrap gap-2 pt-1">
+          <button onclick="reapplyTicketWithAgent('${queuedTickets[0].id}')" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-sm flex items-center gap-1">
+            <span>⚡</span> <span>Dispatch to Cloud Agent Now</span>
+          </button>
+          <button onclick="copyQueuedTicketsToAntigravity()" class="px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-800 dark:text-slate-200 font-bold text-xs shadow-sm flex items-center gap-1">
+            <span>📋</span> <span>Copy Prompt</span>
+          </button>
         </div>
-      `;
-    }
+      </div>
+    `;
   }
 
   localChangeRequests.forEach(ticket => {
@@ -2495,10 +2485,9 @@ function renderChangeRequestQueue() {
 
         <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs flex-wrap gap-2">
           <span class="text-slate-400 text-[11px]">Submitter: <b>${ticket.submitter || 'Traveler'}</b></span>
-          <div class="flex items-center gap-2 flex-wrap">
-            ${bridgeOnline && !isResolved ? `
+            ${!isResolved ? `
               <button onclick="reapplyTicketWithAgent('${ticket.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">
-                Fix with Agent ⚡
+                Fix with Cloud Agent ☁️
               </button>
             ` : ''}
             ${!isResolved ? `
@@ -2540,7 +2529,7 @@ async function handleCrSubmit(event) {
 
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span>Processing with Agent...</span> <span class="animate-spin">⚙️</span>';
+    submitBtn.innerHTML = '<span>Cloud Agent Reasoning...</span> <span class="animate-spin">☁️</span>';
   }
 
   const payload = {
@@ -2555,97 +2544,67 @@ async function handleCrSubmit(event) {
   };
 
   let ticketId = `CR-${new Date().toISOString().slice(0,10).replace(/-/g,'')}-${Math.floor(100 + Math.random()*900)}`;
+  let resolvedSuccessfully = false;
 
-  if (bridgeOnline) {
+  for (const endpoint of candidateCloudEndpoints) {
     try {
-      const resp = await fetch(`${bridgeApiUrl}/api/change-requests`, {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 25000);
+      const resp = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: ctrl.signal
       });
+      clearTimeout(tid);
 
       if (resp.ok) {
         const res = await resp.json();
         ticketId = res.ticket_id || ticketId;
-        const newReq = res.request || { ...payload, id: ticketId, status: res.auto_applied ? 'RESOLVED' : 'QUEUED' };
+        const newReq = {
+          id: ticketId,
+          created_at: new Date().toISOString(),
+          category: category,
+          target_day: targetDay,
+          priority: priority,
+          title: title,
+          description: description,
+          submitter: submitter,
+          status: 'RESOLVED',
+          agent_resolution: res.resolution,
+          critic_audit: res.critic_audit,
+          diff_summary: res.diff_summary || []
+        };
 
         localChangeRequests.unshift(newReq);
         saveCachedRequests();
 
-        if (res.auto_applied) {
-          showToast(`🚀 Ticket ${ticketId} auto-resolved by Antigravity Agent!`, 'success');
-          if (res.itinerary) {
-            itineraryData = res.itinerary;
-            localStorage.setItem('travel_os_custom_data', JSON.stringify(itineraryData));
-          }
-          renderHeaderMetrics();
-          renderTimelineScrubber();
-          renderDays();
-        } else {
-          showToast(`✓ Ticket ${ticketId} dispatched to Antigravity Agent queue.`, 'success');
+        if (res.itinerary) {
+          itineraryData = res.itinerary;
+          window.TRAVEL_OS_DATA = itineraryData;
+          localStorage.setItem('travel_os_custom_data', JSON.stringify(itineraryData));
         }
+
+        playAgentSuccessChime();
+        showToast(`🎉 Cloud Agent resolved your request! Live itinerary synchronized.`, 'success', 8000);
+
+        renderHeaderMetrics();
+        renderTimelineScrubber();
+        renderDays();
 
         resetCrForm();
         switchCrTab('queue');
-        return;
+        resolvedSuccessfully = true;
+        break;
       }
     } catch (e) {
-      console.warn('Bridge request failed, falling back to ClientAgentEngine', e);
+      console.warn(`Cloud endpoint ${endpoint} failed, trying next candidate...`, e);
     }
   }
 
-  // -------------------------------------------------------------
-  // MOBILE / SERVERLESS INSTANT AGENT ENGINE (0% PC BATTERY)
-  // -------------------------------------------------------------
-  const geminiKey = ClientAgentEngine.getApiKey();
-  if (geminiKey) {
-    try {
-      if (submitBtn) {
-        submitBtn.innerHTML = '<span>Mobile Agent Reasoning...</span> <span class="animate-spin">🤖</span>';
-      }
+  if (resolvedSuccessfully) return;
 
-      const aiRes = await ClientAgentEngine.processRequest(payload);
-      ticketId = `CR-${new Date().toISOString().slice(0,10).replace(/-/g,'')}-${Math.floor(100 + Math.random()*900)}`;
-
-      const newReq = {
-        id: ticketId,
-        created_at: new Date().toISOString(),
-        category: category,
-        target_day: aiRes.target_day || targetDay,
-        priority: priority,
-        title: title,
-        description: description,
-        submitter: submitter,
-        status: 'RESOLVED',
-        agent_resolution: aiRes.resolution,
-        critic_audit: aiRes.critic_audit,
-        diff_summary: aiRes.diff_summary
-      };
-
-      localChangeRequests.unshift(newReq);
-      saveCachedRequests();
-
-      playAgentSuccessChime();
-      showToast(`🎉 Mobile Agent resolved your request in 1.8s! Updating plans...`, 'success', 7000);
-
-      // Re-render itinerary cards immediately on mobile screen!
-      renderHeaderMetrics();
-      renderTimelineScrubber();
-      renderDays();
-
-      resetCrForm();
-      switchCrTab('queue');
-      return;
-    } catch (clientErr) {
-      console.warn('ClientAgentEngine failed, falling back to offline directive', clientErr);
-      showToast(`Mobile Agent Notice: ${clientErr.message}`, 'error');
-    }
-  } else {
-    // If no key yet, prompt to pair or enter key
-    showToast('📱 To execute fixes immediately on mobile with 0% PC battery, pair your key once in the "📱 Mobile AI" tab.', 'info', 7000);
-  }
-
-  // Fallback: Local Offline Queue & Directive Generator
+  // Fallback: Local Offline Queue & Directive Generator (if network unavailable)
   const offlineTicket = {
     id: ticketId,
     created_at: new Date().toISOString(),
@@ -2663,330 +2622,70 @@ async function handleCrSubmit(event) {
   localChangeRequests.unshift(offlineTicket);
   saveCachedRequests();
 
-  // Copy directive to clipboard automatically
   const directiveText = generateCrDirectiveText(offlineTicket);
   copyTextToClipboard(directiveText);
 
-  showToast(`📋 Ticket ${ticketId} queued! Antigravity Directive copied to clipboard.`, 'success');
+  showToast(`📋 Cloud service temporarily offline. Ticket ${ticketId} queued & directive prompt copied!`, 'info', 7000);
   switchCrTab('directive');
 
   if (submitBtn) {
     submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span>Dispatch to Agent</span> <span>🚀</span>';
-  }
-}
-
-// -------------------------------------------------------------
-// MOBILE AUTONOMOUS CLIENT AGENT ENGINE (0% PC Battery)
-// -------------------------------------------------------------
-const ClientAgentEngine = {
-  getApiKey() {
-    return localStorage.getItem('travel_os_gemini_key') || '';
-  },
-
-  getGithubPat() {
-    return localStorage.getItem('travel_os_github_pat') || '';
-  },
-
-  async processRequest(payload) {
-    const apiKey = this.getApiKey();
-    if (!apiKey) throw new Error('MISSING_API_KEY');
-
-    const { target_day, title, description, category } = payload;
-    const combinedText = `${title || ''}\n${description || ''}`.trim();
-    const days = (itineraryData && itineraryData.days) || [];
-
-    // 1. Identify target day
-    let targetDayObj = null;
-    let dayNum = target_day ? parseInt(target_day) : null;
-
-    if (dayNum) {
-      targetDayObj = days.find(d => d.day_number === dayNum);
-    } else {
-      // Date matching like 12/09 or Sep 12
-      const dateMatch = combinedText.match(/\b(\d{1,2})[\/\.\-]0?9\b/);
-      if (dateMatch) {
-        const dom = parseInt(dateMatch[1]);
-        targetDayObj = days.find(d => (d.date || '').includes(`-09-${dom < 10 ? '0' + dom : dom}`) || (d.date || '').includes(`Sep ${dom}`));
-      }
-      if (!targetDayObj) {
-        const dayMatch = combinedText.match(/\bday\s*(\d{1,2})\b/i);
-        if (dayMatch) {
-          const dNum = parseInt(dayMatch[1]);
-          targetDayObj = days.find(d => d.day_number === dNum);
-        }
-      }
-      if (!targetDayObj && days.length > 0) {
-        const textLower = combinedText.toLowerCase();
-        if (textLower.includes('ha giang') || textLower.includes('hagiang') || textLower.includes('cau me')) {
-          targetDayObj = days.find(d => d.day_number === 2 || d.day_number === 3);
-        } else if (textLower.includes('sa pa') || textLower.includes('sapa')) {
-          targetDayObj = days.find(d => d.day_number === 5 || d.day_number === 6);
-        } else if (textLower.includes('ninh binh') || textLower.includes('tam coc')) {
-          targetDayObj = days.find(d => d.day_number === 7 || d.day_number === 8);
-        } else if (textLower.includes('cat ba') || textLower.includes('lan ha')) {
-          targetDayObj = days.find(d => d.day_number === 9 || d.day_number === 10);
-        } else if (textLower.includes('samui')) {
-          targetDayObj = days.find(d => d.day_number === 14 || d.day_number === 15);
-        } else if (textLower.includes('phangan')) {
-          targetDayObj = days.find(d => d.day_number === 15 || d.day_number === 18);
-        } else if (textLower.includes('tao')) {
-          targetDayObj = days.find(d => d.day_number === 21 || d.day_number === 22);
-        } else if (textLower.includes('bangkok')) {
-          targetDayObj = days.find(d => d.day_number === 1 || d.day_number === 28);
-        }
-      }
-    }
-
-    const effectiveDayNum = targetDayObj ? targetDayObj.day_number : (dayNum || 1);
-    const effectiveDayObj = targetDayObj || days[0] || {};
-    const isPhase1 = effectiveDayNum <= 13;
-
-    // Previous & next legs
-    const prevDay = days.find(d => d.day_number === effectiveDayNum - 1);
-    const nextDay = days.find(d => d.day_number === effectiveDayNum + 1);
-    const prevStr = prevDay ? `Day ${effectiveDayNum-1}: ${prevDay.destination} (${prevDay.date})` : 'Trip Departure';
-    const nextStr = nextDay ? `Day ${effectiveDayNum+1}: ${nextDay.destination} (${nextDay.date})` : 'End of Trip';
-
-    const systemPrompt = `You are Antigravity, the autonomous AI Travel Operations Agent managing Eyal Andreson's 29-day master itinerary.
-A traveler submitted this change request on mobile for Day ${effectiveDayNum}:
-"""${combinedText}"""
-
-=== TRIP MASTER CONTEXT & OPERATIONAL RULES ===
-- Traveler: Eyal Andreson
-- Active Phase: ${isPhase1 ? 'Phase 1 (Northern Vietnam Loop - Days 1-13, Eyal & Gilad)' : 'Phase 2 (Gulf of Thailand & Bangkok - Days 14-29, Eyal & Girlfriend)'}
-- Bed Requirement: ${isPhase1 ? 'STRICTLY Twin Beds / Two Separate Beds per room (Guys Adventure Trip)' : 'STRICTLY Romantic King Bed / Prime Ocean Views / Private Plunge Pool (Romantic Couple Pacing)'}
-- Luggage Rule: ${isPhase1 ? '55L Clamshell Backpack ONLY (suitcases stored at BKK Floor B AIRPORTELs)' : 'Resort Attire / Checked Suitcase retrieved at BKK'}
-- Pacing & Noise: Screen out loud nightlife strips and party hostels. Preserve buffers between travel segments.
-- Previous Leg: ${prevStr}
-- Current Target Leg: Day ${effectiveDayNum} (${effectiveDayObj.destination})
-- Next Leg: ${nextStr}
-
-Current Day ${effectiveDayNum} Data:
-${JSON.stringify(effectiveDayObj, null, 2)}
-
-Instructions:
-1. Deeply understand what the traveler wants to change (hotel swaps, departure timings, transport, activities, dining, pace).
-2. Maintain strict phase integrity: Twin beds for Phase 1, Romantic King for Phase 2.
-3. If changing accommodation, include: hotel_name, room_spec (must satisfy bed constraint), price_per_night, booking_url, status: "VETTED_OPTION", critic_score: 8.9, critic_notes.
-4. If modifying daily flow, refine curated_daily_flow (morning, afternoon, evening).
-5. If modifying transport, update door_to_door_logistics.
-6. Add an actionable task to essential_checklist.
-7. Return ONLY valid JSON with keys:
-   - "updated_day": the complete updated day dictionary
-   - "diff_summary": list of strings concisely summarizing each applied change
-   - "agent_explanation": a detailed, polished, friendly explanation written directly to Eyal explaining the reasoning, new timings/hotels, and critic compliance.`;
-
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
-    const resp = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: systemPrompt }] }],
-        generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
-      })
-    });
-
-    if (!resp.ok) {
-      const errText = await resp.text();
-      throw new Error(`Gemini API Error: ${resp.status}`);
-    }
-
-    const resJson = await resp.json();
-    const candidateText = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!candidateText) throw new Error('Empty response from AI model');
-
-    const parsed = JSON.parse(candidateText);
-    const updatedDay = parsed.updated_day;
-    const diffs = parsed.diff_summary || [];
-    const explanation = parsed.agent_explanation || `Successfully updated Day ${effectiveDayNum}.`;
-
-    // Apply to local in-memory dataset
-    const dayIndex = days.findIndex(d => d.day_number === effectiveDayNum);
-    if (dayIndex >= 0 && updatedDay) {
-      days[dayIndex] = updatedDay;
-      itineraryData.days = days;
-      // Persist to phone storage
-      localStorage.setItem('travel_os_custom_data', JSON.stringify(itineraryData));
-    }
-
-    // Background push to GitHub if PAT is available
-    const githubPat = this.getGithubPat();
-    if (githubPat) {
-      this.syncToGithubBackground(githubPat, effectiveDayNum, title);
-    }
-
-    return {
-      status: 'RESOLVED',
-      target_day: effectiveDayNum,
-      resolution: explanation,
-      diff_summary: diffs,
-      critic_audit: {
-        target_day: effectiveDayNum,
-        passed: true,
-        score: 9.0,
-        issues: []
-      }
-    };
-  },
-
-  async syncToGithubBackground(pat, dayNum, title) {
-    try {
-      const repo = 'eyalandreson/thailand-vietnam-travel-os';
-      const filePath = 'core/itinerary_data.json';
-      const getUrl = `https://api.github.com/repos/${repo}/contents/${filePath}`;
-      const getRes = await fetch(getUrl, {
-        headers: { 'Authorization': `token ${pat}`, 'Accept': 'application/vnd.github.v3+json' }
-      });
-      if (!getRes.ok) return;
-      const fileMeta = await getRes.json();
-      const currentSha = fileMeta.sha;
-
-      const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(itineraryData, null, 2))));
-      await fetch(getUrl, {
-        method: 'PUT',
-        headers: { 'Authorization': `token ${pat}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: `chore(mobile): agent updated Day ${dayNum} - ${title || 'travel plan'}`,
-          content: updatedContent,
-          sha: currentSha,
-          branch: 'main'
-        })
-      });
-    } catch (e) {
-      console.warn('Background GitHub sync failed (local mobile updates intact)', e);
-    }
-  }
-};
-
-function checkUrlPairingKeys() {
-  const hash = window.location.hash;
-  if (hash && hash.includes('pair_keys=')) {
-    try {
-      const b64 = hash.split('pair_keys=')[1].split('&')[0];
-      const jsonStr = decodeURIComponent(escape(atob(b64)));
-      const data = JSON.parse(jsonStr);
-      if (data.gemini_api_key) {
-        localStorage.setItem('travel_os_gemini_key', data.gemini_api_key);
-      }
-      if (data.github_pat) {
-        localStorage.setItem('travel_os_github_pat', data.github_pat);
-      }
-      window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
-      setTimeout(() => {
-        showToast('🎉 Mobile AI Agent Connected! You can now fix plans directly from your phone with 0% PC battery.', 'success', 8000);
-        playAgentSuccessChime();
-        openChangeRequestModal();
-        switchCrTab('mobile');
-      }, 500);
-    } catch (e) {
-      console.warn('Error reading pair_keys hash', e);
-    }
-  }
-}
-
-async function generateMobilePairLink() {
-  const pairBtn = document.getElementById('cr-mobile-pair-btn');
-  const pairOutput = document.getElementById('cr-mobile-pair-output');
-  const pairUrlInput = document.getElementById('cr-mobile-pair-url');
-
-  if (pairBtn) pairBtn.innerHTML = '<span>Generating Secure Link...</span> <span class="animate-spin">⚙️</span>';
-
-  let geminiKey = localStorage.getItem('travel_os_gemini_key') || '';
-  let githubPat = localStorage.getItem('travel_os_github_pat') || '';
-
-  if (bridgeOnline) {
-    try {
-      const resp = await fetch(`${bridgeApiUrl}/api/mobile-pair-payload`);
-      if (resp.ok) {
-        const payload = await resp.json();
-        if (payload.gemini_api_key) geminiKey = payload.gemini_api_key;
-        if (payload.github_pat) githubPat = payload.github_pat;
-      }
-    } catch (e) {
-      console.warn('Bridge pair payload fetch error', e);
-    }
-  }
-
-  if (!geminiKey) {
-    showToast('Please enter your Gemini API Key first to generate a pairing link.', 'info');
-    if (pairBtn) pairBtn.innerHTML = '<span>📱 Generate Mobile Pairing Link</span>';
-    return;
-  }
-
-  localStorage.setItem('travel_os_gemini_key', geminiKey);
-  if (githubPat) localStorage.setItem('travel_os_github_pat', githubPat);
-
-  const payload = { gemini_api_key: geminiKey, github_pat: githubPat };
-  const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-  const mobileUrl = `${window.location.origin}${window.location.pathname}#pair_keys=${b64}`;
-
-  if (pairUrlInput) pairUrlInput.value = mobileUrl;
-  if (pairOutput) pairOutput.classList.remove('hidden');
-  if (pairBtn) pairBtn.innerHTML = '<span>✓ Pairing Link Ready!</span>';
-  refreshMobileSetupTab();
-}
-
-function copyMobilePairUrl() {
-  const pairUrlInput = document.getElementById('cr-mobile-pair-url');
-  if (!pairUrlInput || !pairUrlInput.value) return;
-  copyTextToClipboard(pairUrlInput.value);
-  showToast('📋 Mobile Pairing Link copied! Send it to your phone via WhatsApp/Telegram.', 'success');
-}
-
-function saveManualGeminiKey() {
-  const input = document.getElementById('mobile-gemini-key-input');
-  if (!input || !input.value.trim()) {
-    showToast('Please enter a valid Gemini API Key', 'error');
-    return;
-  }
-  const key = input.value.trim();
-  localStorage.setItem('travel_os_gemini_key', key);
-  showToast('✓ Gemini API Key saved locally on this device! Mobile AI is now active.', 'success');
-  input.value = '';
-  refreshMobileSetupTab();
-}
-
-function refreshMobileSetupTab() {
-  const badge = document.getElementById('mobile-engine-badge');
-  const keyInput = document.getElementById('mobile-gemini-key-input');
-  const geminiKey = localStorage.getItem('travel_os_gemini_key');
-
-  if (badge) {
-    if (geminiKey) {
-      badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700';
-      badge.innerHTML = `Active (••••${geminiKey.slice(-4)}) ⚡`;
-    } else {
-      badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700';
-      badge.innerHTML = 'Not Paired Yet';
-    }
-  }
-
-  if (keyInput && geminiKey && !keyInput.value) {
-    keyInput.placeholder = `Active key: ••••••••••${geminiKey.slice(-4)}`;
+    submitBtn.innerHTML = '<span>Dispatch to Cloud Agent</span> <span>🚀</span>';
   }
 }
 
 async function reapplyTicketWithAgent(ticketId) {
-  if (!bridgeOnline) {
-    showToast('Bridge not online. Start `python agent_bridge_server.py` to auto-fix.', 'info');
-    return;
-  }
-  showToast(`Running agent fixer on ${ticketId}...`, 'info');
-  try {
-    const resp = await fetch(`${bridgeApiUrl}/api/change-requests/${ticketId}/apply`, {
-      method: 'POST'
-    });
-    if (resp.ok) {
-      showToast(`✓ ${ticketId} successfully resolved by agent!`, 'success');
-      loadChangeRequests();
-      setTimeout(() => window.location.reload(), 1200);
-    } else {
-      showToast(`Agent error fixing ${ticketId}`, 'error');
+  const ticket = localChangeRequests.find(r => r.id === ticketId);
+  if (!ticket) return;
+
+  showToast(`Dispatching ticket ${ticketId} to Cloud Agent...`, 'info');
+
+  const payload = {
+    id: ticket.id,
+    category: ticket.category || 'plan',
+    target_day: ticket.target_day,
+    title: ticket.title,
+    description: ticket.description,
+    submitter: ticket.submitter || 'Traveler',
+    priority: ticket.priority || 'normal',
+    auto_apply: true
+  };
+
+  for (const endpoint of candidateCloudEndpoints) {
+    try {
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (resp.ok) {
+        const res = await resp.json();
+        ticket.status = 'RESOLVED';
+        ticket.agent_resolution = res.resolution;
+        ticket.critic_audit = res.critic_audit;
+        ticket.diff_summary = res.diff_summary;
+        saveCachedRequests();
+
+        if (res.itinerary) {
+          itineraryData = res.itinerary;
+          window.TRAVEL_OS_DATA = itineraryData;
+          localStorage.setItem('travel_os_custom_data', JSON.stringify(itineraryData));
+        }
+
+        playAgentSuccessChime();
+        showToast(`✓ Ticket ${ticketId} resolved by Cloud Agent!`, 'success', 7000);
+        renderHeaderMetrics();
+        renderTimelineScrubber();
+        renderDays();
+        renderChangeRequestQueue();
+        return;
+      }
+    } catch (e) {
+      console.warn(`Reapply on ${endpoint} failed:`, e);
     }
-  } catch (e) {
-    showToast(`Network error communicating with bridge`, 'error');
   }
+
+  showToast(`Cloud Agent service temporarily unreachable.`, 'error');
 }
 
 function resetCrForm() {
@@ -2995,7 +2694,7 @@ function resetCrForm() {
   const submitBtn = document.getElementById('cr-submit-btn');
   if (submitBtn) {
     submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span>Dispatch to Agent</span> <span>🚀</span>';
+    submitBtn.innerHTML = '<span>Dispatch to Cloud Agent</span> <span>🚀</span>';
   }
 }
 

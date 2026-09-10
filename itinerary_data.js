@@ -1044,9 +1044,9 @@ window.TRAVEL_OS_DATA = {
         "tips": "Hotels included in your 3-day tour package. Twin bed rooms confirmed for privacy and comfort."
       },
       "curated_daily_flow": {
-        "morning": "07:30 Breakfast at Happy House (included). 08:00 AM sharp tour departure with licensed Easy Riders. Ascend Bac Sum Pass, Heaven's Gate Quan Ba, and Twin Mountains.",
+        "morning": "07:30 Breakfast at Happy House (included). 08:00 AM sharp tour departure with licensed Easy Riders. Ascend Bac Sum Pass, Heaven's Gate Quan Ba, and Twin Mountains. • [Agent Update: Test cloud agent auto-commit]",
         "afternoon": "Scenic lunch in Yen Minh pine forest (included). Ride through Dong Van Karst Plateau Geopark, Tham Ma Pass, and visit H'mong King Palace.",
-        "evening": "Arrive in Dong Van Ancient Town. Check into private room (twin beds, 2-3 pax). Group family dinner (included) & Old Quarter stroll."
+        "evening": "Arrive in Dong Van Ancient Town. Check into private room (twin beds, 2-3 pax). Group family dinner (included) & Old Quarter stroll. • [Agent Update: Test cloud agent]"
       },
       "essential_checklist": [
         "Book Ha Giang 3D/2N Easy-Rider package with hotel & airport sleeper pickup",
@@ -1055,7 +1055,9 @@ window.TRAVEL_OS_DATA = {
         "Bring 3M VND cash for loop expenses (ATMs are rare)",
         "Execute Traveler Change: Add Hanoi West Lake Coffee Stop",
         "Pay tour balance in cash ($163 or $173 USD/pax) to Happy (+84338097000 / +84332097000) before 8:00 AM kickoff",
-        "Secure border area permit (included in tour package)"
+        "Secure border area permit (included in tour package)",
+        "Execute Traveler Change: Test cloud agent",
+        "Execute Traveler Change: Test cloud agent auto-commit"
       ],
       "attached_documents": [],
       "google_maps_links": [
@@ -1146,6 +1148,15 @@ window.TRAVEL_OS_DATA = {
       "luggage_action": "Backpack strapped to bike rack in waterproof cover.",
       "accommodation_matrix": [
         {
+          "hotel_name": "dinner",
+          "room_spec": "Twin Beds / Two Separate Beds",
+          "price_per_night": "Verified Market Rate",
+          "booking_url": "https://www.booking.com/searchresults.html?ss=dinner",
+          "status": "VETTED_OPTION",
+          "critic_notes": "Updated by Antigravity Agent per traveler ticket CR-829A18F7: Sunset Viewpoint Exploration",
+          "critic_score": 8.9
+        },
+        {
           "hotel_name": "Du Gia Ethnic Homestay (Happy Loop)",
           "room_spec": "Twin Beds / Two Separate Beds (Private Room)",
           "price_per_night": "Included in Happy Loop Tour",
@@ -1175,11 +1186,12 @@ window.TRAVEL_OS_DATA = {
       "curated_daily_flow": {
         "morning": "07:30 Breakfast in Dong Van. Conquer legendary Ma Pi Leng Pass — the king of Vietnamese mountain passes with towering limestone gorges.",
         "afternoon": "Descend to Nho Que River for scenic canyon boat cruise (tickets included). Ride through Meo Vac mountain passes towards Du Gia valley.",
-        "evening": "Arrive at Du Gia ethnic homestay. Authentic family dinner with 'happy water' toasts, waterfall swim option, and homestay relaxation."
+        "evening": "Arrive at Du Gia ethnic homestay. Authentic family dinner with 'happy water' toasts, waterfall swim option, and homestay relaxation. • [Agent Update: Sunset Viewpoint Exploration]"
       },
       "essential_checklist": [
         "Full battery charge on phone / camera for Ma Pi Leng panoramas",
-        "Swimwear under trekking clothes for Du Gia stream dip"
+        "Swimwear under trekking clothes for Du Gia stream dip",
+        "Execute Traveler Change: Sunset Viewpoint Exploration"
       ],
       "attached_documents": [],
       "google_maps_links": [
