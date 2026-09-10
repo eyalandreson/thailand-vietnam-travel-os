@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Master Itinerary: Thailand & Vietnam [Live Travel OS]</title>
+  <title>Master Itinerary: Thailand & Vietnam [Adaptive Travel OS]</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
   <script src="itinerary_data.js"></script>
@@ -20,7 +20,7 @@
         </div>
         <div>
           <h1 class="font-bold text-white text-sm sm:text-base leading-tight">Master Itinerary: Thailand & Vietnam</h1>
-          <p class="text-[11px] text-cyan-400 font-medium tracking-wide">LIVE TRAVEL OS • 29 DAYS (SEP 11 – OCT 09)</p>
+          <p class="text-[11px] text-cyan-400 font-medium tracking-wide">ADAPTIVE TRAVEL OS • 29 DAYS (SEP 11 – OCT 09)</p>
         </div>
       </div>
 
@@ -96,44 +96,134 @@
       </div>
 
       <!-- CRITICAL ACTION & STRATEGY CARDS -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         <!-- Strategy 1: Luggage Protocol -->
         <div onclick="openLuggageModal()" class="glass-card rounded-2xl p-4 cursor-pointer hover:border-blue-500/50 transition border-l-4 border-amber-500 group">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-              <span>🧳</span> BKK Luggage Drop Protocol
+              <span>🧳</span> BKK Luggage Protocol
             </span>
             <span class="text-slate-400 text-xs group-hover:translate-x-0.5 transition">View Plan →</span>
           </div>
-          <p class="text-xs text-slate-200 mt-2 font-medium">Suvarnabhumi Basement (Floor B, ARL Level)</p>
+          <p class="text-xs text-slate-200 mt-2 font-medium">BKK Suvarnabhumi Basement (Floor B)</p>
           <p class="text-[11px] text-slate-400 mt-1">Suitcase stored Sep 12–24 (AIRPORTELs). Strictly 55L backpack for Vietnam!</p>
         </div>
 
-        <!-- Strategy 2: BKK -> USM Flight Radar -->
-        <div onclick="openPriceRadarModal()" class="glass-card rounded-2xl p-4 cursor-pointer hover:border-blue-500/50 transition border-l-4 border-cyan-500 group">
+        <!-- Strategy 2: Sep 24 Connection Risk Radar -->
+        <div onclick="openPriceRadarModal()" class="glass-card rounded-2xl p-4 cursor-pointer hover:border-blue-500/50 transition border-l-4 border-red-500 group">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
-              <span>✈️</span> Flight Price Radar (Sep 24)
+            <span class="text-xs font-bold text-red-400 flex items-center gap-1.5">
+              <span>✈️</span> Sep 24 Risk Radar
             </span>
-            <span class="text-slate-400 text-xs group-hover:translate-x-0.5 transition">View Strategy →</span>
+            <span class="text-slate-400 text-xs group-hover:translate-x-0.5 transition">Audit →</span>
           </div>
-          <p class="text-xs text-slate-200 mt-2 font-medium">Bangkok Airways Direct BKK -> USM</p>
-          <p class="text-[11px] text-slate-400 mt-1">PG 169 (17:15) • Target: $115-135 USD • Buy window: July-Aug 2026</p>
+          <p class="text-xs text-slate-200 mt-2 font-medium"><span class="text-red-400 font-bold">PG 169 (17:15) High Risk</span></p>
+          <p class="text-[11px] text-emerald-400 mt-1 font-medium">Recommended: PG 177 / PG 181 (19:30-20:00) with Boutique Lounge</p>
         </div>
 
-        <!-- Strategy 3: Ha Giang Loop Easy-Riders -->
+        <!-- Strategy 3: Route Resilience Switcher -->
+        <div onclick="openRouteModal()" class="glass-card rounded-2xl p-4 cursor-pointer hover:border-blue-500/50 transition border-l-4 border-cyan-500 group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
+              <span>🔄</span> Route Resilience
+            </span>
+            <span class="text-slate-400 text-xs group-hover:translate-x-0.5 transition">Compare →</span>
+          </div>
+          <p class="text-xs text-slate-200 mt-2 font-medium">Active: Sequence A (Triangle)</p>
+          <p class="text-[11px] text-slate-400 mt-1">Sa Pa → Ninh Binh → Cat Ba (Saves 10h slog). Sequence B weather fallback.</p>
+        </div>
+
+        <!-- Strategy 4: Ha Giang Loop Easy-Riders -->
         <div class="glass-card rounded-2xl p-4 border-l-4 border-emerald-500">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-              <span>🏍️</span> Ha Giang Transport Confirmed
+              <span>🏍️</span> Ha Giang Transport
             </span>
             <span class="text-xs px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-semibold">Easy-Riders</span>
           </div>
-          <p class="text-xs text-slate-200 mt-2 font-medium">Licensed Local Guides & Protective Armor</p>
+          <p class="text-xs text-slate-200 mt-2 font-medium">Licensed Guides & Full Armor</p>
           <p class="text-[11px] text-slate-400 mt-1">DOT helmets, Ma Pi Leng Pass, Tu San canyon boat trip on Nho Que river.</p>
         </div>
 
+      </div>
+
+      <!-- VERIFIED GMAIL ATTACHMENTS SHELF -->
+      <div class="glass-card rounded-2xl p-4 border border-emerald-500/30 bg-emerald-950/20">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-400 text-sm">🔒</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-300">Verified Gmail Ground Truth Documents (6 Confirmed Anchors)</span>
+          </div>
+          <span class="text-[11px] text-slate-400">All genuine airline & immigration PDFs downloaded locally</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs">
+          <a href="documents/Emirates_Flight_TLV_BKK_G5M8CF.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 hover:border-emerald-400/80 transition flex items-center justify-between group">
+            <div class="flex items-center gap-2 truncate">
+              <span class="text-emerald-400">✈️</span>
+              <div class="truncate">
+                <p class="text-white font-semibold truncate">Emirates TLV-BKK (A380)</p>
+                <p class="text-[10px] text-slate-400 font-mono">PNR: G5M8CF • Sep 10-11</p>
+              </div>
+            </div>
+            <span class="text-[10px] px-2 py-1 rounded bg-emerald-900/60 text-emerald-300 group-hover:bg-emerald-800 transition shrink-0 ml-2 font-medium">📥 PDF</span>
+          </a>
+
+          <a href="documents/TDAC_Arrival_Card_30C4358.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 hover:border-emerald-400/80 transition flex items-center justify-between group">
+            <div class="flex items-center gap-2 truncate">
+              <span class="text-emerald-400">📋</span>
+              <div class="truncate">
+                <p class="text-white font-semibold truncate">Thailand Arrival Card (TDAC)</p>
+                <p class="text-[10px] text-slate-400 font-mono">ID: #30C4358 • Sep 11</p>
+              </div>
+            </div>
+            <span class="text-[10px] px-2 py-1 rounded bg-emerald-900/60 text-emerald-300 group-hover:bg-emerald-800 transition shrink-0 ml-2 font-medium">📥 PDF</span>
+          </a>
+
+          <a href="documents/Sukhon_Hotel_Agoda_697155847.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 hover:border-emerald-400/80 transition flex items-center justify-between group">
+            <div class="flex items-center gap-2 truncate">
+              <span class="text-emerald-400">🏨</span>
+              <div class="truncate">
+                <p class="text-white font-semibold truncate">Sukhon Hotel Bangkok</p>
+                <p class="text-[10px] text-slate-400 font-mono">Agoda: 697155847 • Sep 11-12</p>
+              </div>
+            </div>
+            <span class="text-[10px] px-2 py-1 rounded bg-emerald-900/60 text-emerald-300 group-hover:bg-emerald-800 transition shrink-0 ml-2 font-medium">📥 PDF</span>
+          </a>
+
+          <a href="documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 hover:border-emerald-400/80 transition flex items-center justify-between group">
+            <div class="flex items-center gap-2 truncate">
+              <span class="text-emerald-400">✈️</span>
+              <div class="truncate">
+                <p class="text-white font-semibold truncate">BKK -> Hanoi (Sep 12)</p>
+                <p class="text-[10px] text-slate-400 font-mono">Mytrip: 1145-554-179</p>
+              </div>
+            </div>
+            <span class="text-[10px] px-2 py-1 rounded bg-emerald-900/60 text-emerald-300 group-hover:bg-emerald-800 transition shrink-0 ml-2 font-medium">📥 PDF</span>
+          </a>
+
+          <a href="documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 hover:border-emerald-400/80 transition flex items-center justify-between group">
+            <div class="flex items-center gap-2 truncate">
+              <span class="text-emerald-400">✈️</span>
+              <div class="truncate">
+                <p class="text-white font-semibold truncate">Hanoi -> BKK (Sep 24)</p>
+                <p class="text-[10px] text-slate-400 font-mono">Mytrip: 1145-554-179</p>
+              </div>
+            </div>
+            <span class="text-[10px] px-2 py-1 rounded bg-emerald-900/60 text-emerald-300 group-hover:bg-emerald-800 transition shrink-0 ml-2 font-medium">📥 PDF</span>
+          </a>
+
+          <a href="documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 hover:border-emerald-400/80 transition flex items-center justify-between group">
+            <div class="flex items-center gap-2 truncate">
+              <span class="text-emerald-400">✈️</span>
+              <div class="truncate">
+                <p class="text-white font-semibold truncate">Etihad BKK-TLV via AUH</p>
+                <p class="text-[10px] text-slate-400 font-mono">PNR: 9KDEH2 • Oct 09</p>
+              </div>
+            </div>
+            <span class="text-[10px] px-2 py-1 rounded bg-emerald-900/60 text-emerald-300 group-hover:bg-emerald-800 transition shrink-0 ml-2 font-medium">📥 PDF</span>
+          </a>
+        </div>
       </div>
 
       <!-- PHASE NAVIGATION TABS -->
@@ -217,7 +307,7 @@
     </div>
   </div>
 
-  <!-- MODAL: BKK -> USM FLIGHT PRICE RADAR -->
+  <!-- MODAL: BKK -> USM FLIGHT CONNECTION & PRICE RADAR -->
   <div id="price-radar-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
     <div class="glass-card rounded-2xl max-w-xl w-full p-6 border border-slate-700 shadow-2xl relative">
       <button onclick="closePriceRadarModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
@@ -225,29 +315,46 @@
       <div class="flex items-center gap-2 mb-3">
         <span class="text-xl">✈️</span>
         <div>
-          <h3 class="text-base font-bold text-white">Bangkok (BKK) -> Koh Samui (USM) Price Radar</h3>
-          <p class="text-xs text-cyan-400">Sep 24, 2026 • Direct Nonstop Flight Strategy</p>
+          <h3 class="text-base font-bold text-white">Sep 24 Connection Risk Radar & Price Strategy</h3>
+          <p class="text-xs text-cyan-400">Hanoi (HAN) -> Bangkok (BKK) -> Koh Samui (USM)</p>
         </div>
       </div>
 
       <div class="space-y-3 text-xs text-slate-300">
+        <!-- High Risk Warning -->
+        <div class="bg-red-950/40 p-3.5 rounded-xl border border-red-500/50 text-red-200">
+          <div class="font-bold text-red-300 mb-1 flex items-center gap-1.5">
+            <span>⚠️</span> PG 169 (17:15 PM) — FLAGGED HIGH RISK / TIGHT
+          </div>
+          <p class="leading-relaxed">
+            Hanoi flight 1145-554-179 lands at <b>14:45 PM</b>. Deplaning, international immigration (45–60 mins), and descending to <b>Floor B (Basement)</b> for AIRPORTELs suitcase retrieval leaves you at domestic check-in past 16:15 PM. Domestic check-in strictly closes at <b>16:30 PM</b>. Any 20-minute tarmac delay means a missed flight. <b>NOT RECOMMENDED</b>.
+          </p>
+        </div>
+
+        <!-- Recommended Flight -->
+        <div class="bg-emerald-950/50 p-3.5 rounded-xl border border-emerald-500/50 text-emerald-200">
+          <div class="font-bold text-emerald-300 mb-1 flex items-center gap-1.5">
+            <span>🎯</span> Recommended Primary: Bangkok Airways PG 177 or PG 181
+          </div>
+          <p class="leading-relaxed">
+            • <b>PG 177:</b> Dep 19:30 BKK $\rightarrow$ Arr 20:35 USM<br>
+            • <b>PG 181:</b> Dep 20:00 BKK $\rightarrow$ Arr 21:05 USM<br>
+            • <b>Stress-Free Buffer:</b> <b>4h 45m connection window</b>. Zero anxiety for baggage retrieval, unhurried reunion with girlfriend, and 2 hours of complimentary access to the <b>Bangkok Airways Boutique Lounge</b> (free pastries, espresso, soft drinks, charging stations in Concourse A/F).
+          </p>
+        </div>
+
+        <!-- Price Strategy -->
         <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800">
-          <div class="font-bold text-white mb-1.5">🎯 Optimal Target Flight: Bangkok Airways PG 169</div>
-          <p>• <b>Departure:</b> 17:15 PM (BKK Suvarnabhumi)</p>
-          <p>• <b>Arrival:</b> 18:20 PM (USM Koh Samui) — 1h 05m nonstop</p>
-          <p>• <b>Transit Buffer:</b> Exactly <b>2h 40m</b> after your 14:35 arrival from Hanoi (plenty of time to clear immigration, pick up suitcase from Basement locker, and relax in Bangkok Airways lounge).</p>
+          <div class="font-bold text-white mb-1">💰 Price Tier & Buying Window:</div>
+          <p>• <b>Fare Tier:</b> "Web Saver" (Approx. <b>$115 – $135 USD / ~4,200 THB</b> per person, includes 20kg checked bag).</p>
+          <p>• <b>Optimal Window:</b> <b>Mid-July to Early August 2026 (6 to 8 weeks prior)</b>. Bangkok Airways holds monopoly pricing on USM; Web Saver promo seats sell out 3–4 weeks prior.</p>
         </div>
 
-        <div class="bg-cyan-950/40 p-3.5 rounded-xl border border-cyan-500/40 text-cyan-200">
-          <div class="font-bold mb-1">💰 Cheapest Price Tier & Strategy:</div>
-          <p>• <b>Fare Tier:</b> "Web Saver" (Approx. <b>$115 – $135 USD / ~4,200 THB</b> per person).</p>
-          <p>• <b>Includes:</b> 20kg checked luggage, carry-on, and free access to Bangkok Airways Boutique Lounge (complimentary pastries, snacks, coffee at BKK).</p>
-        </div>
-
-        <div class="bg-amber-950/40 p-3.5 rounded-xl border border-amber-500/40 text-amber-200">
-          <div class="font-bold mb-1">📅 Exactly When to Buy:</div>
-          <p>• <b>Optimal Purchase Window:</b> <b>6 to 8 weeks prior to departure (Mid-July to Early August 2026)</b>.</p>
-          <p>• <b>Why:</b> Bangkok Airways owns Koh Samui Airport and maintains monopoly pricing. They do not drop prices last minute. The "Web Saver" discount seats open 90 days out and consistently sell out 3–4 weeks before departure, leaving only the $175+ "Web Freedom" tier.</p>
+        <!-- Fluid Fallbacks -->
+        <div class="bg-blue-950/40 p-3 rounded-xl border border-blue-600/40 text-blue-200">
+          <span class="font-bold">🌊 Fluid Fallbacks if PG 177/181 Sells Out:</span><br>
+          • <b>Fallback 1:</b> Overnight in Bangkok at Sukhon/Riva Arun on Sep 24; take relaxed morning flight Sep 25.<br>
+          • <b>Fallback 2:</b> Fly into Surat Thani (URT) on AirAsia/Nok Air + Lomprayah high-speed catamaran.
         </div>
       </div>
 
@@ -260,6 +367,54 @@
     </div>
   </div>
 
+  <!-- MODAL: ROUTE RESILIENCE & SEQUENCING (A vs B) -->
+  <div id="route-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
+    <div class="glass-card rounded-2xl max-w-2xl w-full p-6 border border-slate-700 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeRouteModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
+      
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xl">🔄</span>
+        <div>
+          <h3 class="text-base font-bold text-white">Route Resilience & Dynamic Sequencing</h3>
+          <p class="text-xs text-cyan-400">Sequence A (Mountain-First Triangle) vs Sequence B (Weather Inversion)</p>
+        </div>
+      </div>
+
+      <div class="space-y-4 text-xs text-slate-300">
+        <!-- Sequence A Card -->
+        <div class="bg-emerald-950/40 p-4 rounded-xl border border-emerald-500/50">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-bold text-sm text-emerald-300">✅ Sequence A: Mountain-First Triangle (ACTIVE PRIMARY)</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-900 text-emerald-200 font-bold">RECOMMENDED</span>
+          </div>
+          <p class="text-slate-200 font-medium mb-1">Sa Pa (Sep 15–17) $\rightarrow$ Ninh Binh (Sep 17–19) $\rightarrow$ Cat Ba Island (Sep 19–22) $\rightarrow$ Hanoi (Sep 22–24)</p>
+          <div class="space-y-1.5 text-slate-300 mt-2">
+            <p>• <b>Solves Major Bottleneck:</b> The old Sa Pa $\rightarrow$ Cat Ba transfer was an exhausting 10-hour cross-country slog.</p>
+            <p>• <b>Optimized Triangle:</b> Sa Pa to Ninh Binh via direct express highway coach (6h). Ninh Binh to Cat Ba is a breeze (only 2.5h direct bus+ferry). Cat Ba to Hanoi is only 2.5h via Hai Phong 5B expressway.</p>
+            <p>• <b>Pacing Advantage:</b> Every post-Sa Pa leg is strictly under 3 hours, leaving full energy for kayaking and cycling!</p>
+          </div>
+        </div>
+
+        <!-- Sequence B Card -->
+        <div class="bg-amber-950/40 p-4 rounded-xl border border-amber-500/50">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-bold text-sm text-amber-300">⚠️ Sequence B: Coastal Inversion (DYNAMIC FALLBACK)</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-amber-900 text-amber-200 font-bold">WEATHER TRIGGERED</span>
+          </div>
+          <p class="text-slate-200 font-medium mb-1">Hanoi $\rightarrow$ Cat Ba Island (3d) $\rightarrow$ Ninh Binh (2d) $\rightarrow$ Sa Pa (2d) $\rightarrow$ Ha Giang (3d) $\rightarrow$ Hanoi</p>
+          <div class="space-y-1.5 text-slate-300 mt-2">
+            <p>• <b>Trigger Condition:</b> Live satellite radar or Vietnam Disaster Management alerts showing heavy tropical depression rainfall, flooding, or landslides on northern mountain passes (Ma Pi Leng / O Quy Ho) during Sep 12–15.</p>
+            <p>• <b>Strategic Pivot:</b> Reverses the loop to enjoy calm waters in Lan Ha Bay and Ninh Binh first, pushing mountain passes to late September when high-altitude conditions clear.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 flex justify-end">
+        <button onclick="closeRouteModal()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: LUGGAGE PROTOCOL -->
   <div id="luggage-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
     <div class="glass-card rounded-2xl max-w-xl w-full p-6 border border-slate-700 shadow-2xl relative">
@@ -268,7 +423,7 @@
       <div class="flex items-center gap-2 mb-3">
         <span class="text-xl">🧳</span>
         <div>
-          <h3 class="text-base font-bold text-white">Luggage Storage & Transfer Plan</h3>
+          <h3 class="text-base font-bold text-white">Luggage Storage & Transfer Protocol</h3>
           <p class="text-xs text-amber-400">Checked Suitcase Drop (Sep 12) & Retrieval (Sep 24)</p>
         </div>
       </div>
@@ -276,28 +431,28 @@
       <div class="space-y-3 text-xs text-slate-300">
         <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800">
           <div class="font-bold text-white mb-1.5">📍 Storage Facility Location:</div>
-          <p><b>AIRPORTELs / SmileLugg Suvarnabhumi (BKK) Floor B (Basement Level)</b></p>
-          <p class="text-slate-400 mt-1">Located directly on the Airport Rail Link level next to the train ticket counters. Open 24/7 with 24h security surveillance and insurance.</p>
+          <p><b>AIRPORTELs Suvarnabhumi (BKK) Floor B (Basement Level)</b></p>
+          <p class="text-slate-400 mt-1">Located on the Airport Rail Link level next to train ticket counters. Open 24/7 with round-the-clock CCTV and insurance protection (~100–150 THB/day).</p>
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
             <span class="font-bold text-amber-300">1. Suitcase Drop (Sep 12)</span>
             <p class="text-[11px] text-slate-400 mt-1">
-              Take ARL from Phaya Thai to BKK Basement. Hand over checked suitcase (containing Phase 2 island attire). Retain claim receipt (Ref: BKK-LK-20260912-771).
+              Take ARL train from Phaya Thai to BKK Floor B. Deposit checked suitcase containing Phase 2 island attire. Receive claim ticket.
             </p>
           </div>
           <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
             <span class="font-bold text-emerald-300">2. Vietnam Backpack-Only</span>
             <p class="text-[11px] text-slate-400 mt-1">
-              Board flight 1145-554-179 to Hanoi with only 1x 55L clamshell backpack. Effortless mobility for Ha Giang easy-riders and Sa Pa trails!
+              Fly to Hanoi with strictly 1x 55L clamshell backpack. Effortless mobility for Ha Giang easy-riders and Sa Pa trails!
             </p>
           </div>
         </div>
 
         <div class="bg-emerald-950/40 p-3.5 rounded-xl border border-emerald-500/40 text-emerald-200">
-          <div class="font-bold mb-1">3. Retrieval on Sep 24 (HAN -> BKK Landing at 14:35):</div>
-          <p>Clear immigration, take elevator straight down to Floor B, show ticket, retrieve suitcase. Proceed to Level 4 Domestic check-in to meet girlfriend and fly to Koh Samui!</p>
+          <div class="font-bold mb-1">3. Retrieval on Sep 24 (HAN -> BKK Landing at 14:45):</div>
+          <p>Clear immigration, take elevator down to Floor B, present claim ticket, retrieve suitcase. Proceed to Level 4 Domestic departures to meet girlfriend and fly to Koh Samui!</p>
         </div>
       </div>
 
@@ -309,7 +464,7 @@
 
   <!-- FOOTER -->
   <footer class="border-t border-slate-800 bg-slate-950/80 py-6 text-center text-xs text-slate-500">
-    Master Itinerary: Thailand & Vietnam [Live Travel OS] • Autonomous Travel Logistics Platform • Dual-Sync Engine v2.4
+    Master Itinerary: Thailand & Vietnam [Adaptive Travel OS] • Autonomous Travel Operations Engine • Dual-Sync Engine v3.0
   </footer>
 
 </body>

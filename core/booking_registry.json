@@ -3,6 +3,23 @@
   "audit_note": "Strict audit enforced: ONLY user-verified confirmed bookings are marked CONFIRMED. All synthetic passes and unbooked legs removed.",
   "confirmed_items": [
     {
+      "id": "FLIGHT-TLV-BKK-G5M8CF",
+      "type": "FLIGHT",
+      "date": "2026-09-10",
+      "arrival_date": "2026-09-11",
+      "title": "Tel Aviv (TLV) -> Bangkok (BKK) via Dubai (DXB)",
+      "reference_code": "G5M8CF",
+      "status": "[CONFIRMED - BOOKED]",
+      "departure": "17:25 PM (TLV Ben Gurion) on Sep 10",
+      "arrival": "12:30 PM (BKK Suvarnabhumi) on Sep 11",
+      "airline": "Emirates (EK2451 / EK384 A380)",
+      "passengers": "Eyal Andreson",
+      "details": "Confirmed international inbound flight. Official e-ticket verified from Emirates email.",
+      "file_path": "documents/Emirates_Flight_TLV_BKK_G5M8CF.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Flight E-Ticket"
+    },
+    {
       "id": "DOC-TDAC-30C4358",
       "type": "IMMIGRATION_PASS",
       "date": "2026-09-11",
@@ -119,44 +136,44 @@
       "notes": "Vetted properties: Eco Palms House or Pao's Sapa Leisure."
     },
     {
-      "id": "ACTION-SAPA-CATBA-BUS",
+      "id": "ACTION-SAPA-NINHBINH-BUS",
       "category": "BUS_TRANSIT",
       "date": "2026-09-17",
-      "title": "Sa Pa to Cat Ba Island Intercity Sleeper Bus & Ferry",
+      "title": "Sa Pa to Ninh Binh (Tam Coc) Direct Express Coach",
       "status": "[ACTION REQUIRED - NOT BOOKED]",
-      "notes": "Direct express coach to island doorstep (Cat Ba Express)."
-    },
-    {
-      "id": "ACTION-CATBA-STAYS-CRUISE",
-      "category": "HOTEL_TOUR",
-      "date": "2026-09-17 to 2026-09-20",
-      "title": "Cat Ba Island (3 Nights, Twin Beds) & Lan Ha Bay Kayak Cruise",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
-      "notes": "Vetted properties: Hôtel Perle d'Orient Cat Ba MGallery or Cat Ba Eco Lodge."
-    },
-    {
-      "id": "ACTION-CATBA-NINHBINH-BUS",
-      "category": "BUS_TRANSIT",
-      "date": "2026-09-20",
-      "title": "Cat Ba Island to Ninh Binh (Tam Coc) Express Bus",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
-      "notes": "Daichi or Good Morning Cat Ba bus to Tam Coc."
+      "notes": "Direct express coach via highway (6 hrs). Eliminates grueling 10-hour Sa Pa to Cat Ba road slog! (The Long Travel or Truly bus)."
     },
     {
       "id": "ACTION-NINHBINH-STAYS",
       "category": "HOTEL",
-      "date": "2026-09-20 to 2026-09-22",
+      "date": "2026-09-17 to 2026-09-19",
       "title": "Ninh Binh Retreat (2 Nights, Twin Beds)",
       "status": "[ACTION REQUIRED - NOT BOOKED]",
       "notes": "Vetted properties: Tam Coc Garden Resort or Hidden Charm Resort."
     },
     {
-      "id": "ACTION-NINHBINH-HANOI-LIMO",
+      "id": "ACTION-NINHBINH-CATBA-BUS",
+      "category": "BUS_TRANSIT",
+      "date": "2026-09-19",
+      "title": "Ninh Binh to Cat Ba Island Express Coach & Ferry",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Short 2.5-hour direct coach + ferry transfer (Daichi or Good Morning Cat Ba)."
+    },
+    {
+      "id": "ACTION-CATBA-STAYS-CRUISE",
+      "category": "HOTEL_TOUR",
+      "date": "2026-09-19 to 2026-09-22",
+      "title": "Cat Ba Island (3 Nights, Twin Beds) & Lan Ha Bay Kayak Cruise",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Vetted properties: Hôtel Perle d'Orient Cat Ba MGallery or Cat Ba Eco Lodge."
+    },
+    {
+      "id": "ACTION-CATBA-HANOI-BUS",
       "category": "BUS_TRANSIT",
       "date": "2026-09-22",
-      "title": "Ninh Binh to Hanoi Old Quarter Limousine Van",
+      "title": "Cat Ba Island to Hanoi Old Quarter Express Bus",
       "status": "[ACTION REQUIRED - NOT BOOKED]",
-      "notes": "Trang An Limousine 9-seater van."
+      "notes": "Cat Ba Express via Hai Phong 5B expressway (2.5 hrs directly to Ma May street doorstep)."
     },
     {
       "id": "ACTION-HANOI-FINALE-STAYS",
@@ -170,9 +187,9 @@
       "id": "ACTION-BKK-USM-FLIGHT",
       "category": "FLIGHT",
       "date": "2026-09-24",
-      "title": "Bangkok (BKK) -> Koh Samui (USM) Direct Flight",
-      "status": "[ACTION REQUIRED - NOT BOOKED - PRICE RADAR ACTIVE]",
-      "notes": "Target: Bangkok Airways PG 169 (17:15 PM) or PG 175 (18:00 PM). Buy in Mid-July to Early August 2026 ($115-135 USD Web Saver)."
+      "title": "Bangkok (BKK) -> Koh Samui (USM) Domestic Connection",
+      "status": "[ACTION REQUIRED - NOT BOOKED - FLUID STRATEGY ACTIVE]",
+      "notes": "Hanoi flight lands at 14:45. PG 169 (17:15) flagged as HIGH RISK (only 2h 30m window for immigration, BKK Basement suitcase retrieval, and re-check). Recommended stress-free primary: Bangkok Airways PG 177 (19:30) or PG 181 (20:00). Fluid Fallbacks: 1) Overnight in Bangkok on Sep 24, morning flight Sep 25; 2) Fly to Surat Thani (URT) + Lomprayah catamaran."
     },
     {
       "id": "ACTION-SAMUI-STAYS",

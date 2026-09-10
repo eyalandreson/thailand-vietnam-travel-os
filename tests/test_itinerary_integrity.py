@@ -49,6 +49,7 @@ class TestItineraryIntegrity(unittest.TestCase):
     def test_confirmed_references_present(self):
         """Verify critical confirmed booking references exist in itinerary."""
         data_str = json.dumps(self.data)
+        self.assertIn("G5M8CF", data_str, "Emirates flight booking G5M8CF missing!")
         self.assertIn("1145-554-179", data_str, "Flight booking 1145-554-179 missing!")
         self.assertIn("697155847", data_str, "Sukhon Hotel booking 697155847 missing!")
         self.assertIn("30C4358", data_str, "TDAC card #30C4358 missing!")

@@ -1,6 +1,6 @@
 """
 Google Workspace Sync Client & Master Document Generator
-Synchronizes "Master Itinerary: Thailand & Vietnam [Live Travel OS]" with Google Docs.
+Synchronizes "Master Itinerary: Thailand & Vietnam [Adaptive Travel OS]" with Google Docs.
 Generates:
 - Standalone pixel-perfect Google Doc HTML view (master_itinerary_doc.html)
 - Executive Markdown export (MASTER_ITINERARY_GOOGLE_DOC.md)
@@ -24,7 +24,7 @@ class GoogleWorkspaceSync:
         """
         Renders a paginated, executive Google Docs document styling matching Google Docs UI.
         """
-        title = data.get("title", "Master Itinerary: Thailand & Vietnam [Live Travel OS]")
+        title = data.get("title", "Master Itinerary: Thailand & Vietnam [Adaptive Travel OS]")
         gen_time = data.get("generated_at", "")
         days = data.get("days", [])
         luggage = data.get("luggage_storage_protocol", {})
@@ -199,17 +199,18 @@ class GoogleWorkspaceSync:
 
 <div class="doc-page">
   <div class="doc-header-banner">
-    <div class="doc-logo">Master Itinerary: Thailand & Vietnam [Live Travel OS]</div>
-    <div class="doc-sync-pill">Dual-Sync Engine: Connected (v2.4)</div>
+    <div class="doc-logo">Master Itinerary: Thailand & Vietnam [Adaptive Travel OS]</div>
+    <div class="doc-sync-pill">Dual-Sync Engine: Connected (v3.0 Adaptive)</div>
   </div>
 
   <h1>Master Itinerary: Thailand & Vietnam</h1>
-  <p style="color: #5f6368; font-size: 13px;"><b>Live Travel OS</b> | Dates: Sep 11, 2026 – Oct 09, 2026 (29 Days) | Dual Synced: {gen_time}</p>
+  <p style="color: #5f6368; font-size: 13px;"><b>Adaptive Travel OS</b> | Dates: Sep 11, 2026 – Oct 09, 2026 (29 Days) | Dual Synced: {gen_time}</p>
 
   <div class="callout-box">
-    <b>Travel Party Architecture & Phases:</b><br>
-    • <b>Phase 1 (Sep 11–24): Northern Vietnam Loop</b> — Traveler + Friend. Focus: Adventure, trekking, scenic mountain loops, street food. <i>Room Rule: Strictly Twin Beds / 2 Separate Beds. Luggage: 55L clamshell backpack ONLY.</i><br>
-    • <b>Transition Day (Sep 24):</b> HAN -> BKK flight (12:45 PM). Friend separates. Suitcase retrieved from BKK Airport Basement. Traveler reunites with girlfriend. Flight to Koh Samui.<br>
+    <b>Operational Philosophy & Travel Party Architecture:</b><br>
+    • <b>Core Rule: "Hard Anchors, Fluid Routes"</b> — Only the 6 Gmail-verified bookings are fixed boundaries. All intermediate routing, accommodation selections, and daily pacing adapt dynamically based on live weather radars, transit buffers, and critic ratings ($\ge$ 8.5/10).<br>
+    • <b>Phase 1 (Sep 11–24): Northern Vietnam Loop</b> — Traveler + Friend. Focus: Adventure, trekking, scenic loops, street food. <i>Room Rule: Strictly Twin Beds / 2 Separate Beds. Luggage: 55L clamshell backpack ONLY.</i><br>
+    • <b>Transition Day (Sep 24):</b> HAN -> BKK flight (arr 14:45 PM). Friend separates. Suitcase retrieved from BKK Airport Basement (Floor B). Traveler reunites with girlfriend. Evening flight to Koh Samui.<br>
     • <b>Phase 2 (Sep 24 – Oct 09): Southern Thailand Islands & Bangkok</b> — Traveler + Girlfriend. Focus: Boutique romantic villas, private plunge pools, scenic diving, sunset dining. <i>Room Rule: Romantic King Bed / Ocean View. Pacing: 13 nights Gulf (1 Samui + 6 Phangan + 6 Tao) + 2 nights Bangkok Finale.</i>
   </div>
 
@@ -217,18 +218,26 @@ class GoogleWorkspaceSync:
     <b>CRITICAL LUGGAGE STORAGE PROTOCOL (Sep 12–24):</b><br>
     • <b>Deposit:</b> Morning of Sep 12 at <b>AIRPORTELs Suvarnabhumi Basement (Floor B, Airport Rail Link level)</b>. Store 1x checked suitcase for 12 days.<br>
     • <b>Advantage:</b> Completely eliminates lugging heavy bags across mountain passes in Ha Giang and Sa Pa. The entire Vietnam expedition is strictly backpack-only (55L clamshell).<br>
-    • <b>Retrieval:</b> Landing back from Hanoi at 14:35 on Sep 24. Collect suitcase at BKK Floor B before checking into Bangkok Airways flight to Koh Samui.
+    • <b>Retrieval:</b> Landing back from Hanoi at 14:45 on Sep 24. Collect suitcase at BKK Floor B before checking into evening flight to Koh Samui.
   </div>
 
   <div class="callout-green">
-    <b>FLIGHT PRICE RADAR & BUYING WINDOW: BKK -> Koh Samui (USM) on Sep 24:</b><br>
-    • <b>Recommended Flight:</b> Bangkok Airways <b>PG 169 (Dep 17:15 - Arr 18:20)</b> or <b>PG 175 (Dep 18:00 - Arr 19:05)</b>.<br>
-    • <b>Cheapest Fare Tier:</b> "Web Saver" ($115 - $135 USD / ~4,200 THB).<br>
-    • <b>When to Buy:</b> <b>6 to 8 weeks before departure (Mid-July to Early August 2026)</b>. Bangkok Airways holds monopoly on USM; Web Saver promo seats sell out 3-4 weeks before flight.<br>
-    • <b>Buffer:</b> 2h 40m connection buffer allows relaxed baggage claim, suitcase retrieval at Floor B, and complimentary boutique lounge access.
+    <b>TRANSIT RISK CALIBRATION: Sep 24 Flight BKK -> Koh Samui (USM):</b><br>
+    • <b>PG 169 (Dep 17:15 - Arr 18:20):</b> <span style="color:#d93025; font-weight:bold;">FLAGGED HIGH RISK / TIGHT.</span> Arriving from Hanoi at 14:45 leaves only 2h 30m total to deplane, clear international immigration, collect suitcase at Floor B, and reach Level 4 domestic check-in before the 16:30 strict cutoff.<br>
+    • <b>RECOMMENDED STRESS-FREE PRIMARY: Bangkok Airways PG 177 (Dep 19:30 - Arr 20:35) or PG 181 (Dep 20:00 - Arr 21:05).</b> Provides a comfortable 4h 45m buffer and includes complimentary access to the Bangkok Airways Boutique Lounge (pastries, snacks, cappuccino, Wi-Fi).<br>
+    • <b>Cheapest Fare Tier:</b> "Web Saver" ($115 - $135 USD / ~4,200 THB). <b>Buy Window: Mid-July to Early August 2026 (6–8 weeks out).</b><br>
+    • <b>Fluid Fallbacks:</b> Fallback 1: Overnight in Bangkok on Sep 24, fly morning Sep 25. Fallback 2: Surat Thani (URT) flight + Lomprayah high-speed catamaran.
   </div>
 
-  <h2>Summary of Genuine Confirmed Bookings (From Traveler Profile)</h2>
+  <div style="background: #fdf7e7; border-left: 4px solid #f2994a; padding: 14px 18px; margin: 18px 0; border-radius: 0 6px 6px 0; font-size: 13.5px;">
+    <b>ROUTE RESILIENCE: Sequence A (Active Triangle) vs Sequence B (Weather Inversion):</b><br>
+    • <b>Sequence A (Recommended Primary):</b> Hanoi -> Ha Giang (3d) -> Sa Pa (2d) -> <b>Ninh Binh (2d)</b> -> <b>Cat Ba Island (3d)</b> -> Hanoi (2d).<br>
+    <i>Why Sequence A wins:</i> Eliminates the brutal 10-hour Sa Pa to Cat Ba road slog! Sa Pa to Ninh Binh via direct express coach (6h). Ninh Binh to Cat Ba is only 2.5h direct bus+ferry. Cat Ba to Hanoi is only 2.5h via Hai Phong expressway. Every transfer post-Sa Pa is under 3 hours.<br>
+    • <b>Sequence B (Dynamic Fallback):</b> Hanoi -> Cat Ba (3d) -> Ninh Binh (2d) -> Sa Pa (2d) -> Ha Giang (3d) -> Hanoi.<br>
+    <i>Trigger Condition:</i> If live satellite radar or meteorological reports indicate heavy tropical depression rainfall, flooding, or landslides on northern mountain passes (Ma Pi Leng / O Quy Ho) during Sep 12–15.
+  </div>
+
+  <h2>Summary of Genuine Confirmed Bookings (Verified from Gmail)</h2>
   <table class="meta-table">
     <thead>
       <tr>
@@ -236,63 +245,73 @@ class GoogleWorkspaceSync:
         <th>Category</th>
         <th>Verified Reference</th>
         <th>Booking Status</th>
-        <th>File Status</th>
+        <th>Official PDF Attachment</th>
       </tr>
     </thead>
     <tbody>
       <tr>
+        <td>Sep 10–11</td>
+        <td>Flight</td>
+        <td>TLV -> DXB -> BKK (Emirates EK2451 / EK384 A380, PNR: <b>G5M8CF</b>)</td>
+        <td><span class="badge-confirmed">CONFIRMED FLIGHT</span></td>
+        <td><a href="documents/Emirates_Flight_TLV_BKK_G5M8CF.pdf" target="_blank" class="badge-doc" style="background:#e6f4ea; color:#137333; text-decoration:none; border:1px solid #ceead6; font-weight:bold;">📥 Emirates_Flight_TLV_BKK_G5M8CF.pdf</a></td>
+      </tr>
+      <tr>
         <td>Sep 11</td>
         <td>Immigration</td>
-        <td>Thailand Digital Arrival Card (#30C4358)</td>
-        <td><span class="badge-confirmed">CONFIRMED DETAILS</span></td>
-        <td style="color:#b06000;">Awaiting Gmail Attachment / Local Drop</td>
+        <td>Thailand Digital Arrival Card (#<b>30C4358</b>)</td>
+        <td><span class="badge-confirmed">CONFIRMED PASS</span></td>
+        <td><a href="documents/TDAC_Arrival_Card_30C4358.pdf" target="_blank" class="badge-doc" style="background:#e6f4ea; color:#137333; text-decoration:none; border:1px solid #ceead6; font-weight:bold;">📥 TDAC_Arrival_Card_30C4358.pdf</a></td>
       </tr>
       <tr>
         <td>Sep 11–12</td>
         <td>Hotel</td>
-        <td>Sukhon Hotel Bangkok (Booking: 697155847)</td>
+        <td>Sukhon Hotel Bangkok (Booking: <b>697155847</b>)</td>
         <td><span class="badge-confirmed">CONFIRMED BOOKING</span></td>
-        <td style="color:#b06000;">Awaiting Gmail Attachment / Local Drop</td>
+        <td><a href="documents/Sukhon_Hotel_Agoda_697155847.pdf" target="_blank" class="badge-doc" style="background:#e6f4ea; color:#137333; text-decoration:none; border:1px solid #ceead6; font-weight:bold;">📥 Sukhon_Hotel_Agoda_697155847.pdf</a></td>
       </tr>
       <tr>
         <td>Sep 12</td>
         <td>Flight</td>
-        <td>Bangkok -> Hanoi 11:55 AM (Booking: 1145-554-179)</td>
+        <td>Bangkok -> Hanoi 11:55 AM (Order: <b>1145-554-179</b>)</td>
         <td><span class="badge-confirmed">CONFIRMED FLIGHT</span></td>
-        <td style="color:#b06000;">Awaiting Gmail Attachment / Local Drop</td>
+        <td><a href="documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf" target="_blank" class="badge-doc" style="background:#e6f4ea; color:#137333; text-decoration:none; border:1px solid #ceead6; font-weight:bold;">📥 Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf</a></td>
       </tr>
       <tr>
         <td>Sep 24</td>
         <td>Flight</td>
-        <td>Hanoi -> Bangkok 12:45 PM (Booking: 1145-554-179)</td>
+        <td>Hanoi -> Bangkok 12:45 PM (Order: <b>1145-554-179</b>)</td>
         <td><span class="badge-confirmed">CONFIRMED FLIGHT</span></td>
-        <td style="color:#b06000;">Awaiting Gmail Attachment / Local Drop</td>
+        <td><a href="documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf" target="_blank" class="badge-doc" style="background:#e6f4ea; color:#137333; text-decoration:none; border:1px solid #ceead6; font-weight:bold;">📥 Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf</a></td>
       </tr>
       <tr>
         <td>Oct 09</td>
         <td>Flight</td>
-        <td>Bangkok -> Tel Aviv via AUH (Booking: 9KDEH2)</td>
+        <td>Bangkok -> Tel Aviv via AUH (Etihad Booking: <b>9KDEH2</b>)</td>
         <td><span class="badge-confirmed">CONFIRMED FLIGHT</span></td>
-        <td style="color:#b06000;">Awaiting Gmail Attachment / Local Drop</td>
+        <td><a href="documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf" target="_blank" class="badge-doc" style="background:#e6f4ea; color:#137333; text-decoration:none; border:1px solid #ceead6; font-weight:bold;">📥 Etihad_BKK_TLV_9KDEH2.pdf</a></td>
       </tr>
     </tbody>
   </table>
 
-  <h2>Action Items: Unbooked Legs & Required Reservations</h2>
+  <h2>Action Items: Unbooked Legs & Required Reservations (Sequence A)</h2>
   <div class="callout-alert">
     <b>The following legs are NOT yet booked and require user action / reservation:</b><br>
     1. <b>Luggage Locker (Sep 12):</b> AIRPORTELs Suvarnabhumi Basement drop-off (pay at counter or online).<br>
     2. <b>Vietnam E-Visa (Sep 12):</b> Apply on official Vietnam immigration portal $\ge$ 2 weeks prior.<br>
     3. <b>Ha Giang Loop (Sep 13–15):</b> Easy-Riders + VIP bus from Hanoi (Action Required).<br>
     4. <b>Sa Pa (Sep 15–17):</b> Mountain transfer coach + Eco Palms House / Pao's Sapa (Action Required).<br>
-    5. <b>Cat Ba & Lan Ha Bay (Sep 17–20):</b> Intercity coach + Perle d'Orient / Eco Lodge + Kayak cruise (Action Required).<br>
-    6. <b>Ninh Binh (Sep 20–22):</b> Tam Coc coach + Tam Coc Garden Resort (Action Required).<br>
-    7. <b>Hanoi Finale (Sep 22–24):</b> Limousine van + La Siesta Ma May (Action Required).<br>
-    8. <b>South Flight (Sep 24):</b> Bangkok Airways PG 169 BKK -> USM (Buy in Mid-July / Early August).<br>
-    9. <b>Koh Samui (Sep 24–25):</b> Hansar Samui decompression stay (Action Required).<br>
-    10. <b>Koh Phangan (Sep 25 – Oct 01):</b> Lomprayah catamaran + Anantara Rasananda (Action Required).<br>
-    11. <b>Koh Tao (Oct 01–07):</b> Lomprayah catamaran + The Place Luxury Villas (Action Required).<br>
-    12. <b>Bangkok Finale (Oct 07–09):</b> Return flight/ferry + Riva Arun Bangkok (Action Required).
+    5. <b>Sa Pa -> Ninh Binh (Sep 17):</b> Direct express coach (6 hrs) via highway (Action Required).<br>
+    6. <b>Ninh Binh Retreat (Sep 17–19):</b> Tam Coc Garden Resort / Hidden Charm Resort (Action Required).<br>
+    7. <b>Ninh Binh -> Cat Ba (Sep 19):</b> Short 2.5-hour direct coach + ferry (Action Required).<br>
+    8. <b>Cat Ba & Lan Ha Bay (Sep 19–22):</b> Hôtel Perle d'Orient MGallery + Kayak cruise (Action Required).<br>
+    9. <b>Cat Ba -> Hanoi (Sep 22):</b> Cat Ba Express via 5B expressway (2.5 hrs) (Action Required).<br>
+    10. <b>Hanoi Finale (Sep 22–24):</b> La Siesta Classic Ma May (Action Required).<br>
+    11. <b>South Flight (Sep 24):</b> Bangkok Airways PG 177 / PG 181 BKK -> USM (Buy in Mid-July / Early August).<br>
+    12. <b>Koh Samui (Sep 24–25):</b> Hansar Samui decompression stay (Action Required).<br>
+    13. <b>Koh Phangan (Sep 25 – Oct 01):</b> Lomprayah catamaran + Anantara Rasananda (Action Required).<br>
+    14. <b>Koh Tao (Oct 01–07):</b> Lomprayah catamaran + The Place Luxury Villas (Action Required).<br>
+    15. <b>Bangkok Finale (Oct 07–09):</b> Return flight/ferry + Riva Arun Bangkok (Action Required).
   </div>
 
   <h2>Comprehensive 29-Day Master Itinerary</h2>

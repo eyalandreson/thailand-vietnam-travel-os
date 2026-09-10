@@ -240,12 +240,20 @@ function renderDays() {
       `;
     } else if (day.day_number === 14) {
       specialBanner = `
-        <div class="bg-purple-950/40 border-l-4 border-purple-500 p-3 rounded-r-lg mb-3 text-xs text-purple-200 flex items-start gap-2">
-          <span class="text-lg">✈️</span>
-          <div>
-            <b>Transition Hub:</b> Friend departs BKK. Retrieve checked suitcase at AIRPORTELs Floor B. Reunite with Girlfriend. Take direct flight BKK -> USM!
-            <button onclick="openPriceRadarModal()" class="ml-2 underline text-blue-300 font-bold hover:text-white">View BKK->USM Price Radar</button>
+        <div class="bg-purple-950/40 border-l-4 border-purple-500 p-3.5 rounded-r-xl mb-3 text-xs text-purple-200 space-y-1">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <span class="font-bold text-white flex items-center gap-1.5">
+              <span>✈️</span> Transition Day & Flight Connection Risk Radar
+            </span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-500/50 font-bold">PG 169 HIGH RISK</span>
           </div>
+          <p class="text-slate-300 leading-relaxed">
+            Hanoi flight lands at 14:45. Friend departs. Retrieve checked suitcase at <b>AIRPORTELs Suvarnabhumi Basement (Floor B)</b>. Reunite with girlfriend at arrivals.
+          </p>
+          <p class="text-amber-300 font-medium">
+            ⚠️ <b>Connection Audit:</b> PG 169 (17:15) leaves only 2h 30m total (immigration + Floor B luggage + 16:30 check-in cutoff). <b>Recommended Stress-Free Connection: PG 177 (19:30) or PG 181 (20:00)</b> with 4h 45m buffer and free Boutique Lounge access!
+            <button onclick="openPriceRadarModal()" class="ml-2 underline text-cyan-300 font-bold hover:text-white">Open Risk Radar →</button>
+          </p>
         </div>
       `;
     }
@@ -474,4 +482,15 @@ function openLuggageModal() {
 
 function closeLuggageModal() {
   document.getElementById('luggage-modal').classList.add('hidden');
+}
+
+// Route Resilience Modal (Sequence A vs B)
+function openRouteModal() {
+  const modal = document.getElementById('route-modal');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeRouteModal() {
+  const modal = document.getElementById('route-modal');
+  if (modal) modal.classList.add('hidden');
 }

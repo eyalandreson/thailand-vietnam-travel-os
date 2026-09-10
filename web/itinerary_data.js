@@ -1,19 +1,24 @@
 window.TRAVEL_OS_DATA = {
-  "title": "Master Itinerary: Thailand & Vietnam [Live Travel OS]",
-  "generated_at": "2026-09-09T04:03:00Z",
-  "system_version": "2.5.0",
-  "audit_note": "Audited: Only confirmed bookings from user profile are marked CONFIRMED. All other days marked UNBOOKED with vetted recommendations.",
+  "title": "Master Itinerary: Thailand & Vietnam [Adaptive Travel OS]",
+  "generated_at": "2026-09-10T09:25:00Z",
+  "system_version": "3.0.0 (Adaptive Travel OS)",
+  "operational_philosophy": "Hard Anchors, Fluid Routes: Only Gmail-verified bookings are immutable anchors. All intermediate routing, hotels, and timing dynamically adapt to live weather, transit buffers, and critic score thresholds.",
+  "audit_note": "Audited: Only 6 genuine bookings verified from Gmail are marked CONFIRMED. All other days marked UNBOOKED with vetted recommendations.",
   "confirmed_metrics": {
     "total_days": 29,
-    "confirmed_days_count": 4,
-    "unbooked_days_count": 25,
+    "confirmed_days_count": 5,
+    "unbooked_days_count": 24,
     "confirmed_references": [
       {
-        "item": "TDAC Digital Arrival Card",
+        "item": "TLV -> BKK Emirates Flight EK2451/EK384 (Sep 10-11)",
+        "ref": "Booking: G5M8CF"
+      },
+      {
+        "item": "Thailand Digital Arrival Card (Sep 11)",
         "ref": "#30C4358"
       },
       {
-        "item": "Sukhon Hotel Bangkok",
+        "item": "Sukhon Hotel Bangkok (Sep 11-12)",
         "ref": "Booking: 697155847"
       },
       {
@@ -25,10 +30,24 @@ window.TRAVEL_OS_DATA = {
         "ref": "Booking: 1145-554-179"
       },
       {
-        "item": "BKK -> TLV Return Flight (Oct 09)",
+        "item": "BKK -> TLV Etihad Flight (Oct 09)",
         "ref": "Booking: 9KDEH2"
       }
     ]
+  },
+  "route_resilience": {
+    "active_sequence": "Sequence A (Mountain-First Triangle: Sa Pa -> Ninh Binh -> Cat Ba -> Hanoi)",
+    "sequence_a": {
+      "name": "Sequence A: Mountain-First Triangle (Recommended Primary)",
+      "pacing": "Sa Pa (Sep 15-17) -> Ninh Binh (Sep 17-19) -> Cat Ba Island (Sep 19-22) -> Hanoi (Sep 22-24)",
+      "rationale": "Eliminates brutal 10-hour Sa Pa to Cat Ba road slog. Sa Pa to Ninh Binh via direct express highway (6h). Ninh Binh to Cat Ba (2.5h direct bus+ferry). Cat Ba to Hanoi (2.5h direct bus via Hai Phong 5B expressway). Every leg post-Sa Pa is under 3 hours."
+    },
+    "sequence_b": {
+      "name": "Sequence B: Coastal Inversion (Dynamic Fallback)",
+      "pacing": "Hanoi (Sep 12-13) -> Cat Ba Island (Sep 13-16) -> Ninh Binh (Sep 16-18) -> Sa Pa (Sep 18-20) -> Ha Giang (Sep 20-23) -> Hanoi (Sep 23-24)",
+      "trigger_condition": "Live satellite weather radar indicating heavy monsoon rainfall, road flooding, or landslide warnings on northern mountain passes (Ma Pi Leng / O Quy Ho) during Sep 12-15.",
+      "rationale": "Inverts northern loop to enjoy calm waters in Lan Ha Bay first, delaying mountain passes until late September when conditions dry out."
+    }
   },
   "traveler_profile": {
     "party_phase_1": {
@@ -40,11 +59,11 @@ window.TRAVEL_OS_DATA = {
     },
     "transition": {
       "date": "2026-09-24",
-      "flight": "Hanoi (HAN) -> Bangkok (BKK) 12:45 PM (Booking: 1145-554-179 - CONFIRMED)",
+      "flight": "Hanoi (HAN) -> Bangkok (BKK) 12:45 PM (Booking: 1145-554-179 - CONFIRMED, arr 14:45)",
       "separation": "Friend departs/separates at BKK",
       "luggage_retrieval": "Retrieve checked suitcase at AIRPORTELs Suvarnabhumi Basement (Floor B)",
-      "reunion": "Traveler reunites with Girlfriend in Bangkok",
-      "south_flight": "Bangkok (BKK) -> Koh Samui (USM) Direct (Bangkok Airways PG 169 - UNBOOKED, BUY IN JULY/AUG)"
+      "reunion": "Traveler reunites with Girlfriend in Bangkok arrivals hall",
+      "south_flight": "Bangkok (BKK) -> Koh Samui (USM) (Recommended: Bangkok Airways PG 177 / PG 181; PG 169 flagged HIGH RISK)"
     },
     "party_phase_2": {
       "label": "Gulf of Thailand & Bangkok Finale (Sep 24 – Oct 09, 2026)",
@@ -59,7 +78,7 @@ window.TRAVEL_OS_DATA = {
     "facility": "AIRPORTELs Luggage Storage (Suvarnabhumi Airport Floor B, Airport Rail Link Level)",
     "status": "RECOMMENDED_PLAN_UNBOOKED",
     "dropoff_date": "2026-09-12 (Morning, before 11:55 flight to HAN)",
-    "pickup_date": "2026-09-24 (14:35 arrival from HAN)",
+    "pickup_date": "2026-09-24 (14:45 arrival from HAN)",
     "duration": "12 Days",
     "storage_cost": "~100-150 THB / day (pay at counter or online)",
     "item_deposited": "1x Large Checked Suitcase containing Phase 2 resort attire",
@@ -69,11 +88,260 @@ window.TRAVEL_OS_DATA = {
     "route": "Bangkok Suvarnabhumi (BKK) -> Koh Samui (USM)",
     "date": "2026-09-24",
     "status": "UNBOOKED_TRACKING",
-    "recommended_flight": "Bangkok Airways PG 169 (Dep 17:15 BKK - Arr 18:20 USM)",
-    "backup_flight": "Bangkok Airways PG 175 (Dep 18:00 BKK - Arr 19:05 USM)",
+    "high_risk_flight": "Bangkok Airways PG 169 (Dep 17:15 BKK - Arr 18:20 USM) [HIGH RISK: Only 2h30m buffer for immigration, Floor B suitcase pickup, and 16:30 check-in cutoff]",
+    "recommended_flight": "Bangkok Airways PG 177 (Dep 19:30 BKK - Arr 20:35 USM) or PG 181 (Dep 20:00 BKK - Arr 21:05 USM)",
+    "connection_buffer": "4h45m stress-free window with free Bangkok Airways Boutique Lounge access (pastries, snacks, drinks)",
     "cheapest_bucket": "Web Saver (Approx. $115 - $135 USD / 4,100 - 4,800 THB)",
-    "optimal_booking_window": "6 to 8 weeks prior to departure (Mid-July to Early August 2026)."
+    "optimal_booking_window": "6 to 8 weeks prior to departure (Mid-July to Early August 2026).",
+    "fluid_fallbacks": "Fallback 1: Overnight in Bangkok on Sep 24, morning flight Sep 25. Fallback 2: Surat Thani (URT) flight + Lomprayah catamaran."
   },
+  "confirmed_items": [
+    {
+      "id": "FLIGHT-TLV-BKK-G5M8CF",
+      "type": "FLIGHT",
+      "date": "2026-09-10",
+      "arrival_date": "2026-09-11",
+      "title": "Tel Aviv (TLV) -> Bangkok (BKK) via Dubai (DXB)",
+      "reference_code": "G5M8CF",
+      "status": "[CONFIRMED - BOOKED]",
+      "departure": "17:25 PM (TLV Ben Gurion) on Sep 10",
+      "arrival": "12:30 PM (BKK Suvarnabhumi) on Sep 11",
+      "airline": "Emirates (EK2451 / EK384 A380)",
+      "passengers": "Eyal Andreson",
+      "details": "Confirmed international inbound flight. Official e-ticket verified from Emirates email.",
+      "file_path": "documents/Emirates_Flight_TLV_BKK_G5M8CF.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Flight E-Ticket"
+    },
+    {
+      "id": "DOC-TDAC-30C4358",
+      "type": "IMMIGRATION_PASS",
+      "date": "2026-09-11",
+      "title": "Thailand Digital Arrival Card (TDAC)",
+      "reference_code": "TDAC #30C4358",
+      "status": "[CONFIRMED - BOOKED]",
+      "passenger": "Eyal Andreson (Passport C4JTR3PN5)",
+      "details": "Official Thailand Digital Arrival Card approved for entry on 2026-09-11. Address: Sukhon Hotel Bangkok, 55/5-6 Phayathai Road.",
+      "file_path": "documents/TDAC_Arrival_Card_30C4358.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Immigration & Customs"
+    },
+    {
+      "id": "HOTEL-SUKHON-697155847",
+      "type": "ACCOMMODATION",
+      "date": "2026-09-11",
+      "checkout_date": "2026-09-12",
+      "title": "Sukhon Hotel Bangkok",
+      "reference_code": "697155847",
+      "status": "[CONFIRMED - BOOKED]",
+      "location": "Phaya Thai / Ratchathewi, Bangkok (BTS Phaya Thai Exit 2)",
+      "room_type": "Superior Double / Twin (Backpack Transition Hub)",
+      "details": "Confirmed stay via Agoda (Booking ID: 697155847). Direct link to BTS & Airport Rail Link.",
+      "file_path": "documents/Sukhon_Hotel_Agoda_697155847.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Hotel Voucher"
+    },
+    {
+      "id": "FLIGHT-BKK-HAN-1145554179",
+      "type": "FLIGHT",
+      "date": "2026-09-12",
+      "title": "Bangkok (BKK) -> Hanoi (HAN)",
+      "reference_code": "1145-554-179",
+      "status": "[CONFIRMED - BOOKED]",
+      "departure": "11:55 AM (BKK Suvarnabhumi)",
+      "arrival": "13:55 PM (HAN Noi Bai Terminal 2)",
+      "airline": "Direct Carrier (Mytrip Order: 1145-554-179)",
+      "passengers": "Eyal Andreson & Gilad Shaked",
+      "details": "Confirmed flight ticket for 2 passengers. Carry-on backpacks only. Official receipt verified.",
+      "file_path": "documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Flight E-Ticket"
+    },
+    {
+      "id": "FLIGHT-HAN-BKK-1145554179",
+      "type": "FLIGHT",
+      "date": "2026-09-24",
+      "title": "Hanoi (HAN) -> Bangkok (BKK)",
+      "reference_code": "1145-554-179",
+      "status": "[CONFIRMED - BOOKED]",
+      "departure": "12:45 PM (HAN Noi Bai Terminal 2)",
+      "arrival": "14:45 PM (BKK Suvarnabhumi)",
+      "airline": "Direct Carrier (Mytrip Order: 1145-554-179)",
+      "passengers": "Eyal Andreson & Gilad Shaked",
+      "details": "Transition day flight from Vietnam back to Bangkok. Friend departs; retrieve suitcase at Floor B.",
+      "file_path": "documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Flight E-Ticket"
+    },
+    {
+      "id": "FLIGHT-BKK-TLV-9KDEH2",
+      "type": "FLIGHT",
+      "date": "2026-10-09",
+      "title": "Bangkok (BKK) -> Tel Aviv (TLV) via Abu Dhabi (AUH)",
+      "reference_code": "9KDEH2",
+      "status": "[CONFIRMED - BOOKED]",
+      "departure": "15:55 PM (BKK Suvarnabhumi) - Etihad Airways",
+      "passengers": "Eyal Andreson & Maria Miriam Malayev",
+      "details": "Confirmed international return flight. E-tickets issued for both passengers.",
+      "file_path": "documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Flight E-Ticket"
+    }
+  ],
+  "unbooked_action_items": [
+    {
+      "id": "ACTION-AIRPORTELS-DROP",
+      "category": "LUGGAGE_STORAGE",
+      "date": "2026-09-12",
+      "title": "BKK Airport Basement Luggage Locker Deposit (AIRPORTELs / SmileLugg)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Optimal plan: drop checked suitcase at BKK Floor B before Hanoi flight on Sep 12, retrieve on Sep 24. Pay at counter (~100-150 THB/day) or pre-book online."
+    },
+    {
+      "id": "ACTION-EVISA-VN",
+      "category": "VISA",
+      "date": "2026-09-12",
+      "title": "Vietnam 30-Day Single Entry E-Visa",
+      "status": "[ACTION REQUIRED - NOT VERIFIED IN GMAIL]",
+      "notes": "Must be applied for online at official Vietnam immigration portal at least 2 weeks before departure."
+    },
+    {
+      "id": "ACTION-HG-EASYRIDERS",
+      "category": "TOUR_TRANSPORT",
+      "date": "2026-09-13",
+      "title": "Ha Giang 3D/2N Licensed Easy-Rider Tour + Hanoi VIP Bus",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "User selected Easy-Riders. Needs to be booked (recommended: Cheers Ha Giang, Jasmine, or QT Motorbikes with full protective gear)."
+    },
+    {
+      "id": "ACTION-HG-SAPA-TRANSIT",
+      "category": "BUS_TRANSIT",
+      "date": "2026-09-15",
+      "title": "Ha Giang to Sa Pa VIP Mountain Minibus",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Direct transfer via Lao Cai (12Go Asia or local basecamp booking)."
+    },
+    {
+      "id": "ACTION-SAPA-STAYS",
+      "category": "HOTEL",
+      "date": "2026-09-15 to 2026-09-17",
+      "title": "Sa Pa Accommodation (2 Nights, Twin Beds)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Vetted properties: Eco Palms House or Pao's Sapa Leisure."
+    },
+    {
+      "id": "ACTION-SAPA-NINHBINH-BUS",
+      "category": "BUS_TRANSIT",
+      "date": "2026-09-17",
+      "title": "Sa Pa to Ninh Binh (Tam Coc) Direct Express Coach",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Direct express coach via highway (6 hrs). Eliminates grueling 10-hour Sa Pa to Cat Ba road slog! (The Long Travel or Truly bus)."
+    },
+    {
+      "id": "ACTION-NINHBINH-STAYS",
+      "category": "HOTEL",
+      "date": "2026-09-17 to 2026-09-19",
+      "title": "Ninh Binh Retreat (2 Nights, Twin Beds)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Vetted properties: Tam Coc Garden Resort or Hidden Charm Resort."
+    },
+    {
+      "id": "ACTION-NINHBINH-CATBA-BUS",
+      "category": "BUS_TRANSIT",
+      "date": "2026-09-19",
+      "title": "Ninh Binh to Cat Ba Island Express Coach & Ferry",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Short 2.5-hour direct coach + ferry transfer (Daichi or Good Morning Cat Ba)."
+    },
+    {
+      "id": "ACTION-CATBA-STAYS-CRUISE",
+      "category": "HOTEL_TOUR",
+      "date": "2026-09-19 to 2026-09-22",
+      "title": "Cat Ba Island (3 Nights, Twin Beds) & Lan Ha Bay Kayak Cruise",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Vetted properties: Hôtel Perle d'Orient Cat Ba MGallery or Cat Ba Eco Lodge."
+    },
+    {
+      "id": "ACTION-CATBA-HANOI-BUS",
+      "category": "BUS_TRANSIT",
+      "date": "2026-09-22",
+      "title": "Cat Ba Island to Hanoi Old Quarter Express Bus",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Cat Ba Express via Hai Phong 5B expressway (2.5 hrs directly to Ma May street doorstep)."
+    },
+    {
+      "id": "ACTION-HANOI-FINALE-STAYS",
+      "category": "HOTEL",
+      "date": "2026-09-22 to 2026-09-24",
+      "title": "Hanoi Old Quarter Boutique Stay (2 Nights, Twin Beds)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Vetted: La Siesta Classic Ma May or Peridot Grand."
+    },
+    {
+      "id": "ACTION-BKK-USM-FLIGHT",
+      "category": "FLIGHT",
+      "date": "2026-09-24",
+      "title": "Bangkok (BKK) -> Koh Samui (USM) Domestic Connection",
+      "status": "[ACTION REQUIRED - NOT BOOKED - FLUID STRATEGY ACTIVE]",
+      "notes": "Hanoi flight lands at 14:45. PG 169 (17:15) flagged as HIGH RISK (only 2h 30m window for immigration, BKK Basement suitcase retrieval, and re-check). Recommended stress-free primary: Bangkok Airways PG 177 (19:30) or PG 181 (20:00). Fluid Fallbacks: 1) Overnight in Bangkok on Sep 24, morning flight Sep 25; 2) Fly to Surat Thani (URT) + Lomprayah catamaran."
+    },
+    {
+      "id": "ACTION-SAMUI-STAYS",
+      "category": "HOTEL",
+      "date": "2026-09-24 to 2026-09-25",
+      "title": "Koh Samui Romance (1 Night, King Bed Ocean View)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Vetted: Hansar Samui Resort or SALA Samui Choengmon."
+    },
+    {
+      "id": "ACTION-SAMUI-PHANGAN-FERRY",
+      "category": "FERRY",
+      "date": "2026-09-25",
+      "title": "Lomprayah High-Speed Catamaran (Samui to Phangan)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Depart Pralarn Pier Maenam 10:30 AM."
+    },
+    {
+      "id": "ACTION-PHANGAN-STAYS",
+      "category": "HOTEL",
+      "date": "2026-09-25 to 2026-10-01",
+      "title": "Koh Phangan Romance (6 Nights, King Bed Plunge Pool Villa)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Vetted: Anantara Rasananda Koh Phangan Villas or Santhiya."
+    },
+    {
+      "id": "ACTION-PHANGAN-TAO-FERRY",
+      "category": "FERRY",
+      "date": "2026-10-01",
+      "title": "Lomprayah High-Speed Catamaran (Phangan to Tao)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Depart Thong Sala 11:00 AM."
+    },
+    {
+      "id": "ACTION-TAO-STAYS",
+      "category": "HOTEL",
+      "date": "2026-10-01 to 2026-10-07",
+      "title": "Koh Tao Romance (6 Nights, King Bed Hillside Pool Villa)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Vetted: The Place Luxury Boutique Villas or Jamahkiri."
+    },
+    {
+      "id": "ACTION-TAO-BKK-TRANSIT",
+      "category": "FERRY_FLIGHT",
+      "date": "2026-10-07",
+      "title": "Koh Tao to Bangkok VIP Transit (Catamaran + Bangkok Airways)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Morning catamaran to Samui + flight to BKK."
+    },
+    {
+      "id": "ACTION-BKK-FINALE-STAYS",
+      "category": "HOTEL",
+      "date": "2026-10-07 to 2026-10-09",
+      "title": "Bangkok Riverside Finale (2 Nights, King Bed River View)",
+      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "notes": "Vetted: Riva Arun Bangkok or Carlton Sukhumvit."
+    }
+  ],
   "total_days": 29,
   "days": [
     {
@@ -85,15 +353,15 @@ window.TRAVEL_OS_DATA = {
       "phase_short": "Phase 1: Guys Trip",
       "status": "[CONFIRMED - BOOKED]",
       "status_badge": "CONFIRMED",
-      "booking_summary": "Sukhon Hotel Confirmed (Booking: 697155847) • TDAC #30C4358",
+      "booking_summary": "Emirates EK2451/EK384 (Booking: G5M8CF, arr 12:30 PM) • Sukhon Hotel (Booking: 697155847) • TDAC #30C4358",
       "weather_radar": {
         "temp_range": "27°C - 33°C",
-        "condition": "Tropical Evening Shower possible",
-        "precipitation_pct": "40%",
+        "condition": "Tropical sun with scattered clouds, passing evening shower",
+        "precipitation_pct": "35%",
         "humidity": "75%",
         "attire_advice": "Breathable travel clothes, light trainers, compact umbrella in backpack"
       },
-      "luggage_action": "Arrive with 1x 55L clamshell backpack + 1x checked suitcase. Prepare suitcase for basement storage tomorrow morning.",
+      "luggage_action": "Arrive at BKK with 1x 55L clamshell backpack + 1x checked suitcase. Prepare suitcase for basement storage tomorrow morning.",
       "accommodation_matrix": [
         {
           "hotel_name": "Sukhon Hotel Bangkok",
@@ -108,23 +376,32 @@ window.TRAVEL_OS_DATA = {
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "Airport Rail Link (ARL) from BKK Suvarnabhumi Basement directly to Phaya Thai Station (45 THB / 26 mins). Walk 80m to Sukhon Hotel.",
-        "departure_time": "Upon clearing BKK immigration",
-        "arrival_time": "Evening check-in",
-        "buffer_time": "60 mins for baggage claim and immigration line",
+        "primary_transit": "Emirates flight EK2451/EK384 (TLV dep Sep 10 17:25 -> DXB -> BKK arr Sep 11 12:30 PM on A380). Clear immigration, board Airport Rail Link (ARL) from BKK Suvarnabhumi Basement directly to Phaya Thai Station (45 THB / 26 mins). Walk 80m to Sukhon Hotel.",
+        "departure_time": "Sep 10 17:25 (TLV) -> Sep 11 12:30 PM (BKK Landing)",
+        "arrival_time": "14:00 PM check-in",
+        "buffer_time": "90 mins for immigration, baggage claim, and ARL train ride",
         "tips": "Show TDAC #30C4358 at passport control. ARL trains run every 10-12 mins until midnight."
       },
       "curated_daily_flow": {
-        "morning": "Flight arrival into Bangkok Suvarnabhumi (BKK). Pass immigration using verified TDAC pass.",
-        "afternoon": "Board Airport Rail Link City Line to Phaya Thai terminus. Check-in at Sukhon Hotel.",
+        "morning": "Flight arrival into Bangkok Suvarnabhumi (BKK) on Emirates A380 (12:30 PM). Pass immigration using verified TDAC pass.",
+        "afternoon": "Board Airport Rail Link City Line to Phaya Thai terminus. Check-in at Sukhon Hotel, refresh, and unpack.",
         "evening": "Stroll down Phetchaburi Soi 5 for Pe Aor Tom Yum Kung Noodles, crispy pork, and iced Thai tea."
       },
       "essential_checklist": [
-        "Have Thailand Digital Arrival Card (TDAC #30C4358) ready on phone",
+        "Have Thailand Digital Arrival Card (TDAC #30C4358) and Emirates boarding pass on phone",
         "Withdraw 5,000 THB from Krungsri ATM (yellow machine)",
         "Repack checked suitcase with all Phase 2 items; isolate 55L backpack for Vietnam"
       ],
       "attached_documents": [
+        {
+          "doc_id": "FLIGHT-TLV-BKK-G5M8CF",
+          "title": "Flight: Tel Aviv (TLV) -> Bangkok (BKK) via Dubai",
+          "ref": "Emirates: G5M8CF",
+          "status": "Verified Official E-Ticket (Gmail)",
+          "badge": "CONFIRMED & DOWNLOADED",
+          "file_path": "documents/Emirates_Flight_TLV_BKK_G5M8CF.pdf",
+          "file_name": "Emirates_Flight_TLV_BKK_G5M8CF.pdf"
+        },
         {
           "doc_id": "DOC-TDAC-30C4358",
           "title": "Thailand Digital Arrival Card (TDAC)",
@@ -474,53 +751,67 @@ window.TRAVEL_OS_DATA = {
       "day_number": 7,
       "date": "2026-09-17",
       "day_of_week": "Thursday",
-      "destination": "Sa Pa -> Cat Ba Island",
+      "destination": "Sa Pa -> Ninh Binh (Tam Coc) [Sequence A Transit Hub]",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
       "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
       "status_badge": "UNBOOKED",
-      "booking_summary": "Sa Pa to Cat Ba coach & hotel unbooked",
+      "booking_summary": "Sa Pa to Ninh Binh direct express coach & Tam Coc retreat unbooked",
       "weather_radar": {
-        "temp_range": "26°C - 32°C",
-        "condition": "Sunny coastal breeze, calm emerald waters in Lan Ha Bay",
+        "temp_range": "24°C - 31°C",
+        "condition": "Warm sunshine over karst river valleys, gentle rural breeze",
         "precipitation_pct": "20%",
-        "humidity": "78%",
-        "attire_advice": "Linen shirts, swim shorts, flip-flops, sunglasses"
+        "humidity": "74%",
+        "attire_advice": "Comfortable travel clothes for bus, casual shorts and cycling sandals for afternoon"
       },
-      "luggage_action": "55L clamshell pack rides in coach luggage bay directly onto island ferry.",
+      "luggage_action": "55L backpacks ride in express coach lower cargo bay; direct drop at Tam Coc resort doorstep.",
       "accommodation_matrix": [
         {
-          "hotel_name": "Hôtel Perle d'Orient Cat Ba - MGallery",
+          "hotel_name": "Tam Coc Garden Resort",
           "status": "UNBOOKED_VETTED_OPTION",
-          "room_spec": "Classic Twin Bay View (Two Single Beds)",
-          "critic_score": 9.3,
-          "critic_notes": "Vetted recommendation. Cliffside at Cat Co 3 beach overlooking Lan Ha Bay. Indochine design, private beach, zero noise.",
-          "price_per_night": "Est. $125 USD / 3,180,000 VND",
-          "booking_url": "https://all.accor.com/hotel/B557/index.en.shtml",
-          "map_query": "Hotel+Perle+d+Orient+Cat+Ba"
+          "room_spec": "Premium Twin Bungalow (Two Separate Beds)",
+          "critic_score": 9.5,
+          "critic_notes": "Vetted recommendation. Nestled among rice paddies and karst pinnacles. Complimentary bicycles, zero road noise, exceptional organic dining.",
+          "price_per_night": "Est. $140 USD / 3,550,000 VND",
+          "booking_url": "https://tamcocgarden.com/",
+          "map_query": "Tam+Coc+Garden+Resort+Ninh+Binh"
+        },
+        {
+          "hotel_name": "Ninh Binh Hidden Charm Hotel & Resort",
+          "status": "UNBOOKED_VETTED_ALTERNATIVE",
+          "room_spec": "Superior Twin Room (Two Single Beds)",
+          "critic_score": 9.2,
+          "critic_notes": "Boutique luxury resort 5 minutes from Tam Coc boat pier, large swimming pool, peaceful garden setting.",
+          "price_per_night": "Est. $75 USD / 1,900,000 VND",
+          "booking_url": "https://hiddencharmresort.com/",
+          "map_query": "Ninh+Binh+Hidden+Charm+Hotel"
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "08:00 AM: Cat Ba Express bus from Sa Pa -> Tan Vu sea bridge -> Speedboat to Cat Ba Island (arr 16:00 PM).",
-        "departure_time": "08:00 AM from Sa Pa",
-        "arrival_time": "16:00 PM at Cat Ba hotel",
-        "buffer_time": "Combined bus + ferry ticket handles transit seamlessly",
-        "tips": "Book Cat Ba Express or Good Morning Cat Ba direct coach."
+        "primary_transit": "07:30 AM: Direct VIP Express Coach from Sa Pa to Ninh Binh via direct highway (6 hrs, arr 13:30 PM in Tam Coc). Avoids grueling 10-hour Sa Pa to Cat Ba road slog! Check in to Tam Coc Garden Resort.",
+        "departure_time": "07:30 AM Sa Pa town",
+        "arrival_time": "13:30 PM Tam Coc hotel",
+        "buffer_time": "Direct express coach bypasses downtown Hanoi traffic, dropping directly in Tam Coc",
+        "tips": "Book Sa Pa to Ninh Binh limousine sleeper or express bus via 12Go Asia (The Long Travel or Truly Ha Giang bus)."
       },
       "curated_daily_flow": {
-        "morning": "Board express coach descending from mountains to coastal highway.",
-        "afternoon": "Cross sea bridge to Hai Phong, speedboat hop to Cat Ba Island. Check in to resort.",
-        "evening": "Hike up Cannon Fort peak for panoramic sunset over Lan Ha Bay. Seafood dinner in town."
+        "morning": "Early checkout from Sa Pa. Board comfortable reclining VIP coach cruising smoothly down the mountain expressway to Ninh Binh.",
+        "afternoon": "Arrive in scenic Tam Coc at 13:30. Check-in to Tam Coc Garden Resort. Grab complimentary bicycles and pedal through quiet rural lanes to Bich Dong Pagoda.",
+        "evening": "Sunset cocktails overlooking emerald rice paddies. Dinner at Tam Coc Garden featuring crisp burned rice, local goat meat, and fresh spring rolls."
       },
       "essential_checklist": [
-        "Book Sa Pa to Cat Ba direct express bus (Cat Ba Express)",
-        "Waterproof phone sleeve for sea excursions"
+        "Book Sa Pa to Ninh Binh direct express bus (The Long Travel / Truly)",
+        "Reserve 2 nights in Tam Coc with Twin Bed configuration"
       ],
       "attached_documents": [],
       "google_maps_links": [
         {
-          "label": "Hôtel Perle d'Orient Cat Ba",
-          "url": "https://maps.google.com/?q=Hotel+Perle+d+Orient+Cat+Ba"
+          "label": "Tam Coc Garden Resort",
+          "url": "https://maps.google.com/?q=Tam+Coc+Garden+Resort+Ninh+Binh"
+        },
+        {
+          "label": "Bich Dong Pagoda",
+          "url": "https://maps.google.com/?q=Bich+Dong+Pagoda+Ninh+Binh"
         }
       ]
     },
@@ -528,53 +819,67 @@ window.TRAVEL_OS_DATA = {
       "day_number": 8,
       "date": "2026-09-18",
       "day_of_week": "Friday",
-      "destination": "Lan Ha Bay & Ba Trai Dao Archways",
+      "destination": "Ninh Binh: Trang An UNESCO Karst Boat & Mua Cave Peak",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
       "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
       "status_badge": "UNBOOKED",
-      "booking_summary": "Lan Ha Bay boat cruise / kayak unbooked",
+      "booking_summary": "Trang An boat tour & Mua Cave entry on-site",
       "weather_radar": {
-        "temp_range": "27°C - 33°C",
-        "condition": "Brilliant sunshine over emerald bay, calm sea swell",
-        "precipitation_pct": "10%",
+        "temp_range": "24°C - 31°C",
+        "condition": "Bright morning sun, calm glassy waters, pleasant afternoon breeze",
+        "precipitation_pct": "15%",
         "humidity": "72%",
-        "attire_advice": "Swimwear, rashguard/sun shirt, polarized sunglasses, reef-safe sunscreen"
+        "attire_advice": "Breathable athletic wear, sun hat, grippy sneakers for 486 stone steps at Mua Cave, sunglasses"
       },
-      "luggage_action": "Bags at hotel. Bring only waterproof dry-bag onto boat.",
+      "luggage_action": "Packs remain safely in Tam Coc bungalow; small dry-bag for boat trip.",
       "accommodation_matrix": [
         {
-          "hotel_name": "Hôtel Perle d'Orient Cat Ba - MGallery",
+          "hotel_name": "Tam Coc Garden Resort",
           "status": "UNBOOKED_VETTED_OPTION",
-          "room_spec": "Classic Twin Bay View (Two Single Beds)",
-          "critic_score": 9.3,
-          "critic_notes": "Night 2 on Cat Ba.",
-          "price_per_night": "Est. $125 USD / 3,180,000 VND",
-          "booking_url": "https://all.accor.com/hotel/B557/index.en.shtml",
-          "map_query": "Hotel+Perle+d+Orient+Cat+Ba"
+          "room_spec": "Premium Twin Bungalow (Two Separate Beds)",
+          "critic_score": 9.5,
+          "critic_notes": "Second night at this serene sanctuary. Superb breakfast and peaceful cycling paths.",
+          "price_per_night": "Est. $140 USD / 3,550,000 VND",
+          "booking_url": "https://tamcocgarden.com/",
+          "map_query": "Tam+Coc+Garden+Resort+Ninh+Binh"
+        },
+        {
+          "hotel_name": "Emeralda Resort Ninh Binh",
+          "status": "UNBOOKED_VETTED_ALTERNATIVE",
+          "room_spec": "Superior Twin Room (Two Single Beds)",
+          "critic_score": 9.1,
+          "critic_notes": "Traditional Tonkin village style near Van Long wetland, huge spa and lush gardens.",
+          "price_per_night": "Est. $90 USD / 2,300,000 VND",
+          "booking_url": "https://emeraldaresort.com/",
+          "map_query": "Emeralda+Resort+Ninh+Binh"
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "08:15 AM: Transfer to Cai Beo pier. Board traditional wooden junk boat into Lan Ha Bay (avoids Halong crowds).",
-        "departure_time": "08:15 AM",
-        "arrival_time": "16:30 PM",
-        "buffer_time": "Full-day boat charter including freshly cooked seafood lunch",
-        "tips": "Lan Ha Bay shares the exact karst geology of Halong Bay but without the mega-cruise traffic."
+        "primary_transit": "07:15 AM short 15-min taxi from hotel to Trang An UNESCO Boat Pier. 13:00 PM: 10-min taxi to Hang Mua. Return to resort by 17:00 PM.",
+        "departure_time": "07:15 AM hotel",
+        "arrival_time": "17:00 PM hotel",
+        "buffer_time": "Arrive at Trang An by 07:30 AM to beat all tour buses from Hanoi",
+        "tips": "Select Trang An Boat Route 3 (passes through 1,000m Dot Cave and Dia Linh Cave with scenic temple stops)."
       },
       "curated_daily_flow": {
-        "morning": "Board junk boat at Cai Beo harbor. Navigate floating fishing villages. Kayak through Dark & Bright cave tunnels into hidden lagoons.",
-        "afternoon": "Swim at secluded Ba Trai Dao beaches. Seafood lunch onboard (grilled prawns, calamari, sea bass).",
-        "evening": "Sail back through sunset karsts. Casual dinner at Secret Garden Cat Ba."
+        "morning": "07:30 AM: Glide through subterranean karst water caves on a traditional wooden sampan rowed by local boatwomen. Pure tranquility before crowds.",
+        "afternoon": "Climb the iconic 486 dragon-spine stone steps to the peak of Hang Mua for panoramic 360-degree views of the Ngo Dong river valley and karst towers.",
+        "evening": "Cycling through lotus ponds as twilight sets. Dinner in Tam Coc village, tasting crispy spring rolls and cold Bia Hanoi."
       },
       "essential_checklist": [
-        "Book private or small-group Lan Ha Bay day cruise",
-        "Reef-safe sunscreen SPF 50+"
+        "Start Trang An boat at 07:30 sharp to experience empty water caves",
+        "Water bottle and sunscreen for Hang Mua dragon peak climb"
       ],
       "attached_documents": [],
       "google_maps_links": [
         {
-          "label": "Cai Beo Fishing Village",
-          "url": "https://maps.google.com/?q=Cai+Beo+Fishing+Village"
+          "label": "Trang An Boat Pier",
+          "url": "https://maps.google.com/?q=Trang+An+Boat+Tour+Ninh+Binh"
+        },
+        {
+          "label": "Hang Mua Cave Viewpoint",
+          "url": "https://maps.google.com/?q=Hang+Mua+Ninh+Binh"
         }
       ]
     },
@@ -582,53 +887,67 @@ window.TRAVEL_OS_DATA = {
       "day_number": 9,
       "date": "2026-09-19",
       "day_of_week": "Saturday",
-      "destination": "Cat Ba Island: Ngu Lam Peak & Hospital Cave",
+      "destination": "Ninh Binh -> Cat Ba Island (Lan Ha Bay)",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
       "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
       "status_badge": "UNBOOKED",
-      "booking_summary": "Cat Ba night 3 unbooked",
+      "booking_summary": "Ninh Binh to Cat Ba express coach/ferry & island resort unbooked",
       "weather_radar": {
-        "temp_range": "25°C - 31°C",
-        "condition": "Warm tropical sun with afternoon coastal breeze",
-        "precipitation_pct": "25%",
-        "humidity": "76%",
-        "attire_advice": "Breathable hiking shorts, trail shoes, t-shirt, insect repellent"
+        "temp_range": "26°C - 32°C",
+        "condition": "Sunny coastal breeze, calm turquoise waters in Lan Ha Bay",
+        "precipitation_pct": "20%",
+        "humidity": "78%",
+        "attire_advice": "Linen shirts, board shorts, flip-flops, sunglasses, waterproof dry-bag"
       },
-      "luggage_action": "Bags at hotel.",
+      "luggage_action": "55L clamshell backpack loaded onto express coach; transferred onto speedboat directly to Cat Ba hotel.",
       "accommodation_matrix": [
         {
           "hotel_name": "Hôtel Perle d'Orient Cat Ba - MGallery",
           "status": "UNBOOKED_VETTED_OPTION",
           "room_spec": "Classic Twin Bay View (Two Single Beds)",
           "critic_score": 9.3,
-          "critic_notes": "Night 3 on Cat Ba.",
+          "critic_notes": "Vetted recommendation. Cliffside at Cat Co 3 beach overlooking Lan Ha Bay. Indochine design, private beach, zero noise, infinity pool.",
           "price_per_night": "Est. $125 USD / 3,180,000 VND",
           "booking_url": "https://all.accor.com/hotel/B557/index.en.shtml",
           "map_query": "Hotel+Perle+d+Orient+Cat+Ba"
+        },
+        {
+          "hotel_name": "Cat Ba Eco Lodge",
+          "status": "UNBOOKED_VETTED_ALTERNATIVE",
+          "room_spec": "Superior Twin Mountain View (Two Beds)",
+          "critic_score": 9.0,
+          "critic_notes": "Nestled in jungle valley at edge of National Park, tranquil swimming pool, complete seclusion from town.",
+          "price_per_night": "Est. $55 USD / 1,400,000 VND",
+          "booking_url": "https://catba-ecolodge.com/",
+          "map_query": "Cat+Ba+Eco+Lodge"
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "Scooter rental or taxi into island interior (14 km to National Park HQ).",
-        "departure_time": "08:30 AM",
-        "arrival_time": "16:00 PM",
-        "buffer_time": "Self-paced mountain hiking and historic cave walkthrough",
-        "tips": "Ngu Lam peak summit hike takes ~1.5 hours return."
+        "primary_transit": "09:00 AM: Daichi / Good Morning Cat Ba direct coach from Tam Coc hotel -> Highway -> Ferry channel / speedboat -> Cat Ba Island hotel doorstep (Only 2.5 to 3 hrs total, arr 12:00 PM). Fast, seamless, zero stress!",
+        "departure_time": "09:00 AM Tam Coc",
+        "arrival_time": "12:00 PM Cat Ba hotel",
+        "buffer_time": "Combined coach + ferry ticket transfers luggage automatically across the water",
+        "tips": "Book Cat Ba Express or Daichi bus via hotel reception or 12Go Asia."
       },
       "curated_daily_flow": {
-        "morning": "Hike jungle trail to Ngu Lam Peak for 360-degree panorama of limestone mountain peaks rolling into the sea.",
-        "afternoon": "Explore Hospital Cave (Quan Y)—bomb-proof 3-story underground hospital cavern from wartime.",
-        "evening": "Relax on Cat Co 1 beach. Dinner at Yummy Restaurant (fresh crab & cold Bia Saigon)."
+        "morning": "Enjoy breakfast by the rice paddies. Board express coach for a quick 2.5-hour hop across the sea bridge and ferry to Cat Ba Island.",
+        "afternoon": "Check into Hôtel Perle d'Orient at Cat Co 3 beach. Swim in the azure waters or lounge at the cliffside pool.",
+        "evening": "Trek up to Cannon Fort peak for breathtaking sunset views over the thousands of karst towers of Lan Ha Bay. Fresh grilled seafood dinner in town."
       },
       "essential_checklist": [
-        "Insect repellent for jungle hike",
-        "Pack bags for morning transfer to Ninh Binh tomorrow"
+        "Book Ninh Binh to Cat Ba direct express bus (Daichi / Cat Ba Express)",
+        "Reserve 3 nights in Cat Ba with Twin Bed room spec"
       ],
       "attached_documents": [],
       "google_maps_links": [
         {
-          "label": "Cat Ba National Park",
-          "url": "https://maps.google.com/?q=Cat+Ba+National+Park"
+          "label": "Hôtel Perle d'Orient Cat Ba",
+          "url": "https://maps.google.com/?q=Hotel+Perle+d+Orient+Cat+Ba"
+        },
+        {
+          "label": "Cannon Fort Cat Ba",
+          "url": "https://maps.google.com/?q=Cannon+Fort+Cat+Ba"
         }
       ]
     },
@@ -636,53 +955,67 @@ window.TRAVEL_OS_DATA = {
       "day_number": 10,
       "date": "2026-09-20",
       "day_of_week": "Sunday",
-      "destination": "Cat Ba -> Ninh Binh (Tam Coc)",
+      "destination": "Lan Ha Bay: Ba Trai Dao Archways & Hidden Lagoons",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
       "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
       "status_badge": "UNBOOKED",
-      "booking_summary": "Cat Ba to Ninh Binh bus & retreat unbooked",
+      "booking_summary": "Lan Ha Bay traditional junk boat & kayak tour unbooked",
       "weather_radar": {
-        "temp_range": "24°C - 31°C",
-        "condition": "Warm and pleasant among river valleys, calm waters",
-        "precipitation_pct": "20%",
-        "humidity": "74%",
-        "attire_advice": "Light cycling clothes, sunglasses, sun hat, comfortable walking shoes"
+        "temp_range": "27°C - 33°C",
+        "condition": "Brilliant sunshine over emerald bay, calm sea swell, zero storm risk",
+        "precipitation_pct": "10%",
+        "humidity": "76%",
+        "attire_advice": "Swimwear, quick-dry rashguard, water shoes, polarized sunglasses, 10L dry-bag"
       },
-      "luggage_action": "55L backpack stored in coach cargo hold; direct drop-off at retreat doorstep.",
+      "luggage_action": "55L packs stay in resort; only take 10L dry-bag on the boat.",
       "accommodation_matrix": [
         {
-          "hotel_name": "Tam Coc Garden Resort",
+          "hotel_name": "Hôtel Perle d'Orient Cat Ba - MGallery",
           "status": "UNBOOKED_VETTED_OPTION",
-          "room_spec": "Premium Twin Bungalow (Two Separate Beds)",
-          "critic_score": 9.5,
-          "critic_notes": "Vetted recommendation. Nestled amid rice fields and karst pinnacles. Complimentary bicycles, zero traffic noise, exceptional dining.",
-          "price_per_night": "Est. $140 USD / 3,550,000 VND",
-          "booking_url": "https://tamcocgarden.com/",
-          "map_query": "Tam+Coc+Garden+Resort+Ninh+Binh"
+          "room_spec": "Classic Twin Bay View (Two Single Beds)",
+          "critic_score": 9.3,
+          "critic_notes": "Second night at Cat Co 3 private cove. Indochine elegance, ocean sound from balcony.",
+          "price_per_night": "Est. $125 USD / 3,180,000 VND",
+          "booking_url": "https://all.accor.com/hotel/B557/index.en.shtml",
+          "map_query": "Hotel+Perle+d+Orient+Cat+Ba"
+        },
+        {
+          "hotel_name": "Flamingo Cat Ba Beach Resort",
+          "status": "UNBOOKED_VETTED_ALTERNATIVE",
+          "room_spec": "Deluxe Ocean View Twin (Two Beds)",
+          "critic_score": 8.9,
+          "critic_notes": "Modern beachfront mega-resort on Cat Co 1, skywalks and rooftop hot tubs.",
+          "price_per_night": "Est. $110 USD / 2,800,000 VND",
+          "booking_url": "https://flamingoresorts.vn/catba/",
+          "map_query": "Flamingo+Cat+Ba+Resort"
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "09:00 AM: Daichi / Good Morning Cat Ba bus from Cat Ba hotel -> Island ferry -> Highway -> Ninh Binh Tam Coc (3.5 hrs, arr 13:30 PM).",
-        "departure_time": "09:00 AM Cat Ba",
-        "arrival_time": "13:30 PM Tam Coc",
-        "buffer_time": "Direct coach transfers passengers and luggage onto ferry without shifting bags",
-        "tips": "Book bus ticket 2 days in advance via 12Go Asia or Cat Ba hotel desk."
+        "primary_transit": "08:00 AM hotel pickup to Ben Beo Pier (10 mins). Board traditional wooden sailing boat through Lan Ha Bay. Kayak into Dark & Bright Caves and swim at Ba Trai Dao. Return to pier by 16:30 PM.",
+        "departure_time": "08:00 AM hotel",
+        "arrival_time": "16:30 PM Ben Beo Pier",
+        "buffer_time": "Private/small-group cruise avoids commercial Halong Bay routes",
+        "tips": "Lan Ha Bay is far cleaner, quieter, and more dramatic than overcrowded Ha Long Bay."
       },
       "curated_daily_flow": {
-        "morning": "Board tourist express coach from Cat Ba town across ferry channel to Ninh Binh's inland karst empire.",
-        "afternoon": "Check in Tam Coc Garden Resort. Pedal bicycles along quiet dirt tracks to Bich Dong Pagoda.",
-        "evening": "Sunset cocktails overlooking rice paddies. Dinner at Tam Coc Garden (Ninh Binh crispy burned rice and roasted goat)."
+        "morning": "Board boat at Ben Beo pier. Cruise through Cai Beo floating fishing village—one of the oldest in Asia.",
+        "afternoon": "Kayak through limestone archways into secluded lagoon chambers. Anchor at Ba Trai Dao (Three Peaches) for swimming off pristine deserted beaches. Fresh seafood lunch on deck.",
+        "evening": "Return to Cat Ba. Sunset drinks at Perle d'Orient rooftop bar, followed by dinner at a local harbor restaurant."
       },
       "essential_checklist": [
-        "Book Cat Ba -> Ninh Binh express bus",
-        "Bicycle lock provided by resort"
+        "Book small-group Lan Ha Bay day cruise (Cat Ba Ventures or Blue Swimmer)",
+        "Waterproof dry-bag and camera float strap for kayaking"
       ],
       "attached_documents": [],
       "google_maps_links": [
         {
-          "label": "Tam Coc Garden Resort",
-          "url": "https://maps.google.com/?q=Tam+Coc+Garden+Resort"
+          "label": "Ben Beo Boat Pier",
+          "url": "https://maps.google.com/?q=Ben+Beo+Pier+Cat+Ba"
+        },
+        {
+          "label": "Ba Trai Dao Islets",
+          "url": "https://maps.google.com/?q=Ba+Trai+Dao+Beach+Lan+Ha+Bay"
         }
       ]
     },
@@ -690,57 +1023,67 @@ window.TRAVEL_OS_DATA = {
       "day_number": 11,
       "date": "2026-09-21",
       "day_of_week": "Monday",
-      "destination": "Ninh Binh: Mua Cave & Trang An UNESCO",
+      "destination": "Cat Ba Island: Jungle Trek, Hospital Cave & Sunset Cove",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
       "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
       "status_badge": "UNBOOKED",
-      "booking_summary": "Ninh Binh night 2 unbooked",
+      "booking_summary": "Cat Ba third night & park entry on-site",
       "weather_radar": {
-        "temp_range": "23°C - 30°C",
-        "condition": "Crisp clear morning for sunrise climb, warm afternoon",
-        "precipitation_pct": "15%",
-        "humidity": "70%",
-        "attire_advice": "Sturdy trainers for 500 stone steps at Mua Cave, light breathable clothes"
+        "temp_range": "26°C - 32°C",
+        "condition": "Warm tropical sun with coastal afternoon breeze",
+        "precipitation_pct": "20%",
+        "humidity": "75%",
+        "attire_advice": "Trekking shorts, trail runners for park hike, swimwear for afternoon cove swim"
       },
-      "luggage_action": "Bags at resort.",
+      "luggage_action": "Packs remain in resort bungalow.",
       "accommodation_matrix": [
         {
-          "hotel_name": "Tam Coc Garden Resort",
+          "hotel_name": "Hôtel Perle d'Orient Cat Ba - MGallery",
           "status": "UNBOOKED_VETTED_OPTION",
-          "room_spec": "Premium Twin Bungalow (Two Separate Beds)",
-          "critic_score": 9.5,
-          "critic_notes": "Night 2 at Tam Coc Garden Resort.",
-          "price_per_night": "Est. $140 USD / 3,550,000 VND",
-          "booking_url": "https://tamcocgarden.com/",
-          "map_query": "Tam+Coc+Garden+Resort+Ninh+Binh"
+          "room_spec": "Classic Twin Bay View (Two Single Beds)",
+          "critic_score": 9.3,
+          "critic_notes": "Final night on Cat Ba. Quiet, refined, pristine views.",
+          "price_per_night": "Est. $125 USD / 3,180,000 VND",
+          "booking_url": "https://all.accor.com/hotel/B557/index.en.shtml",
+          "map_query": "Hotel+Perle+d+Orient+Cat+Ba"
+        },
+        {
+          "hotel_name": "Secret Garden Cat Ba",
+          "status": "UNBOOKED_VETTED_ALTERNATIVE",
+          "room_spec": "Deluxe Twin Mountain View (Two Beds)",
+          "critic_score": 8.8,
+          "critic_notes": "Charming garden property, quiet atmosphere, friendly local hosts.",
+          "price_per_night": "Est. $45 USD / 1,150,000 VND",
+          "booking_url": "https://secretgardencatba.com/",
+          "map_query": "Secret+Garden+Cat+Ba"
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "06:00 AM: 15-min taxi to Hang Mua. 09:30 AM: 20-min taxi to Trang An UNESCO Boat Wharf (Route 3 boat tour, 3 hrs).",
-        "departure_time": "06:00 AM (beats crowds and heat)",
-        "arrival_time": "15:00 PM return",
-        "buffer_time": "Early start ensures climbing Mua Cave before tour groups arrive from Hanoi",
-        "tips": "At Trang An, pick Route 3 for the 1,000m Dot Cave and King Kong film set."
+        "primary_transit": "Rent two automatic scooters or hire an open-air electric buggy to Cat Ba National Park (15km, 25 mins). Trek to Ngu Lam Peak. 5-min ride to historic Hospital Cave. Return to town.",
+        "departure_time": "08:30 AM resort",
+        "arrival_time": "15:00 PM return to beach",
+        "buffer_time": "Island roads are quiet, paved, and scenic with zero heavy traffic",
+        "tips": "Hospital Cave was a bomb-proof military hospital built inside a karst cavern during the American War."
       },
       "curated_daily_flow": {
-        "morning": "Dawn ascent of Hang Mua (500 stone steps) to Lying Dragon peak for golden morning light over Tam Coc valley.",
-        "afternoon": "Sampan boat ride at Trang An UNESCO complex gliding through illuminated underground water caves.",
-        "evening": "Resort pool swim overlooking lotus lagoon. Chookie's Beer Garden dinner."
+        "morning": "Hike the rainforest trail to Ngu Lam Peak for an amphitheater view over the emerald canopy and jagged karst spikes.",
+        "afternoon": "Explore the 17-room secret subterranean complex of Hospital Cave. Ride back to Cat Co 3 beach for relaxation and cold coconuts.",
+        "evening": "Dinner at Casa Bonita restaurant (fresh fish steamed with lemongrass, morning glory with garlic, passionfruit mocktails)."
       },
       "essential_checklist": [
-        "Arrive at Hang Mua at 06:15 AM",
-        "Trang An ticket: 250,000 VND / person (buy at wharf counter)"
+        "Confirm tomorrow morning express bus ticket back to Hanoi Old Quarter",
+        "Repack 55L backpacks for return to Hanoi"
       ],
       "attached_documents": [],
       "google_maps_links": [
         {
-          "label": "Hang Mua (Mua Cave)",
-          "url": "https://maps.google.com/?q=Hang+Mua+Ninh+Binh"
+          "label": "Cat Ba National Park",
+          "url": "https://maps.google.com/?q=Cat+Ba+National+Park"
         },
         {
-          "label": "Trang An Boat Wharf",
-          "url": "https://maps.google.com/?q=Trang+An+Departure+Boat+Ticket"
+          "label": "Hospital Cave Cat Ba",
+          "url": "https://maps.google.com/?q=Hospital+Cave+Cat+Ba"
         }
       ]
     },
@@ -748,53 +1091,67 @@ window.TRAVEL_OS_DATA = {
       "day_number": 12,
       "date": "2026-09-22",
       "day_of_week": "Tuesday",
-      "destination": "Ninh Binh -> Hanoi (Old Quarter Finale Base)",
+      "destination": "Cat Ba Island -> Hanoi Old Quarter Base",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
       "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
       "status_badge": "UNBOOKED",
-      "booking_summary": "Ninh Binh -> Hanoi limo & Hanoi hotel unbooked",
+      "booking_summary": "Cat Ba to Hanoi express coach & Old Quarter boutique hotel unbooked",
       "weather_radar": {
         "temp_range": "25°C - 32°C",
-        "condition": "Warm urban sun, breezy evening",
-        "precipitation_pct": "20%",
-        "humidity": "72%",
-        "attire_advice": "Casual urban street clothes, comfortable walking shoes"
+        "condition": "Balmy late-monsoon warmth in the capital, clear evening skies",
+        "precipitation_pct": "25%",
+        "humidity": "78%",
+        "attire_advice": "Casual street clothes, comfortable walking sneakers for night market and street food exploration"
       },
-      "luggage_action": "55L backpack loaded into limousine van trunk.",
+      "luggage_action": "55L backpacks travel in coach luggage hold; drop-off at Hanoi hotel.",
       "accommodation_matrix": [
         {
           "hotel_name": "La Siesta Classic Ma May (Hanoi Old Quarter)",
           "status": "UNBOOKED_VETTED_OPTION",
-          "room_spec": "Deluxe Twin Room (Two Separate Single Beds)",
+          "room_spec": "Deluxe Twin Room (Two Separate Beds)",
           "critic_score": 9.4,
-          "critic_notes": "Vetted recommendation. Returning to Old Quarter base for pre-flight finale. Central location, quiet street.",
+          "critic_notes": "Vetted recommendation. The gold standard for boutique hospitality in Hanoi Old Quarter. Acoustic soundproofing, prime culinary location.",
           "price_per_night": "Est. $85 USD / 2,150,000 VND",
           "booking_url": "https://lasiestahotels.vn/mamay/",
           "map_query": "La+Siesta+Classic+Ma+May+Hanoi"
+        },
+        {
+          "hotel_name": "Peridot Grand Luxury Hotel",
+          "status": "UNBOOKED_VETTED_ALTERNATIVE",
+          "room_spec": "Grand Deluxe Twin (Two Single Beds)",
+          "critic_score": 9.3,
+          "critic_notes": "High-end comfort, rooftop cocktail lounge, quiet Old Quarter side street.",
+          "price_per_night": "Est. $110 USD / 2,800,000 VND",
+          "booking_url": "https://peridotgrandhotel.com/",
+          "map_query": "Peridot+Grand+Hotel+Hanoi"
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "11:00 AM: VIP 9-seater Limousine Van pickup from Tam Coc. Expressway to Hanoi Old Quarter (90 mins, arr 12:45 PM).",
-        "departure_time": "11:00 AM Tam Coc",
-        "arrival_time": "12:45 PM Hanoi",
-        "buffer_time": "Expressway route avoids highway traffic",
-        "tips": "Book Trang An Limousine via 12Go or resort front desk."
+        "primary_transit": "09:00 AM: Cat Ba Express coach from resort doorstep -> Speedboat to Hai Phong -> Express Highway to Hanoi Old Quarter (Only 2.5 hrs flat, arr 11:30 AM). Fast, modern, air-conditioned.",
+        "departure_time": "09:00 AM Cat Ba resort",
+        "arrival_time": "11:30 AM Hanoi Old Quarter hotel",
+        "buffer_time": "Highway 5B connection is rapid and avoids city bottlenecks until Hanoi ring road",
+        "tips": "Cat Ba Express drops right on Ma May street directly in front of La Siesta!"
       },
       "curated_daily_flow": {
-        "morning": "Breakfast at resort. Board luxury limousine van to Hanoi.",
-        "afternoon": "Check in Hanoi Old Quarter hotel. Hanoi Train Street coconut coffee as locomotive rumbles past.",
-        "evening": "Pho Gia Truyen Bat Dan beef pho, Banh Mi 25, and fresh draught Bia Hoi on Ta Hien corner."
+        "morning": "Scenic ferry crossing away from Cat Ba. Fast highway cruise back to Hanoi. Arrive at hotel before noon.",
+        "afternoon": "Lunch at Bun Cha Dac Kim on Hang Manh. Stroll through the French Quarter, Opera House, and St. Joseph Cathedral.",
+        "evening": "Night food market crawl: sizzling Banh Xeo, fresh rice rolls at Banh Cuon Gia An, and craft IPAs on the rooftop of Standing Bar overlooking Truc Bach lake."
       },
       "essential_checklist": [
-        "Book Ninh Binh -> Hanoi limousine van (Trang An Limousine)",
-        "Prepare laundry at hotel for quick overnight turnaround before Thailand"
+        "Book Cat Ba to Hanoi express coach ticket (Cat Ba Express)",
+        "Reserve 2 nights at La Siesta Classic Ma May with Twin Beds"
       ],
       "attached_documents": [],
       "google_maps_links": [
         {
-          "label": "Hanoi Train Street",
-          "url": "https://maps.google.com/?q=Hanoi+Train+Street"
+          "label": "La Siesta Classic Ma May",
+          "url": "https://maps.google.com/?q=La+Siesta+Classic+Ma+May+Hanoi"
+        },
+        {
+          "label": "Bun Cha Dac Kim",
+          "url": "https://maps.google.com/?q=Bun+Cha+Dac+Kim+Hang+Manh"
         }
       ]
     },
@@ -802,53 +1159,64 @@ window.TRAVEL_OS_DATA = {
       "day_number": 13,
       "date": "2026-09-23",
       "day_of_week": "Wednesday",
-      "destination": "Hanoi: French Quarter & Farewell Dinner",
+      "destination": "Hanoi: Culinary Tour, Craft Beer & Expedition Finale",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
       "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
       "status_badge": "UNBOOKED",
-      "booking_summary": "Hanoi night 2 unbooked",
+      "booking_summary": "Final night in Hanoi Old Quarter before transition day",
       "weather_radar": {
-        "temp_range": "26°C - 33°C",
-        "condition": "Warm tropical sun, ideal cafe terrace weather",
-        "precipitation_pct": "15%",
-        "humidity": "70%",
-        "attire_advice": "Smart casual, comfortable shoes, daypack for shopping/souvenirs"
+        "temp_range": "25°C - 32°C",
+        "condition": "Pleasant autumn breeze, warm sun over the tree-lined boulevards",
+        "precipitation_pct": "20%",
+        "humidity": "75%",
+        "attire_advice": "Casual street clothes, walking trainers, sun hat"
       },
-      "luggage_action": "Evening full pack & consolidate of 55L clamshell backpack for tomorrow's international flight.",
+      "luggage_action": "Repack 55L backpacks tonight for tomorrow's international flight HAN -> BKK. Verify all souvenirs and dirty laundry packed.",
       "accommodation_matrix": [
         {
           "hotel_name": "La Siesta Classic Ma May (Hanoi Old Quarter)",
           "status": "UNBOOKED_VETTED_OPTION",
-          "room_spec": "Deluxe Twin Room (Two Separate Single Beds)",
+          "room_spec": "Deluxe Twin Room (Two Separate Beds)",
           "critic_score": 9.4,
-          "critic_notes": "Finale night in Vietnam.",
+          "critic_notes": "Second night at La Siesta. Enjoy late checkout arrangements before flight tomorrow.",
           "price_per_night": "Est. $85 USD / 2,150,000 VND",
           "booking_url": "https://lasiestahotels.vn/mamay/",
           "map_query": "La+Siesta+Classic+Ma+May+Hanoi"
+        },
+        {
+          "hotel_name": "The Chi Boutique Hotel Hanoi",
+          "status": "UNBOOKED_VETTED_ALTERNATIVE",
+          "room_spec": "Deluxe Twin Room (Two Beds)",
+          "critic_score": 9.0,
+          "critic_notes": "Steps from St. Joseph Cathedral, artistic boutique design, vibrant street life.",
+          "price_per_night": "Est. $75 USD / 1,900,000 VND",
+          "booking_url": "https://thechihotel.com/",
+          "map_query": "The+Chi+Boutique+Hotel+Hanoi"
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "Walking and short Grab taxi hops within central Hanoi.",
-        "departure_time": "Self-paced",
-        "arrival_time": "Self-paced",
+        "primary_transit": "Walkable Old Quarter exploration. Grab or traditional cyclo for cross-city hops to Temple of Literature and West Lake.",
+        "departure_time": "Flexible leisurely schedule",
+        "arrival_time": "Evening packing session",
         "buffer_time": "Pre-flight prep day with zero tight deadlines",
-        "tips": "Use Grab app linked to credit card for 30k-50k VND rides."
+        "tips": "Try authentic egg coffee at Cafe Giang (39 Nguyen Huu Huan)—the birthplace of Vietnamese egg coffee since 1946."
       },
       "curated_daily_flow": {
-        "morning": "French Quarter boulevards, Temple of Literature, The Note Coffee overlooking Hoan Kiem.",
-        "afternoon": "West Lake Tran Quoc Pagoda, souvenir shopping for artisan ceramics and Vietnamese coffee beans.",
-        "evening": "Phase 1 Guys Trip Farewell Feast: Cha Ca Thang Long (turmeric-marinated grilled catfish sizzled with dill). Toast the northern loop at Moonlight Sky Bar."
+        "morning": "Sip velvety egg coffee at Cafe Giang. Walk the leafy perimeter of Hoan Kiem Lake.",
+        "afternoon": "Visit the serene 11th-century Temple of Literature and Vietnam National Museum of Fine Arts. Sip jasmine tea in ancient courtyard.",
+        "evening": "Celebratory Guys Trip finale dinner: sizzled turmeric catfish with dill at Cha Ca Thang Long, followed by craft beer flight at Pasteur Street Brewing Co."
       },
       "essential_checklist": [
-        "Pack and zip 55L pack; weigh under 15kg for cabin/carry-on",
-        "Confirm Vietnam departure flight 1145-554-179 status for tomorrow"
+        "Book private airport transfer to Noi Bai Airport for 09:45 AM tomorrow",
+        "Check-in online 24h prior for flight HAN -> BKK (Order: 1145-554-179)",
+        "Confirm AIRPORTELs storage receipt is accessible on phone for BKK Floor B retrieval"
       ],
       "attached_documents": [],
       "google_maps_links": [
         {
-          "label": "Temple of Literature",
-          "url": "https://maps.google.com/?q=Temple+of+Literature+Hanoi"
+          "label": "Cafe Giang Egg Coffee",
+          "url": "https://maps.google.com/?q=Cafe+Giang+Nguyen+Huu+Huan"
         },
         {
           "label": "Cha Ca Thang Long",
@@ -865,15 +1233,23 @@ window.TRAVEL_OS_DATA = {
       "phase_short": "Transition -> Phase 2",
       "status": "[TRANSITION FLIGHT BOOKED / SOUTH UNBOOKED]",
       "status_badge": "PARTIAL",
-      "booking_summary": "Flight HAN->BKK Confirmed (Booking: 1145-554-179) • BKK->USM Flight & Samui Hotel Unbooked",
+      "booking_summary": "Flight HAN->BKK Confirmed (Order: 1145-554-179, arr 14:45) • BKK Floor B Suitcase Retrieval • Recommended PG 177/181 (19:30-20:00)",
       "weather_radar": {
         "temp_range": "26°C - 32°C",
-        "condition": "Warm tropical sun over Gulf of Thailand, balmy coastal evening",
+        "condition": "Balmy tropical sun over Gulf of Thailand, balmy coastal evening",
         "precipitation_pct": "20%",
         "humidity": "75%",
         "attire_advice": "Transition from trekking clothes to chic island resort attire: linen shirt, tailored shorts"
       },
-      "luggage_action": "RETRIEVAL ACTION: Upon landing at BKK (14:35), proceed to Airport Rail Link level (Floor B) and retrieve checked suitcase from AIRPORTELs locker. Reunite with girlfriend with all gear ready for the South!",
+      "luggage_action": "RETRIEVAL ACTION: Upon landing at BKK (14:45), proceed to Airport Rail Link level (Floor B) and retrieve checked suitcase from AIRPORTELs locker. Reunite with girlfriend at arrivals hall with all gear ready for the South!",
+      "flight_connection_risk": {
+        "hanoi_arrival": "14:45 PM at BKK Suvarnabhumi (Mytrip Order: 1145-554-179)",
+        "suitcase_pickup": "Floor B AIRPORTELs (retrieval buffer: 15:45 - 16:15 PM)",
+        "girlfriend_meeting": "Suvarnabhumi Arrival Hall Floor 2 (16:30 PM)",
+        "pg169_warning": "Bangkok Airways PG 169 (17:15 PM) is FLAGGED HIGH RISK (only 2h30m window; check-in cutoffs close at 16:30). Any 20-min delay risks missing flight. NOT RECOMMENDED.",
+        "pg177_pg181_recommendation": "Bangkok Airways PG 177 (19:30 PM) or PG 181 (20:00 PM) is RECOMMENDED STRESS-FREE PRIMARY (4h45m buffer; ample time for luggage, reunion, and boutique lounge).",
+        "fluid_fallbacks": "Fallback 1: Overnight in Bangkok on Sep 24, morning flight Sep 25. Fallback 2: Surat Thani (URT) flight + Lomprayah catamaran."
+      },
       "accommodation_matrix": [
         {
           "hotel_name": "Hansar Samui Resort & Spa (Bophut Beach)",
@@ -897,20 +1273,20 @@ window.TRAVEL_OS_DATA = {
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "10:15 AM: Taxi to Noi Bai Airport. 12:45 PM: Flight HAN -> BKK (Booking: 1145-554-179, arr 14:35). Friend departs. 14:50 PM: Retrieve suitcase from Floor B. 15:15 PM: Reunite with girlfriend at BKK Terminal. Proposed: 17:15 PM Bangkok Airways PG 169 to Koh Samui (arr 18:20 PM). Transfer to resort.",
-        "departure_time": "10:15 AM Hanoi / 17:15 PM BKK",
-        "arrival_time": "19:00 PM Koh Samui resort",
-        "buffer_time": "2h40m connection buffer at BKK terminal for bag retrieval and terminal transit",
+        "primary_transit": "09:45 AM: Taxi to Noi Bai Airport. 12:45 PM: Flight HAN -> BKK (Booking: 1145-554-179, arr 14:45). Friend departs. 15:15 PM: Retrieve suitcase from Floor B AIRPORTELs. 16:30 PM: Reunite with girlfriend at BKK Terminal. Board recommended Bangkok Airways PG 177 (19:30 PM) or PG 181 (20:00 PM) direct to Koh Samui (USM arr 20:35 / 21:05). Transfer to resort. (Note: PG 169 at 17:15 is flagged HIGH RISK due to tight connection).",
+        "departure_time": "09:45 AM Hanoi / 19:30 PM BKK",
+        "arrival_time": "21:30 PM Koh Samui resort",
+        "buffer_time": "4h45m stress-free connection buffer at BKK terminal for bag retrieval, reunion, and check-in",
         "tips": "Bangkok Airways operates exclusive boutique lounges with complimentary snacks and espresso for all passengers at BKK Concourse A/F."
       },
       "curated_daily_flow": {
         "morning": "Checkout Hanoi hotel. Board confirmed flight 1145-554-179 to Bangkok. Bid farewell to friend as journeys branch.",
-        "afternoon": "Land at Suvarnabhumi. Head to Floor B locker desk, retrieve large suitcase. Reunite with girlfriend at arrivals hall! Check in for flight to Koh Samui.",
-        "evening": "Touchdown Koh Samui. Check-in to oceanfront King room at Hansar Samui. Welcome cocktails & candlelit dinner at Coco Tam's in Fisherman's Village with fire dancer show."
+        "afternoon": "Land at Suvarnabhumi. Head to Floor B, retrieve checked suitcase. Reunite with girlfriend at arrivals hall! Drop bags for evening Koh Samui flight and enjoy treats in Bangkok Airways Boutique Lounge.",
+        "evening": "Touchdown Koh Samui. Check-in to oceanfront King room at Hansar Samui. Late cocktails & dinner on the sand in Fisherman's Village."
       },
       "essential_checklist": [
-        "Book direct BKK -> USM flight (Bangkok Airways PG 169 in mid-July / early Aug)",
-        "Book Koh Samui arrival resort (Hansar Samui)",
+        "Book Bangkok Airways PG 177 (19:30) or PG 181 (20:00) during Web Saver window in mid-July / early Aug",
+        "Reserve 1 night arrival decompression at Hansar Samui Resort (King Ocean Room)",
         "Retrieve suitcase from AIRPORTELs Floor B upon landing"
       ],
       "attached_documents": [
