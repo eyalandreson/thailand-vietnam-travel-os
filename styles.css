@@ -124,15 +124,139 @@ body {
   box-shadow: 0 14px 28px -5px rgba(37, 99, 235, 0.6), 0 10px 10px -5px rgba(37, 99, 235, 0.5);
 }
 
-/* Highlight Target Day */
+/* Highlight Target Day with Ambient Glow Pulse */
 @keyframes target-glow {
-  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-  50% { box-shadow: 0 0 25px 8px rgba(59, 130, 246, 0.8); }
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.8); }
+  50% { box-shadow: 0 0 25px 8px rgba(59, 130, 246, 0.5); border-color: #3b82f6 !important; }
   100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
 }
 .highlight-target-day {
   animation: target-glow 2s ease-in-out 2;
   border-color: #3b82f6 !important;
+}
+
+/* Sticky Timeline Scrubber Bar */
+.timeline-scrubber {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+.timeline-scrubber::-webkit-scrollbar {
+  display: none;
+}
+.timeline-day-pill {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  color: #cbd5e1;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+.timeline-day-pill:hover {
+  background: rgba(51, 65, 85, 0.9);
+  border-color: rgba(99, 102, 241, 0.6);
+  color: #fff;
+  transform: translateY(-2px);
+}
+.timeline-day-pill.active {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.4), rgba(99, 102, 241, 0.4));
+  border-color: #60a5fa;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.45);
+}
+
+/* Curated Flow Time-of-Day Nodes */
+.flow-node-morning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+.flow-node-afternoon {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(14, 165, 233, 0.35);
+}
+.flow-node-evening {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+
+/* Mobile Bottom Navigation Bar */
+.mobile-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 45;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(51, 65, 85, 0.75);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.6);
+}
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+.mobile-nav-item:hover, .mobile-nav-item:active {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+}
+
+/* Daily Interactive Task Checkboxes */
+.daily-task-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #64748b;
+  border-radius: 4px;
+  background-color: #1e293b;
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  transition: all 0.15s ease-in-out;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.daily-task-checkbox:checked {
+  background-color: #10b981;
+  border-color: #10b981;
+}
+.daily-task-checkbox:checked::before {
+  content: "✓";
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+}
+.daily-task-text.checked {
+  text-decoration: line-through;
+  opacity: 0.55;
+  color: #94a3b8;
 }
 
 /* Toast Notifications */

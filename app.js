@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initApp() {
   renderHeaderMetrics();
+  renderTimelineScrubber();
   renderDays();
   setupEventListeners();
   initPackingChecklist();
@@ -129,6 +130,22 @@ function setPhase(phase) {
 
 function filterStatus(status) {
   currentFilter = status;
+  const allBtn = document.getElementById('btn-filter-all');
+  const confBtn = document.getElementById('btn-filter-confirmed');
+  const vetBtn = document.getElementById('btn-filter-vetted');
+
+  if (allBtn && confBtn && vetBtn) {
+    allBtn.className = status === 'all' 
+      ? 'px-2.5 py-1 rounded-lg text-xs bg-blue-600 text-white font-semibold shadow-sm transition' 
+      : 'px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+    confBtn.className = status === 'confirmed' 
+      ? 'px-2.5 py-1 rounded-lg text-xs bg-emerald-600 text-white font-semibold shadow-sm transition' 
+      : 'px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-emerald-400 hover:bg-emerald-950/60 transition border border-transparent hover:border-emerald-500/30';
+    vetBtn.className = status === 'vetted' 
+      ? 'px-2.5 py-1 rounded-lg text-xs bg-amber-600 text-white font-semibold shadow-sm transition' 
+      : 'px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-amber-400 hover:bg-amber-950/60 transition border border-transparent hover:border-amber-500/30';
+  }
+
   renderDays();
 }
 
@@ -223,6 +240,13 @@ function renderDays() {
       const matchTrans = JSON.stringify(d.transport_module || {}).toLowerCase().includes(q);
       return matchDest || matchFlow || matchHotels || matchDocs || matchExp || matchTrans;
     });
+  }
+
+  // Update search results counter in toolbar
+  const countEl = document.getElementById('search-results-count');
+  const totalDays = itineraryData.days ? itineraryData.days.length : 29;
+  if (countEl) {
+    countEl.innerText = `Showing ${filtered.length} of ${totalDays} days`;
   }
 
   if (filtered.length === 0) {
@@ -339,22 +363,25 @@ function renderDays() {
             </div>
           </div>
 
-          <!-- Taxi / Grab Helper Box -->
+          <!-- Taxi / Grab Driver Assist Box -->
           ${grab.dropoff || dropLocal ? `
-            <div class="bg-slate-950/70 p-2.5 rounded-lg border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-              <div class="truncate">
-                <span class="text-slate-400 font-semibold text-[11px]">🚕 Taxi / Grab Destination:</span>
-                <p class="text-white font-medium truncate">${grab.dropoff || ''} ${dropLocal ? `<span class="text-yellow-300 font-normal">(${dropLocal})</span>` : ''}</p>
+            <div class="bg-slate-950/80 p-3 rounded-xl border border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 text-amber-400 font-semibold text-[11px] mb-0.5">
+                  <span>🚕</span> Taxi / Grab Driver Assist:
+                </div>
+                <div class="text-white font-semibold truncate text-[13px]">${grab.dropoff || ''}</div>
+                ${dropLocal ? `<div class="text-amber-300 text-xs font-medium font-sans mt-0.5 tracking-wide">${dropLocal}</div>` : ''}
               </div>
               <div class="flex items-center gap-2 shrink-0">
                 ${dropLocal ? `
-                  <button onclick="copyToClipboard('${escapedLocal}', 'Copied destination in local script for driver!')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-amber-300 border border-amber-500/30 flex items-center gap-1">
-                    <span>📋</span> Copy Script
+                  <button onclick="copyToClipboard('${escapedLocal}', 'Copied destination in local script for driver!')" class="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
+                    <span>📋</span> Copy Driver Script
                   </button>
                 ` : ''}
                 ${grab.maps_url ? `
-                  <a href="${grab.maps_url}" target="_blank" class="px-2.5 py-1 rounded bg-sky-900/60 hover:bg-sky-800 text-xs text-sky-200 border border-sky-500/40 flex items-center gap-1">
-                    <span>📍</span> Open Maps
+                  <a href="${grab.maps_url}" target="_blank" class="px-3 py-1.5 rounded-lg bg-sky-900/40 hover:bg-sky-900/70 text-sky-200 border border-sky-500/40 text-xs font-semibold flex items-center gap-1.5 transition">
+                    <span>📍</span> Open Maps ↗
                   </a>
                 ` : ''}
               </div>
@@ -481,6 +508,29 @@ function renderDays() {
       `;
     }
 
+    // Read persisted daily tasks from localStorage
+    let tasksState = {};
+    try {
+      tasksState = JSON.parse(localStorage.getItem('travel_os_daily_tasks_v1') || '{}');
+    } catch (e) {
+      tasksState = {};
+    }
+
+    const checklistHtml = (day.essential_checklist || []).map((task, idx) => {
+      const isChecked = Boolean(tasksState[`${day.day_number}_${idx}`]);
+      return `
+        <label class="flex items-start gap-2.5 cursor-pointer select-none group py-1">
+          <input type="checkbox" 
+                 class="daily-task-checkbox mt-0.5" 
+                 ${isChecked ? 'checked' : ''} 
+                 onchange="toggleDailyTask(${day.day_number}, ${idx}, this)">
+          <span class="daily-task-text text-slate-300 group-hover:text-white transition-colors leading-snug ${isChecked ? 'checked' : ''}">
+            ${task}
+          </span>
+        </label>
+      `;
+    }).join('');
+
     const card = document.createElement('div');
     card.id = `day-card-${day.day_number}`;
     card.className = 'glass-card rounded-2xl overflow-hidden transition-all duration-200';
@@ -488,8 +538,8 @@ function renderDays() {
       <!-- Card Header (Always Visible) -->
       <div onclick="toggleDay(${day.day_number})" class="p-4 sm:p-5 flex items-center justify-between cursor-pointer hover:bg-slate-800/40 select-none">
         <div class="flex items-center gap-3 sm:gap-4 flex-wrap sm:flex-nowrap">
-          <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 font-bold text-sm border border-blue-500/30 shrink-0">
-            D${day.day_number}
+          <div class="flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600/30 to-indigo-600/20 text-blue-300 font-extrabold text-sm border border-blue-500/40 shadow-inner shrink-0">
+            D${day.day_number < 10 ? '0' + day.day_number : day.day_number}
           </div>
           <div>
             <div class="flex items-center gap-2 flex-wrap">
@@ -556,15 +606,31 @@ function renderDays() {
           </div>
         ` : ''}
 
-        <!-- Curated Daily Flow -->
-        <div class="bg-slate-800/40 rounded-xl p-3.5 border border-slate-700/50 mb-4 text-xs">
-          <div class="font-bold text-slate-200 mb-2 flex items-center gap-1.5">
-            <span>🗺️</span> Curated Daily Flow (Geographically Sequenced)
+        <!-- Curated Daily Flow (Curated 3-Node Journey Grid) -->
+        <div class="mb-4">
+          <div class="font-bold text-slate-300 text-xs mb-2 flex items-center justify-between">
+            <span class="flex items-center gap-1.5">🗺️ Curated Daily Flow (Geographically Sequenced)</span>
+            <span class="text-[10px] text-slate-400 font-mono">Paced & Route-Optimized</span>
           </div>
-          <div class="space-y-1.5 text-slate-300">
-            <p><span class="text-amber-300 font-semibold">🌅 Morning:</span> ${day.curated_daily_flow.morning}</p>
-            <p><span class="text-sky-300 font-semibold">☀️ Afternoon:</span> ${day.curated_daily_flow.afternoon}</p>
-            <p><span class="text-purple-300 font-semibold">🌙 Evening:</span> ${day.curated_daily_flow.evening}</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+            <div class="flow-node-morning p-3 rounded-xl border text-xs">
+              <div class="flex items-center gap-1.5 font-bold text-amber-300 mb-1">
+                <span>🌅</span> Morning Focus
+              </div>
+              <p class="text-slate-300 leading-relaxed text-[12px]">${day.curated_daily_flow.morning || 'Flexible exploration'}</p>
+            </div>
+            <div class="flow-node-afternoon p-3 rounded-xl border text-xs">
+              <div class="flex items-center gap-1.5 font-bold text-sky-300 mb-1">
+                <span>☀️</span> Afternoon Highlight
+              </div>
+              <p class="text-slate-300 leading-relaxed text-[12px]">${day.curated_daily_flow.afternoon || 'Activity & transit'}</p>
+            </div>
+            <div class="flow-node-evening p-3 rounded-xl border text-xs">
+              <div class="flex items-center gap-1.5 font-bold text-purple-300 mb-1">
+                <span>🌙</span> Evening Pacing
+              </div>
+              <p class="text-slate-300 leading-relaxed text-[12px]">${day.curated_daily_flow.evening || 'Dinner & unwind'}</p>
+            </div>
           </div>
         </div>
 
@@ -582,17 +648,22 @@ function renderDays() {
         ` : ''}
 
         <!-- Essential Checklist & Google Maps -->
-        <div class="pt-3 border-t border-slate-800 flex flex-col md:flex-row justify-between gap-3 text-xs text-slate-400">
-          <div>
-            <span class="font-bold text-slate-300">✓ Day Checklist:</span>
-            <ul class="list-disc list-inside mt-1 space-y-0.5">
-              ${(day.essential_checklist || []).map(c => `<li>${c}</li>`).join('')}
-            </ul>
+        <div class="pt-3.5 border-t border-slate-800/80 flex flex-col md:flex-row justify-between gap-4 text-xs">
+          <div class="flex-1">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="font-bold text-slate-200 flex items-center gap-1.5">
+                <span>✓</span> Operational Checklist
+              </span>
+              <span class="text-[10px] text-slate-400">Tap to track completion</span>
+            </div>
+            <div class="space-y-1 bg-slate-900/40 p-2.5 rounded-xl border border-slate-800/60">
+              ${checklistHtml || '<p class="text-slate-400 italic">No special actions required for this day.</p>'}
+            </div>
           </div>
-          <div>
-            <span class="font-bold text-slate-300">📍 Maps Navigation:</span>
-            <div class="flex flex-wrap gap-1.5 mt-1">
-              ${mapsHtml}
+          <div class="md:w-64">
+            <span class="font-bold text-slate-200 block mb-1.5">📍 Fast Navigation:</span>
+            <div class="flex flex-wrap gap-1.5">
+              ${mapsHtml || '<span class="text-slate-400 text-[11px]">Local routes</span>'}
             </div>
           </div>
         </div>
@@ -620,6 +691,176 @@ function setupEventListeners() {
       searchQuery = e.target.value;
       renderDays();
     });
+  }
+
+  // Global Keyboard Shortcuts: Ctrl+K / Cmd+K for Gemini, Escape to close modals
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+      e.preventDefault();
+      openGeminiModal();
+    }
+    if (e.key === 'Escape') {
+      closeGeminiModal();
+      closeDocModal();
+      closePackingModal();
+      closeCurrencyModal();
+      closeTranslationsModal();
+      closeLuggageModal();
+      closeRouteModal();
+      closePriceRadarModal();
+    }
+  });
+
+  // Observe active day in viewport to update scrubber
+  window.addEventListener('scroll', throttle(updateActiveDayFromScroll, 200), { passive: true });
+}
+
+// -------------------------------------------------------------
+// STICKY TIMELINE SCRUBBER CONTROLLER
+// -------------------------------------------------------------
+function renderTimelineScrubber() {
+  if (!itineraryData) return;
+  const container = document.getElementById('timeline-scrubber-list');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const days = itineraryData.days || [];
+  days.forEach(day => {
+    const isPhase1 = day.phase.includes('Vietnam') || day.day_number <= 13;
+    const dotColor = isPhase1 ? 'bg-amber-400' : 'bg-pink-400';
+    const shortDate = day.date ? day.date.slice(5).replace('-', '/') : '';
+
+    const pill = document.createElement('button');
+    pill.id = `scrubber-pill-${day.day_number}`;
+    pill.className = `timeline-day-pill ${day.day_number === 1 ? 'active' : ''}`;
+    pill.setAttribute('title', `Day ${day.day_number}: ${day.destination} (${day.date})`);
+    pill.innerHTML = `
+      <div class="flex items-center gap-1 font-bold">
+        <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span>
+        <span>D${day.day_number < 10 ? '0' + day.day_number : day.day_number}</span>
+      </div>
+      <span class="text-[9px] text-slate-400 font-mono mt-0.5">${shortDate}</span>
+    `;
+    pill.onclick = () => scrollToDay(day.day_number);
+    container.appendChild(pill);
+  });
+}
+
+function scrollToDay(dayNum) {
+  if (!itineraryData) return;
+  const days = itineraryData.days || [];
+  const targetDay = days.find(d => d.day_number === dayNum);
+  if (!targetDay) return;
+
+  // 1. Update active scrubber pill
+  document.querySelectorAll('.timeline-day-pill').forEach(p => p.classList.remove('active'));
+  const activePill = document.getElementById(`scrubber-pill-${dayNum}`);
+  if (activePill) {
+    activePill.classList.add('active');
+    activePill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
+  // 2. Update active label
+  const label = document.getElementById('active-day-label');
+  if (label) {
+    label.innerText = `Day ${dayNum} • ${targetDay.destination}`;
+  }
+
+  // 3. Ensure day card is rendered (reset filters if filtered out)
+  const card = document.getElementById(`day-card-${dayNum}`);
+  if (!card) {
+    currentPhase = 'all';
+    currentFilter = 'all';
+    searchQuery = '';
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) searchInput.value = '';
+    renderDays();
+  }
+
+  const targetCard = document.getElementById(`day-card-${dayNum}`);
+  if (targetCard) {
+    // Expand accordion content
+    const content = document.getElementById(`day-content-${dayNum}`);
+    const icon = document.getElementById(`day-icon-${dayNum}`);
+    if (content) content.classList.remove('hidden');
+    if (icon) icon.classList.add('rotate-180');
+
+    // Smooth scroll to card (offset for sticky header + scrubber ~ 140px)
+    const yOffset = -140;
+    const y = targetCard.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+
+    // Focus glow pulse
+    targetCard.classList.remove('highlight-target-day');
+    void targetCard.offsetWidth; // reflow
+    targetCard.classList.add('highlight-target-day');
+    setTimeout(() => {
+      targetCard.classList.remove('highlight-target-day');
+    }, 3000);
+  }
+}
+
+function scrollToCurrentActiveDay() {
+  jumpToToday();
+}
+
+function updateActiveDayFromScroll() {
+  if (!itineraryData) return;
+  const days = itineraryData.days || [];
+  const scrollPos = window.scrollY + 200;
+
+  for (let i = days.length - 1; i >= 0; i--) {
+    const card = document.getElementById(`day-card-${days[i].day_number}`);
+    if (card && card.offsetTop <= scrollPos) {
+      const activeNum = days[i].day_number;
+      // Update scrubber active pill if changed
+      const currentActive = document.querySelector('.timeline-day-pill.active');
+      const targetPill = document.getElementById(`scrubber-pill-${activeNum}`);
+      if (targetPill && currentActive !== targetPill) {
+        if (currentActive) currentActive.classList.remove('active');
+        targetPill.classList.add('active');
+        targetPill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        const label = document.getElementById('active-day-label');
+        if (label) label.innerText = `Day ${activeNum} • ${days[i].destination}`;
+      }
+      break;
+    }
+  }
+}
+
+function throttle(func, limit) {
+  let inThrottle;
+  return function() {
+    const args = arguments;
+    const context = this;
+    if (!inThrottle) {
+      func.apply(context, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
+// -------------------------------------------------------------
+// DAILY TASK CHECKLIST PERSISTENCE
+// -------------------------------------------------------------
+function toggleDailyTask(dayNum, taskIdx, checkboxEl) {
+  const storageKey = 'travel_os_daily_tasks_v1';
+  let tasksState = {};
+  try {
+    tasksState = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  } catch (e) {
+    tasksState = {};
+  }
+
+  const key = `${dayNum}_${taskIdx}`;
+  tasksState[key] = checkboxEl.checked;
+  localStorage.setItem(storageKey, JSON.stringify(tasksState));
+
+  const textEl = checkboxEl.parentElement.querySelector('.daily-task-text');
+  if (textEl) {
+    if (checkboxEl.checked) textEl.classList.add('checked');
+    else textEl.classList.remove('checked');
   }
 }
 
