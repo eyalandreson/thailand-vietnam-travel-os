@@ -79,6 +79,8 @@ class AgentBridgeHandler(BaseHTTPRequestHandler):
             self.handle_status()
         elif path == "/api/change-requests":
             self.handle_list_requests()
+        elif path == "/api/mobile-pair-payload":
+            self.handle_mobile_pair_payload()
         else:
             self._set_headers(404)
             self.wfile.write(json.dumps({"error": f"Endpoint not found: {path}"}).encode("utf-8"))
@@ -144,6 +146,20 @@ class AgentBridgeHandler(BaseHTTPRequestHandler):
             "count": len(requests_list),
             "requests": requests_list
         }, indent=2).encode("utf-8"))
+
+    def handle_mobile_pair_payload(self):
+        """Returns pairing credentials for mobile instant AI execution."""
+        import dotenv
+        env = dotenv.dotenv_values(os.path.join(BASE_DIR, ".env"))
+        api_key = env.get("GEMINI_API_KEY") or ""
+        github_pat = env.get("GITHUB_PAT") or ""
+        self._set_headers(200)
+        self.wfile.write(json.dumps({
+            "status": "SUCCESS",
+            "gemini_api_key": api_key,
+            "github_pat": github_pat,
+            "timestamp": datetime.datetime.utcnow().isoformat() + "Z"
+        }).encode("utf-8"))
 
     def handle_create_request(self, payload: Dict[str, Any]):
         """Creates a new change request ticket and queues it for the agent."""
