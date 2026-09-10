@@ -3,7 +3,7 @@
    Inspired by Wanderlog, Airbnb Trips, Apple Maps Guides, and Linear
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* ==========================================================================
    iOS SAFARI & IPHONE CRITICAL OPTIMIZATIONS
@@ -29,7 +29,6 @@ button, a, input, select, textarea, [onclick] {
     font-size: 16px !important;
   }
 }
-500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* --- Theme Variables (Light Mode Default) --- */
 :root {
@@ -251,6 +250,28 @@ body {
 .timeline-day-pill.active span {
   color: #ffffff !important;
 }
+
+/* --- Quick Tools Action Bar --- */
+.quick-tool-pill {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  user-select: none;
+}
+.quick-tool-pill:hover {
+  transform: translateY(-1px);
+}
+.quick-tool-pill:active {
+  transform: scale(0.97);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 
 /* --- Curated Flow Time-of-Day Nodes --- */
 .flow-node-morning {
