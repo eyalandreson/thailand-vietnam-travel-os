@@ -11,6 +11,7 @@ Accurately reflects:
 """
 import json
 import os
+import sys
 
 def build_itinerary():
     days = [
@@ -1412,6 +1413,24 @@ def build_itinerary():
         }
     ]
 
+    # Import enrichment data
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+    from core.enrichment_data import (
+        DAY_EXPERIENCES,
+        DAY_TRANSPORTS,
+        PACKING_MASTER_LIST,
+        TRANSLATIONS_DICTIONARY,
+        CURRENCY_BENCHMARKS
+    )
+
+    # Enrich every day with experiences (Primary Plan vs Agile Contingency) and transport modules
+    for d in days:
+        d_num = d.get("day_number")
+        if d_num in DAY_EXPERIENCES:
+            d["experiences"] = DAY_EXPERIENCES[d_num]
+        if d_num in DAY_TRANSPORTS:
+            d["transport_module"] = DAY_TRANSPORTS[d_num]
+
     # Load confirmed registry items
     registry_path = os.path.join(os.path.dirname(__file__), "booking_registry.json")
     confirmed_items = []
@@ -1424,8 +1443,8 @@ def build_itinerary():
 
     master_payload = {
         "title": "Master Itinerary: Thailand & Vietnam [Adaptive Travel OS]",
-        "generated_at": "2026-09-10T09:25:00Z",
-        "system_version": "3.0.0 (Adaptive Travel OS)",
+        "generated_at": "2026-09-10T12:55:00Z",
+        "system_version": "3.1.0 (Ground Companion & Experience Hub)",
         "operational_philosophy": "Hard Anchors, Fluid Routes: Only Gmail-verified bookings are immutable anchors. All intermediate routing, hotels, and timing dynamically adapt to live weather, transit buffers, and critic score thresholds.",
         "audit_note": "Audited: Only 6 genuine bookings verified from Gmail are marked CONFIRMED. All other days marked UNBOOKED with vetted recommendations.",
         "confirmed_metrics": {
@@ -1503,6 +1522,9 @@ def build_itinerary():
         },
         "confirmed_items": confirmed_items,
         "unbooked_action_items": unbooked_action_items,
+        "packing_master_list": PACKING_MASTER_LIST,
+        "translations_dictionary": TRANSLATIONS_DICTIONARY,
+        "currency_benchmarks": CURRENCY_BENCHMARKS,
         "total_days": len(days),
         "days": days
     }

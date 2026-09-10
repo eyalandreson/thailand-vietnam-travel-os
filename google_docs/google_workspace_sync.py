@@ -3,7 +3,6 @@ Google Workspace Sync Client & Master Document Generator
 Synchronizes "Master Itinerary: Thailand & Vietnam [Adaptive Travel OS]" with Google Docs.
 Generates:
 - Standalone pixel-perfect Google Doc HTML view (master_itinerary_doc.html)
-- Executive Markdown export (MASTER_ITINERARY_GOOGLE_DOC.md)
 - Direct Google Docs API v1 & Drive API v3 sync when credentials are authenticated
 """
 import os
@@ -30,6 +29,9 @@ class GoogleWorkspaceSync:
         luggage = data.get("luggage_storage_protocol", {})
         flight_radar = data.get("flight_radar_bkk_usm", {})
         profile = data.get("traveler_profile", {})
+        packing = data.get("packing_master_list", {})
+        translations = data.get("translations_dictionary", {})
+        currency = data.get("currency_benchmarks", {})
 
         html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -47,7 +49,7 @@ class GoogleWorkspaceSync:
     }}
     .doc-page {{
       background: #ffffff;
-      max-width: 850px;
+      max-width: 900px;
       margin: 0 auto 30px auto;
       padding: 60px 70px;
       box-shadow: 0 1px 3px rgba(60,64,67,0.15), 0 2px 8px rgba(60,64,67,0.1);
@@ -88,7 +90,7 @@ class GoogleWorkspaceSync:
       color: #202124;
       border-bottom: 1px solid #dadce0;
       padding-bottom: 6px;
-      margin-top: 30px;
+      margin-top: 32px;
     }}
     h3 {{
       font-size: 15px;
@@ -120,13 +122,13 @@ class GoogleWorkspaceSync:
       border-radius: 0 6px 6px 0;
       font-size: 13.5px;
     }}
-    .meta-table, .hotel-table {{
+    .meta-table, .hotel-table, .appendix-table {{
       width: 100%;
       border-collapse: collapse;
       margin: 12px 0;
       font-size: 13px;
     }}
-    .meta-table th, .hotel-table th {{
+    .meta-table th, .hotel-table th, .appendix-table th {{
       background: #f8f9fa;
       color: #3c4043;
       text-align: left;
@@ -134,7 +136,7 @@ class GoogleWorkspaceSync:
       border: 1px solid #dadce0;
       font-weight: 600;
     }}
-    .meta-table td, .hotel-table td {{
+    .meta-table td, .hotel-table td, .appendix-table td {{
       padding: 8px 10px;
       border: 1px solid #dadce0;
       vertical-align: top;
@@ -181,6 +183,31 @@ class GoogleWorkspaceSync:
       align-items: center;
       margin-bottom: 8px;
     }}
+    .plan-box {{
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin: 10px 0;
+      font-size: 13px;
+    }}
+    .plan-a {{
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+    }}
+    .plan-b {{
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      border-left: 4px solid #d97706;
+    }}
+    .transit-box {{
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0284c7;
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin: 10px 0;
+      font-size: 13px;
+    }}
     a {{
       color: #1a73e8;
       text-decoration: none;
@@ -204,11 +231,11 @@ class GoogleWorkspaceSync:
   </div>
 
   <h1>Master Itinerary: Thailand & Vietnam</h1>
-  <p style="color: #5f6368; font-size: 13px;"><b>Adaptive Travel OS</b> | Dates: Sep 11, 2026 – Oct 09, 2026 (29 Days) | Dual Synced: {gen_time}</p>
+  <p style="color: #5f6368; font-size: 13px;"><b>Adaptive Travel OS & Ground Companion</b> | Dates: Sep 11, 2026 – Oct 09, 2026 (29 Days) | Dual Synced: {gen_time}</p>
 
   <div class="callout-box">
     <b>Operational Philosophy & Travel Party Architecture:</b><br>
-    • <b>Core Rule: "Hard Anchors, Fluid Routes"</b> — Only the 6 Gmail-verified bookings are fixed boundaries. All intermediate routing, accommodation selections, and daily pacing adapt dynamically based on live weather radars, transit buffers, and critic ratings ($\ge$ 8.5/10).<br>
+    • <b>Core Rule: "Hard Anchors, Fluid Routes"</b> — Only the 6 Gmail-verified bookings are fixed boundaries. All intermediate routing, accommodation selections, and daily pacing adapt dynamically based on live weather radars, transit buffers, and critic ratings (&ge; 8.5/10).<br>
     • <b>Phase 1 (Sep 11–24): Northern Vietnam Loop</b> — Traveler + Friend. Focus: Adventure, trekking, scenic loops, street food. <i>Room Rule: Strictly Twin Beds / 2 Separate Beds. Luggage: 55L clamshell backpack ONLY.</i><br>
     • <b>Transition Day (Sep 24):</b> HAN -> BKK flight (arr 14:45 PM). Friend separates. Suitcase retrieved from BKK Airport Basement (Floor B). Traveler reunites with girlfriend. Evening flight to Koh Samui.<br>
     • <b>Phase 2 (Sep 24 – Oct 09): Southern Thailand Islands & Bangkok</b> — Traveler + Girlfriend. Focus: Boutique romantic villas, private plunge pools, scenic diving, sunset dining. <i>Room Rule: Romantic King Bed / Ocean View. Pacing: 13 nights Gulf (1 Samui + 6 Phangan + 6 Tao) + 2 nights Bangkok Finale.</i>
@@ -298,7 +325,7 @@ class GoogleWorkspaceSync:
   <div class="callout-alert">
     <b>The following legs are NOT yet booked and require user action / reservation:</b><br>
     1. <b>Luggage Locker (Sep 12):</b> AIRPORTELs Suvarnabhumi Basement drop-off (pay at counter or online).<br>
-    2. <b>Vietnam E-Visa (Sep 12):</b> Apply on official Vietnam immigration portal $\ge$ 2 weeks prior.<br>
+    2. <b>Vietnam E-Visa (Sep 12):</b> Apply on official Vietnam immigration portal &ge; 2 weeks prior.<br>
     3. <b>Ha Giang Loop (Sep 13–15):</b> Easy-Riders + VIP bus from Hanoi (Action Required).<br>
     4. <b>Sa Pa (Sep 15–17):</b> Mountain transfer coach + Eco Palms House / Pao's Sapa (Action Required).<br>
     5. <b>Sa Pa -> Ninh Binh (Sep 17):</b> Direct express coach (6 hrs) via highway (Action Required).<br>
@@ -314,7 +341,7 @@ class GoogleWorkspaceSync:
     15. <b>Bangkok Finale (Oct 07–09):</b> Return flight/ferry + Riva Arun Bangkok (Action Required).
   </div>
 
-  <h2>Comprehensive 29-Day Master Itinerary</h2>
+  <h2>Comprehensive 29-Day Master Itinerary & Daily Companion Guide</h2>
 """
 
         for day in days:
@@ -332,6 +359,8 @@ class GoogleWorkspaceSync:
             docs = day.get("attached_documents", [])
             maps = day.get("google_maps_links", [])
             hotels = day.get("accommodation_matrix", [])
+            experiences = day.get("experiences", {})
+            transport = day.get("transport_module")
 
             html += f"""
   <div class="day-block" id="day-{d_num}">
@@ -358,6 +387,46 @@ class GoogleWorkspaceSync:
                         html += f"""<span class="badge-doc">📄 {d.get('title')} ({d.get('ref')}) [Awaiting File]</span> """
                 html += """</div>\n"""
 
+            if transport:
+                html += f"""
+    <div class="transit-box">
+      <b>🚆 End-to-End Transport Module:</b> {transport.get('route_title', 'Transit Route')} 
+      <span style="background:#0284c7; color:#fff; font-size:11px; padding:2px 6px; border-radius:3px; margin-left:6px;">{transport.get('transit_type', 'Transit')}</span><br>
+      <b>Hubs:</b> {transport.get('pickup_hub', 'TBD')} &rarr; {transport.get('dropoff_terminal', 'TBD')} | <b>Duration:</b> {transport.get('duration', 'N/A')}<br>
+      <b>Operator:</b> {transport.get('operator', 'N/A')} | <b>Baggage:</b> {transport.get('baggage_allowance', 'N/A')}<br>
+      <b>Booking / Reservation:</b> <a href="{transport.get('booking_url', '#')}" target="_blank"><b>{transport.get('booking_platform', 'Direct Link')} ↗</b></a><br>
+      <b>🚕 Taxi / Grab Helper:</b> <i>{transport.get('grab_helper', 'N/A')}</i>
+    </div>
+"""
+
+            if experiences:
+                p = experiences.get("primary", {})
+                c = experiences.get("contingency", {})
+                html += f"""
+    <div class="plan-box plan-a">
+      <b>🌟 Plan A (Signature / Main Experience):</b> {p.get('title', 'N/A')} 
+      <span style="background:#16a34a; color:#fff; font-size:11px; padding:2px 6px; border-radius:3px; margin-left:6px;">{p.get('type', 'Activity')}</span><br>
+      <b>Duration:</b> {p.get('duration', 'N/A')} | <b>Hours:</b> {p.get('opening_hours', 'N/A')} | <b>Est. Cost:</b> {p.get('cost_estimate', 'N/A')}<br>
+      <b>Tip:</b> {p.get('time_sensitive_tip', 'N/A')}
+"""
+                p_links = p.get("links", [])
+                if p_links:
+                    html += "<br><b>Direct Links:</b> " + " | ".join([f"""<a href="{l.get('url')}" target="_blank">{l.get('label')} ↗</a>""" for l in p_links])
+                html += "</div>\n"
+
+                html += f"""
+    <div class="plan-box plan-b">
+      <b>☔ Plan B (Agile Contingency / Weather Alternative):</b> {c.get('title', 'N/A')} 
+      <span style="background:#d97706; color:#fff; font-size:11px; padding:2px 6px; border-radius:3px; margin-left:6px;">{c.get('type', 'Contingency')}</span><br>
+      <b>Trigger:</b> <i>{c.get('trigger', 'Inclement weather or route advisory')}</i><br>
+      <b>Duration:</b> {c.get('duration', 'N/A')} | <b>Est. Cost:</b> {c.get('cost_estimate', 'N/A')}<br>
+      <b>Tip:</b> {c.get('time_sensitive_tip', 'N/A')}
+"""
+                c_links = c.get("links", [])
+                if c_links:
+                    html += "<br><b>Direct Links:</b> " + " | ".join([f"""<a href="{l.get('url')}" target="_blank">{l.get('label')} ↗</a>""" for l in c_links])
+                html += "</div>\n"
+
             if hotels:
                 html += """    <table class="hotel-table">
       <thead>
@@ -379,12 +448,7 @@ class GoogleWorkspaceSync:
                 html += """      </tbody>
     </table>\n"""
 
-            html += f"""    <p style="font-size: 13.5px; margin: 8px 0;">
-      <b>🚗 Door-to-Door Logistics:</b> {logistics.get('primary_transit', 'N/A')}<br>
-      <span style="color: #5f6368; font-size: 12.5px;">Schedule: Dep {logistics.get('departure_time', 'N/A')} | Arr {logistics.get('arrival_time', 'N/A')} | Buffer: {logistics.get('buffer_time', 'N/A')} | Pro-Tip: {logistics.get('tips', 'N/A')}</span>
-    </p>
-
-    <div style="background: #f8f9fa; border: 1px solid #e8eaed; border-radius: 6px; padding: 10px 14px; margin: 10px 0; font-size: 13px;">
+            html += f"""    <div style="background: #f8f9fa; border: 1px solid #e8eaed; border-radius: 6px; padding: 10px 14px; margin: 10px 0; font-size: 13px;">
       <b>Curated Daily Flow (Geographically Sequenced):</b><br>
       🌅 <b>Morning:</b> {flow.get('morning', 'N/A')}<br>
       ☀️ <b>Afternoon:</b> {flow.get('afternoon', 'N/A')}<br>
@@ -404,6 +468,96 @@ class GoogleWorkspaceSync:
                 html += """</div>\n"""
 
             html += """  </div>\n"""
+
+        # Appendices
+        html += f"""
+  <h2>Appendix A: Split-Luggage Dynamic Packing & Gear Architecture</h2>
+  <div class="callout-box">
+    <b>Luggage Split Strategy:</b><br>
+    • <b>Bag A (Vietnam 55L Clamshell Backpack):</b> Only what is required for northern trekking, mountain loops, and bay waters. Target weight &le; 10kg.<br>
+    • <b>Bag B (Bangkok Airport Basement Suitcase):</b> Romantic resort attire, diving gear, evening wear, and reserve supplies stored at AIRPORTELs Suvarnabhumi Basement.<br>
+    • <b>Pre-Departure Inspection:</b> Critical documents, medicine, and electronic hardware.
+  </div>
+
+  <h3>Bag A: Vietnam 55L Backpack (Ha Giang, Sa Pa, Ninh Binh, Cat Ba)</h3>
+  <table class="appendix-table">
+    <thead><tr><th>Category</th><th>Item</th><th>Description & Purpose</th><th>Priority</th></tr></thead>
+    <tbody>
+"""
+        bag_a = packing.get("bag_a_backpack", [])
+        for item in bag_a:
+            p_badge = '<span style="color:#d93025; font-weight:bold;">HIGH</span>' if item.get('priority') == 'HIGH' else '<span>NORMAL</span>'
+            html += f"<tr><td><b>{item.get('cat')}</b></td><td>{item.get('name')}</td><td>{item.get('desc')}</td><td>{p_badge}</td></tr>\n"
+        html += """    </tbody>
+  </table>
+
+  <h3>Bag B: Bangkok Basement Luggage (Resort & Romantic Gulf Finale)</h3>
+  <table class="appendix-table">
+    <thead><tr><th>Category</th><th>Item</th><th>Description & Purpose</th><th>Priority</th></tr></thead>
+    <tbody>
+"""
+        bag_b = packing.get("bag_b_suitcase", [])
+        for item in bag_b:
+            p_badge = '<span style="color:#d93025; font-weight:bold;">HIGH</span>' if item.get('priority') == 'HIGH' else '<span>NORMAL</span>'
+            html += f"<tr><td><b>{item.get('cat')}</b></td><td>{item.get('name')}</td><td>{item.get('desc')}</td><td>{p_badge}</td></tr>\n"
+        html += """    </tbody>
+  </table>
+
+  <h3>Pre-Departure Essential Inspection</h3>
+  <table class="appendix-table">
+    <thead><tr><th>Category</th><th>Item</th><th>Description & Purpose</th><th>Priority</th></tr></thead>
+    <tbody>
+"""
+        pre_dep = packing.get("pre_departure_inspection", [])
+        for item in pre_dep:
+            p_badge = '<span style="color:#d93025; font-weight:bold;">HIGH</span>' if item.get('priority') == 'HIGH' else '<span>NORMAL</span>'
+            html += f"<tr><td><b>{item.get('cat')}</b></td><td>{item.get('name')}</td><td>{item.get('desc')}</td><td>{p_badge}</td></tr>\n"
+        html += """    </tbody>
+  </table>
+
+  <h2>Appendix B: Street-Smart Currency Benchmarks & ATM Fee Advisories</h2>
+  <table class="appendix-table">
+    <thead><tr><th>Currency Pair</th><th>Benchmark Rate</th><th>Quick Mental Rule</th></tr></thead>
+    <tbody>
+      <tr><td><b>USD to ILS (₪)</b></td><td>1 USD = 3.70 ILS</td><td>Multiply USD by ~3.7</td></tr>
+      <tr><td><b>USD to THB (฿)</b></td><td>1 USD = 36.50 THB</td><td>100 THB = ~$2.74 USD</td></tr>
+      <tr><td><b>USD to VND (₫)</b></td><td>1 USD = 25,400 VND</td><td>100,000 VND = ~$3.94 USD</td></tr>
+      <tr><td><b>THB to ILS (₪)</b></td><td>100 THB = ~10.14 ILS</td><td><b>Divide Baht by 10</b> (e.g., 500 THB &approx; 50 ILS)</td></tr>
+      <tr><td><b>VND to ILS (₪)</b></td><td>100,000 VND = ~14.57 ILS</td><td><b>Drop 4 zeros and multiply by 1.45</b> (e.g., 200,000 VND &approx; 29 ILS)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout-alert">
+    <b>ATM Fee Advisories & Ground Rules:</b><br>
+"""
+        atm_tips = currency.get("advisory", [])
+        for tip in atm_tips:
+            html += f"• {tip}<br>\n"
+        html += """  </div>
+
+  <h2>Appendix C: Offline Taxi & Emergency Phrasebook (Thai & Vietnamese)</h2>
+"""
+        cat_labels = {
+            "taxi_transit": "🚕 Taxi & Transit Navigation",
+            "food_dietary": "🍜 Dining, Dietary & Water Safety",
+            "emergency_medical": "🚨 Medical, Pharmacy & Emergency",
+            "airport_luggage": "✈️ Airport, Luggage & Hotel Reception"
+        }
+        for cat_key, items in translations.items():
+            cat_title = cat_labels.get(cat_key, cat_key.replace("_", " ").title())
+            html += f"""  <h3>{cat_title}</h3>
+  <table class="appendix-table">
+    <thead><tr><th>English Meaning</th><th>Thai (Script & Phonetic)</th><th>Vietnamese (Script & Phonetic)</th></tr></thead>
+    <tbody>
+"""
+            for p in items:
+                html += f"""<tr>
+  <td><b>{p.get('en')}</b></td>
+  <td><span style="font-size:14px; font-weight:bold;">{p.get('th')}</span><br><span style="color:#5f6368; font-size:11.5px;">({p.get('th_phonetic')})</span></td>
+  <td><span style="font-size:14px; font-weight:bold;">{p.get('vi')}</span><br><span style="color:#5f6368; font-size:11.5px;">({p.get('vi_phonetic')})</span></td>
+</tr>\n"""
+            html += """    </tbody>
+  </table>\n"""
 
         html += """
   <div style="text-align: center; color: #70757a; font-size: 12px; margin-top: 40px; border-top: 1px solid #dadce0; padding-top: 20px;">

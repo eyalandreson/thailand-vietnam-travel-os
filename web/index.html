@@ -3,18 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
   <title>Master Itinerary: Thailand & Vietnam [Adaptive Travel OS]</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
   <script src="itinerary_data.js"></script>
   <script src="app.js" defer></script>
 </head>
-<body class="antialiased min-h-screen">
+<body class="antialiased min-h-screen text-slate-100">
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container"></div>
+
+  <!-- FLOATING TODAY JUMP BUTTON -->
+  <button onclick="jumpToToday()" class="floating-today-btn px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold text-xs flex items-center gap-2 border border-blue-400/50 shadow-2xl">
+    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+    <span>📍 Jump to Today</span>
+  </button>
 
   <!-- TOP APP NAVIGATION BAR -->
   <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3 shrink-0">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center font-black text-white text-lg shadow-lg shadow-blue-500/30">
           OS
         </div>
@@ -24,17 +39,31 @@
         </div>
       </div>
 
-      <!-- VIEW MODE SWITCHER (Operational Mandate) -->
-      <div class="flex items-center gap-2">
-        <div class="bg-slate-800 p-1 rounded-xl border border-slate-700 flex items-center">
-          <button id="btn-view-app" onclick="switchView('app')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white transition flex items-center gap-1.5 shadow-sm">
-            <span>⚡</span> App View
+      <!-- UTILITY ACTION TOOLS (Packing, Currency, Translations) -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <button onclick="openPackingModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 hover:border-blue-500/50 transition flex items-center gap-1.5 shadow-sm" title="Split Luggage & Packing Checklist">
+          <span>🧳</span> <span class="hidden md:inline">Packing</span>
+        </button>
+
+        <button onclick="openCurrencyModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 hover:border-emerald-500/50 transition flex items-center gap-1.5 shadow-sm" title="Live 4-Way Currency Converter (ILS/USD/THB/VND)">
+          <span>💱</span> <span class="hidden md:inline">Currency</span>
+        </button>
+
+        <button onclick="openTranslationsModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 hover:border-amber-500/50 transition flex items-center gap-1.5 shadow-sm" title="Offline Emergency & Taxi Phrasebook">
+          <span>🗣️</span> <span class="hidden md:inline">Phrases</span>
+        </button>
+
+        <!-- VIEW MODE SWITCHER -->
+        <div class="bg-slate-800 p-1 rounded-xl border border-slate-700 flex items-center ml-1">
+          <button id="btn-view-app" onclick="switchView('app')" class="px-2.5 sm:px-3 py-1 rounded-lg text-xs font-semibold bg-blue-600 text-white transition flex items-center gap-1 shadow-sm">
+            <span>⚡</span> <span class="hidden sm:inline">App</span>
           </button>
-          <button id="btn-view-doc" onclick="switchView('doc')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5">
-            <span>📄</span> Google Doc View
+          <button id="btn-view-doc" onclick="switchView('doc')" class="px-2.5 sm:px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1">
+            <span>📄</span> <span class="hidden sm:inline">Doc</span>
           </button>
         </div>
       </div>
+
     </div>
   </header>
 
@@ -234,11 +263,11 @@
           </button>
           <button onclick="setPhase('phase1')" data-phase="phase1" class="tab-phase py-3 px-1 border-b-2 border-transparent font-medium text-sm text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5">
             <span>⛰️</span> Phase 1: Northern Vietnam (Sep 11–24)
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300">Twin Beds</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 font-semibold">Twin Beds</span>
           </button>
           <button onclick="setPhase('phase2')" data-phase="phase2" class="tab-phase py-3 px-1 border-b-2 border-transparent font-medium text-sm text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5">
             <span>🏖️</span> Phase 2: Gulf Islands & Bangkok (Sep 24 – Oct 09)
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-950 text-pink-300">King Bed</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-950 text-pink-300 font-semibold">King Bed</span>
           </button>
         </nav>
 
@@ -257,7 +286,7 @@
       <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
         <div class="relative w-full sm:w-80">
           <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">🔍</span>
-          <input id="search-input" type="text" placeholder="Search destination, hotel, food, or pass..." 
+          <input id="search-input" type="text" placeholder="Search destination, hotel, attraction, or pass..." 
                  class="w-full bg-slate-800 text-slate-200 text-xs rounded-lg pl-9 pr-4 py-2 border border-slate-700 focus:outline-none focus:border-blue-500">
         </div>
 
@@ -294,7 +323,210 @@
 
   </main>
 
-  <!-- MODAL: DOCUMENT PREVIEW (Requested by User) -->
+  <!-- MODAL: DYNAMIC SPLIT-LUGGAGE PACKING CHECKLIST -->
+  <div id="packing-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm hidden p-4">
+    <div class="glass-card rounded-2xl max-w-2xl w-full p-6 border border-slate-700 shadow-2xl relative max-h-[90vh] flex flex-col">
+      <button onclick="closePackingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
+      
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-2xl">🧳</span>
+        <div>
+          <h3 class="text-base font-bold text-white">Split-Luggage Dynamic Packing & Gear Checklist</h3>
+          <p class="text-xs text-amber-400">Offline-Persistent • Checkbox states saved automatically</p>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="my-3 p-3 bg-slate-900/80 rounded-xl border border-slate-800">
+        <div class="flex justify-between items-center text-xs mb-1.5">
+          <span class="font-medium text-slate-300">Packing Completion:</span>
+          <span id="packing-progress-text" class="font-bold text-emerald-400">0 / 26 packed (0%)</span>
+        </div>
+        <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+          <div id="packing-progress-bar" class="bg-gradient-to-r from-blue-500 to-emerald-400 h-full rounded-full transition-all duration-300" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="flex border-b border-slate-800 gap-2 mb-3 overflow-x-auto text-xs pb-1">
+        <button onclick="switchPackingTab('bag_a')" id="btn-pack-bag_a" class="px-3 py-1.5 rounded-lg font-bold bg-blue-600 text-white shrink-0">
+          🎒 Bag A: Vietnam Backpack (55L)
+        </button>
+        <button onclick="switchPackingTab('bag_b')" id="btn-pack-bag_b" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white bg-slate-800 shrink-0">
+          🧳 Bag B: Bangkok Basement Luggage
+        </button>
+        <button onclick="switchPackingTab('pre_dep')" id="btn-pack-pre_dep" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white bg-slate-800 shrink-0">
+          🛂 Pre-Departure Inspection
+        </button>
+      </div>
+
+      <!-- Items List Container -->
+      <div id="packing-items-container" class="space-y-2.5 overflow-y-auto pr-1 flex-1">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center">
+        <button onclick="resetPackingChecklist()" class="text-xs text-red-400 hover:text-red-300 underline font-medium">
+          Uncheck All Items
+        </button>
+        <button onclick="closePackingModal()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: LIVE 4-WAY CURRENCY CONVERTER -->
+  <div id="currency-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm hidden p-4">
+    <div class="glass-card rounded-2xl max-w-xl w-full p-6 border border-slate-700 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeCurrencyModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
+      
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-2xl">💱</span>
+        <div>
+          <h3 class="text-base font-bold text-white">Street-Smart 4-Way Currency Converter</h3>
+          <p class="text-xs text-emerald-400">Live Reciprocal Exchange • Type in any box to recalculate</p>
+        </div>
+      </div>
+
+      <!-- 4-Way Inputs Grid -->
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+          <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">ILS - Israeli Shekel (₪)</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-slate-400 font-bold">₪</span>
+            <input id="curr-input-ils" type="number" step="any" placeholder="0.00" oninput="calculateCurrency('ils')"
+                   class="w-full bg-slate-800 text-white font-bold text-base rounded-lg pl-8 pr-3 py-1.5 border border-slate-700 focus:outline-none focus:border-emerald-500">
+          </div>
+          <span class="text-[10px] text-slate-500 mt-1 block">Benchmark: $1 = ₪3.70</span>
+        </div>
+
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+          <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">USD - US Dollar ($)</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-slate-400 font-bold">$</span>
+            <input id="curr-input-usd" type="number" step="any" placeholder="0.00" oninput="calculateCurrency('usd')"
+                   class="w-full bg-slate-800 text-white font-bold text-base rounded-lg pl-8 pr-3 py-1.5 border border-slate-700 focus:outline-none focus:border-emerald-500">
+          </div>
+          <span class="text-[10px] text-slate-500 mt-1 block">Base Reference Currency</span>
+        </div>
+
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+          <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">THB - Thai Baht (฿)</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-slate-400 font-bold">฿</span>
+            <input id="curr-input-thb" type="number" step="any" placeholder="0" oninput="calculateCurrency('thb')"
+                   class="w-full bg-slate-800 text-white font-bold text-base rounded-lg pl-8 pr-3 py-1.5 border border-slate-700 focus:outline-none focus:border-emerald-500">
+          </div>
+          <span class="text-[10px] text-slate-500 mt-1 block">Mental: Divide Baht by 10 &approx; ₪</span>
+        </div>
+
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+          <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">VND - Vietnam Dong (₫)</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-slate-400 font-bold">₫</span>
+            <input id="curr-input-vnd" type="number" step="any" placeholder="0" oninput="calculateCurrency('vnd')"
+                   class="w-full bg-slate-800 text-white font-bold text-base rounded-lg pl-8 pr-3 py-1.5 border border-slate-700 focus:outline-none focus:border-emerald-500">
+          </div>
+          <span class="text-[10px] text-slate-500 mt-1 block">Mental: Drop 4 zeros &times; 1.45 &approx; ₪</span>
+        </div>
+      </div>
+
+      <!-- Quick Preset Chips -->
+      <div class="mb-4">
+        <span class="text-[11px] font-bold text-slate-400 block mb-1.5">Quick Street Presets:</span>
+        <div class="flex flex-wrap gap-1.5">
+          <button onclick="setCurrencyPreset('thb', 100)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300">100 ฿ (Street Pad Thai)</button>
+          <button onclick="setCurrencyPreset('thb', 500)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300">500 ฿ (Ferry / Massage)</button>
+          <button onclick="setCurrencyPreset('thb', 1000)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300">1,000 ฿ (Dinner for Two)</button>
+          <button onclick="setCurrencyPreset('vnd', 100000)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300">100k ₫ (Pho + Coffee)</button>
+          <button onclick="setCurrencyPreset('vnd', 500000)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300">500k ₫ (Ha Giang Homestay)</button>
+          <button onclick="setCurrencyPreset('usd', 50)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300">$50 USD</button>
+        </div>
+      </div>
+
+      <!-- ATM Fee Advisories Callout -->
+      <div class="bg-amber-950/40 p-3.5 rounded-xl border border-amber-500/50 text-xs text-amber-200 space-y-1.5">
+        <div class="font-bold text-amber-300 flex items-center gap-1.5">
+          <span>💡</span> Ground Rules & ATM Advisories:
+        </div>
+        <p>• <b>Thailand ATM Fee:</b> 220 THB mandatory local fee on every foreign card withdrawal. Always withdraw maximum allowed (20k–30k THB at yellow Krungsri ATMs).</p>
+        <p>• <b>Vietnam Zero-Fee ATMs:</b> <b>TPBank</b> and <b>VPBank</b> charge <b>0 VND fee</b> on foreign Visa/Mastercard debit cards.</p>
+        <p>• <b>DCC Trap:</b> Always select <b>"Charge in Local Currency" (THB / VND)</b>. Never let the machine convert to USD or ILS (hidden 5% markup)!</p>
+      </div>
+
+      <div class="mt-4 flex justify-end">
+        <button onclick="closeCurrencyModal()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: OFFLINE EMERGENCY & TAXI PHRASEBOOK -->
+  <div id="translations-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm hidden p-4">
+    <div class="glass-card rounded-2xl max-w-3xl w-full p-6 border border-slate-700 shadow-2xl relative max-h-[90vh] flex flex-col">
+      <button onclick="closeTranslationsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
+      
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-2xl">🗣️</span>
+        <div>
+          <h3 class="text-base font-bold text-white">Offline Emergency & Taxi Phrasebook</h3>
+          <p class="text-xs text-amber-400">Thai & Vietnamese Script • Phonetics • Fullscreen Display for Drivers</p>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex border-b border-slate-800 gap-2 mb-3 overflow-x-auto text-xs pb-1">
+        <button onclick="filterTranslations('all')" id="btn-trans-all" class="px-3 py-1.5 rounded-lg font-bold bg-blue-600 text-white shrink-0">
+          All Phrases
+        </button>
+        <button onclick="filterTranslations('taxi_transit')" id="btn-trans-taxi_transit" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white bg-slate-800 shrink-0">
+          🚕 Taxi & Transit
+        </button>
+        <button onclick="filterTranslations('food_dietary')" id="btn-trans-food_dietary" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white bg-slate-800 shrink-0">
+          🍜 Food & Dietary
+        </button>
+        <button onclick="filterTranslations('emergency_medical')" id="btn-trans-emergency_medical" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white bg-slate-800 shrink-0">
+          🚨 Emergency & Medical
+        </button>
+        <button onclick="filterTranslations('airport_luggage')" id="btn-trans-airport_luggage" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white bg-slate-800 shrink-0">
+          ✈️ Airport & Luggage
+        </button>
+      </div>
+
+      <!-- Phrases Container -->
+      <div id="translations-list-container" class="space-y-3 overflow-y-auto pr-1 flex-1">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-slate-800 flex justify-end">
+        <button onclick="closeTranslationsModal()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: FULLSCREEN DRIVER DISPLAY CARD -->
+  <div id="fullscreen-phrase-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 hidden p-6" onclick="closeFullscreenPhrase()">
+    <div class="max-w-2xl w-full text-center space-y-6 select-none" onclick="event.stopPropagation()">
+      <div class="text-xs uppercase tracking-widest text-slate-400 font-semibold" id="fs-phrase-en">English Meaning</div>
+      
+      <div class="p-6 bg-slate-900 rounded-3xl border-2 border-yellow-400/80 shadow-2xl space-y-4">
+        <div id="fs-phrase-local" class="text-3xl sm:text-4xl md:text-5xl font-black text-yellow-300 leading-snug">
+          ข้อความภาษาท้องถิ่น
+        </div>
+        <div id="fs-phrase-phonetic" class="text-base sm:text-lg text-slate-300 italic font-mono">
+          (phonetic transliteration)
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-400">💡 Hold phone horizontally to show driver or vendor. Tap anywhere to close.</p>
+      
+      <button onclick="closeFullscreenPhrase()" class="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm">
+        Done / Close
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: DOCUMENT PREVIEW -->
   <div id="doc-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
     <div class="glass-card rounded-2xl max-w-lg w-full p-6 border border-slate-700 shadow-2xl relative">
       <button onclick="closeDocModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
@@ -327,7 +559,7 @@
             <span>⚠️</span> PG 169 (17:15 PM) — FLAGGED HIGH RISK / TIGHT
           </div>
           <p class="leading-relaxed">
-            Hanoi flight 1145-554-179 lands at <b>14:45 PM</b>. Deplaning, international immigration (45–60 mins), and descending to <b>Floor B (Basement)</b> for AIRPORTELs suitcase retrieval leaves you at domestic check-in past 16:15 PM. Domestic check-in strictly closes at <b>16:30 PM</b>. Any 20-minute tarmac delay means a missed flight. <b>NOT RECOMMENDED</b>.
+            Hanoi flight lands at <b>14:45 PM</b>. Deplaning, international immigration (45–60 mins), and descending to <b>Floor B (Basement)</b> for AIRPORTELs suitcase retrieval leaves you at domestic check-in past 16:15 PM. Domestic check-in strictly closes at <b>16:30 PM</b>. Any 20-minute tarmac delay means a missed flight. <b>NOT RECOMMENDED</b>.
           </p>
         </div>
 
@@ -337,8 +569,8 @@
             <span>🎯</span> Recommended Primary: Bangkok Airways PG 177 or PG 181
           </div>
           <p class="leading-relaxed">
-            • <b>PG 177:</b> Dep 19:30 BKK $\rightarrow$ Arr 20:35 USM<br>
-            • <b>PG 181:</b> Dep 20:00 BKK $\rightarrow$ Arr 21:05 USM<br>
+            • <b>PG 177:</b> Dep 19:30 BKK &rarr; Arr 20:35 USM<br>
+            • <b>PG 181:</b> Dep 20:00 BKK &rarr; Arr 21:05 USM<br>
             • <b>Stress-Free Buffer:</b> <b>4h 45m connection window</b>. Zero anxiety for baggage retrieval, unhurried reunion with girlfriend, and 2 hours of complimentary access to the <b>Bangkok Airways Boutique Lounge</b> (free pastries, espresso, soft drinks, charging stations in Concourse A/F).
           </p>
         </div>
@@ -353,7 +585,7 @@
         <!-- Fluid Fallbacks -->
         <div class="bg-blue-950/40 p-3 rounded-xl border border-blue-600/40 text-blue-200">
           <span class="font-bold">🌊 Fluid Fallbacks if PG 177/181 Sells Out:</span><br>
-          • <b>Fallback 1:</b> Overnight in Bangkok at Sukhon/Riva Arun on Sep 24; take relaxed morning flight Sep 25.<br>
+          • <b>Fallback 1:</b> Overnight in Bangkok on Sep 24; take relaxed morning flight Sep 25.<br>
           • <b>Fallback 2:</b> Fly into Surat Thani (URT) on AirAsia/Nok Air + Lomprayah high-speed catamaran.
         </div>
       </div>
@@ -387,9 +619,9 @@
             <span class="font-bold text-sm text-emerald-300">✅ Sequence A: Mountain-First Triangle (ACTIVE PRIMARY)</span>
             <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-900 text-emerald-200 font-bold">RECOMMENDED</span>
           </div>
-          <p class="text-slate-200 font-medium mb-1">Sa Pa (Sep 15–17) $\rightarrow$ Ninh Binh (Sep 17–19) $\rightarrow$ Cat Ba Island (Sep 19–22) $\rightarrow$ Hanoi (Sep 22–24)</p>
+          <p class="text-slate-200 font-medium mb-1">Sa Pa (Sep 15–17) &rarr; Ninh Binh (Sep 17–19) &rarr; Cat Ba Island (Sep 19–22) &rarr; Hanoi (Sep 22–24)</p>
           <div class="space-y-1.5 text-slate-300 mt-2">
-            <p>• <b>Solves Major Bottleneck:</b> The old Sa Pa $\rightarrow$ Cat Ba transfer was an exhausting 10-hour cross-country slog.</p>
+            <p>• <b>Solves Major Bottleneck:</b> The old Sa Pa &rarr; Cat Ba transfer was an exhausting 10-hour cross-country slog.</p>
             <p>• <b>Optimized Triangle:</b> Sa Pa to Ninh Binh via direct express highway coach (6h). Ninh Binh to Cat Ba is a breeze (only 2.5h direct bus+ferry). Cat Ba to Hanoi is only 2.5h via Hai Phong 5B expressway.</p>
             <p>• <b>Pacing Advantage:</b> Every post-Sa Pa leg is strictly under 3 hours, leaving full energy for kayaking and cycling!</p>
           </div>
@@ -401,9 +633,9 @@
             <span class="font-bold text-sm text-amber-300">⚠️ Sequence B: Coastal Inversion (DYNAMIC FALLBACK)</span>
             <span class="text-[10px] px-2 py-0.5 rounded bg-amber-900 text-amber-200 font-bold">WEATHER TRIGGERED</span>
           </div>
-          <p class="text-slate-200 font-medium mb-1">Hanoi $\rightarrow$ Cat Ba Island (3d) $\rightarrow$ Ninh Binh (2d) $\rightarrow$ Sa Pa (2d) $\rightarrow$ Ha Giang (3d) $\rightarrow$ Hanoi</p>
+          <p class="text-slate-200 font-medium mb-1">Hanoi &rarr; Cat Ba Island (3d) &rarr; Ninh Binh (2d) &rarr; Sa Pa (2d) &rarr; Ha Giang (3d) &rarr; Hanoi</p>
           <div class="space-y-1.5 text-slate-300 mt-2">
-            <p>• <b>Trigger Condition:</b> Live satellite radar or Vietnam Disaster Management alerts showing heavy tropical depression rainfall, flooding, or landslides on northern mountain passes (Ma Pi Leng / O Quy Ho) during Sep 12–15.</p>
+            <p>• <b>Trigger Condition:</b> Live satellite radar or Vietnam Disaster Management alerts showing heavy tropical depression rainfall, flooding, or landslides on northern mountain passes during Sep 12–15.</p>
             <p>• <b>Strategic Pivot:</b> Reverses the loop to enjoy calm waters in Lan Ha Bay and Ninh Binh first, pushing mountain passes to late September when high-altitude conditions clear.</p>
           </div>
         </div>

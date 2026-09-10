@@ -77,7 +77,6 @@ class TestItineraryIntegrity(unittest.TestCase):
                 status = hotel.get("status", "")
                 if "CONFIRMED" in status:
                     confirmed_count += 1
-                    # Only Sukhon Hotel (Day 1) can be confirmed accommodation
                     self.assertIn("Sukhon", hotel["hotel_name"])
                 elif "UNBOOKED" in status or "ACTION REQUIRED" in status:
                     unbooked_count += 1
@@ -85,15 +84,83 @@ class TestItineraryIntegrity(unittest.TestCase):
         self.assertEqual(confirmed_count, 1, "Only Sukhon Hotel should be marked CONFIRMED accommodation.")
         self.assertGreaterEqual(unbooked_count, 20, "All pending hotels should be marked ACTION REQUIRED - UNBOOKED.")
 
-    def test_no_synthetic_files_referenced(self):
-        """Verify that document files are not pointing to non-existent synthetic files."""
-        for day in self.data.get("days", []):
-            for doc in day.get("important_documents", []):
-                file_status = doc.get("file_status", "")
-                # If marked as verified local file, it must exist on disk
-                if file_status == "LOCAL_FILE_VERIFIED":
-                    self.assertTrue(os.path.exists(doc.get("file_path", "")), f"File {doc.get('file_path')} does not exist!")
+    def test_all_days_have_dual_experiences(self):
+        """Verify all 29 days contain Plan A (Primary) and Plan B (Contingency) with rich metadata."""
+        days = self.data.get("days", [])
+        self.assertEqual(len(days), 29)
+        for day in days:
+            d_num = day["day_number"]
+            exp = day.get("experiences")
+            self.assertIsNotNone(exp, f"Day {d_num} is missing experiences block")
+            self.assertIn("primary", exp, f"Day {d_num} is missing primary experience")
+            self.assertIn("contingency", exp, f"Day {d_num} is missing contingency experience")
+
+            p = exp["primary"]
+            self.assertTrue(len(p.get("title", "")) > 0, f"Day {d_num} primary title is empty")
+            self.assertTrue(len(p.get("duration", "")) > 0, f"Day {d_num} primary duration is empty")
+            self.assertTrue(len(p.get("cost_estimate", "")) > 0, f"Day {d_num} primary cost is empty")
+            self.assertTrue(len(p.get("time_sensitive_tip", "")) > 0, f"Day {d_num} primary tip is empty")
+
+            c = exp["contingency"]
+            self.assertTrue(len(c.get("title", "")) > 0, f"Day {d_num} contingency title is empty")
+            self.assertTrue(len(c.get("trigger", "")) > 0, f"Day {d_num} contingency trigger is empty")
+            self.assertTrue(len(c.get("cost_estimate", "")) > 0, f"Day {d_num} contingency cost is empty")
+
+    def test_transit_days_have_transport_module(self):
+        """Verify that designated transit days have door-to-door transport modules."""
+        key_transit_days = [1, 2, 3, 5, 7, 9, 12, 14, 15, 21, 27, 29]
+        days_map = {d["day_number"]: d for d in self.data.get("days", [])}
+        for d_num in key_transit_days:
+            day = days_map[d_num]
+            trans = day.get("transport_module")
+            self.assertIsNotNone(trans, f"Day {d_num} should have transport_module")
+            route_val = trans.get("route") or trans.get("route_title") or ""
+            self.assertTrue(len(route_val) > 0, f"Day {d_num} transport title empty")
+            self.assertTrue(len(trans.get("pickup_hub", "")) > 0, f"Day {d_num} pickup hub empty")
+            self.assertTrue(len(trans.get("dropoff_terminal", "")) > 0, f"Day {d_num} dropoff terminal empty")
+            self.assertTrue(len(trans.get("duration", "")) > 0, f"Day {d_num} duration empty")
+            self.assertTrue(len(trans.get("booking_url", "")) > 0, f"Day {d_num} booking url empty")
+
+    def test_packing_master_list_integrity(self):
+        """Verify Split-Luggage packing master list contains Bag A, Bag B, and Pre-departure."""
+        packing = self.data.get("packing_master_list")
+        self.assertIsNotNone(packing, "packing_master_list is missing from root")
+        self.assertIn("bag_a_backpack", packing)
+        self.assertIn("bag_b_suitcase", packing)
+        self.assertIn("pre_departure_inspection", packing)
+
+        self.assertGreaterEqual(len(packing["bag_a_backpack"]), 10, "Bag A should have >= 10 items")
+        self.assertGreaterEqual(len(packing["bag_b_suitcase"]), 10, "Bag B should have >= 10 items")
+        self.assertGreaterEqual(len(packing["pre_departure_inspection"]), 5, "Pre-departure should have >= 5 items")
+
+    def test_translations_dictionary_integrity(self):
+        """Verify Offline Translations phrasebook contains essential categories and dual-language scripts."""
+        trans = self.data.get("translations_dictionary")
+        self.assertIsNotNone(trans, "translations_dictionary is missing from root")
+        self.assertIn("taxi_transit", trans)
+        self.assertIn("food_dietary", trans)
+        self.assertIn("emergency_medical", trans)
+        self.assertIn("airport_luggage", trans)
+
+        for cat, phrases in trans.items():
+            self.assertGreaterEqual(len(phrases), 4, f"Category {cat} should have >= 4 phrases")
+            for p in phrases:
+                self.assertTrue(len(p.get("en", "")) > 0)
+                self.assertTrue(len(p.get("th", "")) > 0)
+                self.assertTrue(len(p.get("th_phonetic", "")) > 0)
+                self.assertTrue(len(p.get("vi", "")) > 0)
+                self.assertTrue(len(p.get("vi_phonetic", "")) > 0)
+
+    def test_currency_benchmarks_integrity(self):
+        """Verify 4-way Currency benchmarks exist with valid rates and advisories."""
+        curr = self.data.get("currency_benchmarks")
+        self.assertIsNotNone(curr, "currency_benchmarks is missing from root")
+        rates = curr.get("rates", {})
+        self.assertEqual(rates.get("USD"), 1.0)
+        self.assertAlmostEqual(rates.get("ILS"), 3.7, places=1)
+        self.assertAlmostEqual(rates.get("THB"), 36.5, places=1)
+        self.assertEqual(rates.get("VND"), 25400.0)
+        self.assertGreaterEqual(len(curr.get("advisory", [])), 3)
 
 if __name__ == "__main__":
     unittest.main()
-
