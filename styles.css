@@ -3,7 +3,33 @@
    Inspired by Wanderlog, Airbnb Trips, Apple Maps Guides, and Linear
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;
+
+/* ==========================================================================
+   iOS SAFARI & IPHONE CRITICAL OPTIMIZATIONS
+   ========================================================================== */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+button, a, input, select, textarea, [onclick] {
+  touch-action: manipulation;
+}
+
+/* Force minimum 16px on mobile inputs to eliminate disruptive iOS Safari auto-zoom */
+@media screen and (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* --- Theme Variables (Light Mode Default) --- */
 :root {
@@ -186,8 +212,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 58px;
-  padding: 8px 10px;
+  min-width: 52px;
+  padding: 6px 8px;
   border-radius: 12px;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -197,6 +223,14 @@ body {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
   box-shadow: var(--shadow-sm);
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 640px) {
+  .timeline-day-pill {
+    min-width: 58px;
+    padding: 8px 10px;
+  }
 }
 
 .timeline-day-pill:hover {
@@ -334,14 +368,21 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 45;
-  background-color: var(--bg-surface);
+  z-index: 50;
+  background-color: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--border-subtle);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+  padding-top: 8px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 20px));
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+}
+.dark .mobile-nav-bar {
+  background-color: rgba(19, 28, 46, 0.94);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
 }
 .mobile-nav-item {
   display: flex;
@@ -526,5 +567,30 @@ body {
     background: #ffffff !important;
     box-shadow: none !important;
     color: #000000 !important;
+  }
+}
+
+
+/* --- iOS Bottom Sheet Modal Styles on Mobile --- */
+@media screen and (max-width: 639px) {
+  .modal-sheet-container {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .modal-sheet-card {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: 28px !important;
+    border-top-right-radius: 28px !important;
+    max-height: 92vh !important;
+    width: 100% !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3) !important;
+  }
+  .modal-drag-indicator {
+    width: 42px;
+    height: 5px;
+    border-radius: 9999px;
+    background-color: var(--border-medium);
+    margin: 0 auto 14px auto;
   }
 }
