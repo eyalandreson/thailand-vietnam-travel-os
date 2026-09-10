@@ -2296,6 +2296,11 @@ async function loadChangeRequests(forceToast = false) {
         const data = await resp.json();
         const serverRequests = data.requests || [];
         
+        // Track previously resolved IDs to detect state change
+        const prevResolvedSet = new Set(
+          localChangeRequests.filter(r => r.status === 'RESOLVED').map(r => r.id)
+        );
+
         // Merge server requests with local requests
         const idMap = new Map();
         serverRequests.forEach(r => idMap.set(r.id, r));
@@ -2303,9 +2308,27 @@ async function loadChangeRequests(forceToast = false) {
           if (!idMap.has(r.id)) idMap.set(r.id, r);
         });
 
+        const newlyResolved = serverRequests.filter(r => 
+          r.status === 'RESOLVED' && !prevResolvedSet.has(r.id)
+        );
+
         localChangeRequests = Array.from(idMap.values());
         saveCachedRequests();
         renderChangeRequestQueue();
+
+        if (newlyResolved.length > 0) {
+          newlyResolved.forEach(nr => {
+            playAgentSuccessChime();
+            showToast(`🎉 Antigravity Agent finished '${nr.title || nr.id}'! Changes are live.`, 'success', 8000);
+            if ('Notification' in window && Notification.permission === 'granted') {
+              new Notification('Antigravity Agent Finished Work', {
+                body: `Ticket ${nr.id} (${nr.title}) is resolved and live on your Travel OS!`,
+                icon: 'manifest.json'
+              });
+            }
+          });
+        }
+
         if (forceToast) showToast(`Loaded ${localChangeRequests.length} tickets from Antigravity Bridge.`, 'success');
         return;
       }
@@ -2631,5 +2654,41 @@ function copyTextToClipboard(text) {
     document.body.removeChild(ta);
   }
 }
+
+function playAgentSuccessChime() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    const now = ctx.currentTime;
+    osc.frequency.setValueAtTime(587.33, now); // D5
+    osc.frequency.setValueAtTime(880.00, now + 0.12); // A5
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    osc.start(now);
+    osc.stop(now + 0.4);
+  } catch (e) {}
+}
+
+function enableBrowserNotifications() {
+  if (!('Notification' in window)) {
+    showToast('Browser notifications are not supported by this browser.', 'info');
+    return;
+  }
+  Notification.requestPermission().then(permission => {
+    if (permission === 'granted') {
+      showToast('🔔 Notifications enabled! You will be alerted when the agent finishes work.', 'success');
+      playAgentSuccessChime();
+    } else {
+      showToast('Notifications permission was not granted.', 'info');
+    }
+  });
+}
+
 
 
