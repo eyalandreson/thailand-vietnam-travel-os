@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-09-09T00:47:00.608740Z",
+  "timestamp": "2026-09-10T20:28:19.356553Z",
   "routine_1_ingestion": {
     "status": "SUCCESS",
-    "total_confirmed_in_registry": 18,
-    "itinerary_days_synchronized": 0,
-    "message": "Ingestion verified: 18 documents active."
+    "total_confirmed_in_registry": 6,
+    "itinerary_days_synchronized": 2,
+    "message": "Ingestion verified: 6 documents active."
   },
   "routine_2_sync": {
     "status": "DUAL_SYNC_COMPLETED",
@@ -15,12 +15,17 @@
     "integrity_verified": true
   },
   "routine_3_critic": {
-    "total_hotels_audited": 39,
-    "passed_count": 39,
+    "total_hotels_audited": 38,
+    "passed_count": 38,
     "failure_count": 0,
     "pass_rate_pct": 100.0,
     "failures": [],
     "status": "APPROVED"
+  },
+  "routine_5_traveler_changes": {
+    "total_pending_found": 0,
+    "processed_count": 0,
+    "results": []
   },
   "routine_4_web": "VERIFIED_READY"
 }

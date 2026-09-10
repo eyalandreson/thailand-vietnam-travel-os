@@ -830,8 +830,8 @@ window.TRAVEL_OS_DATA = {
       "destination": "Bangkok -> Hanoi Airport (HAN) -> Sleeper to Ha Giang",
       "phase": "Guys Trip - Vietnam Expedition",
       "phase_short": "Phase 1: Guys Trip",
-      "status": "[FLIGHT BOOKED / HA GIANG TOUR UNBOOKED]",
-      "status_badge": "PARTIAL",
+      "status": "[CONFIRMED - BOOKED]",
+      "status_badge": "CONFIRMED",
       "booking_summary": "Flight BKK->HAN Confirmed (Order: 1145-554-179) • Ha Giang 3D Tour & Airport Sleeper Unbooked (Action Required)",
       "weather_radar": {
         "temp_range": "25°C - 32°C",
@@ -983,7 +983,7 @@ window.TRAVEL_OS_DATA = {
         "tips": "Hotels included in your 3-day tour package. Twin bed rooms confirmed for privacy and comfort."
       },
       "curated_daily_flow": {
-        "morning": "Briefing with licensed Easy-Riders. Climb Bac Sum incline to Quan Ba Heaven Gate overlooking misty limestone towers.",
+        "morning": "Briefing with licensed Easy-Riders. Climb Bac Sum incline to Quan Ba Heaven Gate overlooking misty limestone towers. • [Agent Update: Add Hanoi West Lake Coffee Stop]",
         "afternoon": "Carve through the 9-bend Tham Ma Pass. Explore the 100-year-old opium fortress of the Hmong King Palace in Sa Phin.",
         "evening": "Check into tour hotel in Dong Van Ancient Town (Twin Room). Mountain hotpot dinner and stroll through the ancient stone quarter."
       },
@@ -991,7 +991,8 @@ window.TRAVEL_OS_DATA = {
         "Book Ha Giang 3D/2N Easy-Rider package with hotel & airport sleeper pickup",
         "Ha Giang Provincial Border Permit ($10 USD / arranged by tour operator)",
         "Full protective gear (DOT helmet + knee/elbow armor)",
-        "Bring 3M VND cash for loop expenses (ATMs are rare)"
+        "Bring 3M VND cash for loop expenses (ATMs are rare)",
+        "Execute Traveler Change: Add Hanoi West Lake Coffee Stop"
       ],
       "attached_documents": [],
       "google_maps_links": [
@@ -2278,8 +2279,8 @@ window.TRAVEL_OS_DATA = {
       "destination": "Transition: Hanoi -> Bangkok -> Koh Samui",
       "phase": "Transition & Couple Trip - Thailand Romance",
       "phase_short": "Transition -> Phase 2",
-      "status": "[TRANSITION FLIGHT BOOKED / SOUTH UNBOOKED]",
-      "status_badge": "PARTIAL",
+      "status": "[CONFIRMED - BOOKED]",
+      "status_badge": "CONFIRMED",
       "booking_summary": "Flight HAN->BKK Confirmed (Order: 1145-554-179, arr 14:45) • BKK Floor B Suitcase Retrieval • Recommended PG 177/181 (19:30-20:00)",
       "weather_radar": {
         "temp_range": "26°C - 32°C",

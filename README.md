@@ -64,7 +64,7 @@ All recommended hotels and transit routes must pass three adversarial filters:
 
 ---
 
-## 5. Autonomous Serverless Runner (Routines 1–4)
+## 5. Autonomous Serverless Runner (Routines 1–5)
 
 The platform runs continuously via:
 1. **GitHub Actions Serverless Cron**: `cloud_workflows/travel_os_runner.yml` runs every 4 hours headlessly without requiring a local machine.
@@ -76,3 +76,17 @@ The platform runs continuously via:
    ```bash
    python -m unittest discover -s tests
    ```
+
+---
+
+## 6. Antigravity Agent Hub & Traveler Change Modeler
+
+Travelers can submit requests directly from within the web platform to change travel plans (hotels, flights, routes, pacing) or request website improvements:
+- **In-App Header & Floating Access**: Quick-access buttons in the top navbar, floating dock, and individual Day cards ("Change Plan with Agent").
+- **Antigravity Local Bridge**:
+  ```bash
+  python agent_bridge_server.py --port 5055
+  ```
+- **Autonomous Fixer Engine (`core/agent_fixer.py`)**: Automatically parses traveler intent, updates `core/itinerary_data.json`, audits against the 3-Pass Adversarial Critic (enforcing Twin beds for Phase 1 and King beds for Phase 2), and executes Dual Blueprint Synchronization (Doc & Web).
+- **Direct Antigravity Directives**: If offline, generates grounded 1-click Antigravity directives ready for chat or the `agy` CLI.
+

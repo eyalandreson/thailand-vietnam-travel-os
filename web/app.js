@@ -86,6 +86,7 @@ function initApp() {
   initPackingChecklist();
   initCurrencyDefaults();
   initGeminiAssistant();
+  initAntigravityHub();
 }
 
 function renderHeaderMetrics() {
@@ -717,6 +718,19 @@ function renderDays() {
               ${mapsHtml || '<span class="text-slate-400 text-xs">Local routes</span>'}
             </div>
           </div>
+        </div>
+
+        <!-- Antigravity Day Agent Action Bar -->
+        <div class="mt-3.5 pt-3 border-t border-slate-200/70 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+            <span>🤖</span>
+            <span>Have changes or new ideas for Day ${day.day_number}?</span>
+          </div>
+          <button onclick="openChangeRequestModal({ day: ${day.day_number}, destination: '${(day.destination || '').replace(/'/g, "\\'")}', category: 'plan' })" 
+                  class="px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold border border-emerald-300 dark:border-emerald-700/50 transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Tell Antigravity agent to update Day ${day.day_number}">
+            <span>✏️</span>
+            <span>Change Plan with Agent</span>
+          </button>
         </div>
 
       </div>
@@ -1952,4 +1966,611 @@ function renderMarkdownToHtml(md) {
 
   return `<p>${html}</p>`;
 }
+
+// =============================================================
+// ANTIGRAVITY AGENT HUB & TRAVELER CHANGE REQUEST CONTROLLER
+// =============================================================
+let bridgeOnline = false;
+let bridgeApiUrl = 'http://127.0.0.1:5055';
+let localChangeRequests = [];
+let currentCrTab = 'submit';
+
+function initAntigravityHub() {
+  populateCrDayOptions();
+  loadCachedRequests();
+  checkBridgeStatus(false);
+  // Periodic background ping every 30 seconds
+  setInterval(() => {
+    checkBridgeStatus(false);
+  }, 30000);
+}
+
+function updateBridgeIndicatorUI(online, stats = null) {
+  bridgeOnline = online;
+
+  const headerDot = document.getElementById('header-bridge-dot');
+  const floatingDot = document.getElementById('floating-bridge-dot');
+  const badgeDot = document.getElementById('bridge-connection-dot');
+  const badgeText = document.getElementById('bridge-connection-text');
+  const badgeEl = document.getElementById('bridge-connection-badge');
+
+  if (online) {
+    if (headerDot) headerDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping';
+    if (floatingDot) floatingDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping';
+    if (badgeDot) badgeDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse';
+    if (badgeText) badgeText.innerText = 'Bridge Connected (:5055)';
+    if (badgeEl) {
+      badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-mono font-bold border border-emerald-300 dark:border-emerald-500/40 flex items-center gap-1';
+    }
+  } else {
+    if (headerDot) headerDot.className = 'w-1.5 h-1.5 rounded-full bg-cyan-400';
+    if (floatingDot) floatingDot.className = 'w-2 h-2 rounded-full bg-cyan-400';
+    if (badgeDot) badgeDot.className = 'w-1.5 h-1.5 rounded-full bg-cyan-400';
+    if (badgeText) badgeText.innerText = 'Direct Agent Mode';
+    if (badgeEl) {
+      badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 font-mono font-bold border border-cyan-300 dark:border-cyan-500/40 flex items-center gap-1';
+    }
+  }
+}
+
+async function checkBridgeStatus(manualToast = false) {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const resp = await fetch(`${bridgeApiUrl}/api/status`, {
+      method: 'GET',
+      signal: controller.signal,
+      headers: { 'Accept': 'application/json' }
+    });
+    clearTimeout(timeoutId);
+
+    if (resp.ok) {
+      const data = await resp.json();
+      updateBridgeIndicatorUI(true, data.stats);
+      if (manualToast) {
+        showToast('🟢 Antigravity Local Bridge Connected! Ready to auto-fix.', 'success');
+      }
+      loadChangeRequests(false);
+      return true;
+    } else {
+      throw new Error(`HTTP ${resp.status}`);
+    }
+  } catch (err) {
+    updateBridgeIndicatorUI(false);
+    if (manualToast) {
+      showToast('⚡ Antigravity Direct Mode Active (Prompts & Offline Queue ready).', 'info');
+    }
+    return false;
+  }
+}
+
+function openChangeRequestModal(options = {}) {
+  const modal = document.getElementById('change-request-modal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+
+  populateCrDayOptions();
+
+  if (options.day !== undefined && options.day !== null) {
+    const daySelect = document.getElementById('cr-target-day-select');
+    if (daySelect) {
+      daySelect.value = options.day;
+      handleCrDaySelectChange();
+    }
+  }
+
+  if (options.category) {
+    const radios = document.getElementsByName('cr_category');
+    radios.forEach(r => {
+      if (r.value === options.category) r.checked = true;
+    });
+    handleCrCategoryChange();
+  }
+
+  if (options.title) {
+    const titleInput = document.getElementById('cr-title-input');
+    if (titleInput) titleInput.value = options.title;
+  }
+
+  checkBridgeStatus(false);
+  loadChangeRequests();
+  switchCrTab('submit');
+}
+
+function closeChangeRequestModal() {
+  const modal = document.getElementById('change-request-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function switchCrTab(tabName) {
+  currentCrTab = tabName;
+  const submitContent = document.getElementById('cr-tab-content-submit');
+  const queueContent = document.getElementById('cr-tab-content-queue');
+  const directiveContent = document.getElementById('cr-tab-content-directive');
+
+  const btnSubmit = document.getElementById('cr-tab-btn-submit');
+  const btnQueue = document.getElementById('cr-tab-btn-queue');
+  const btnDirective = document.getElementById('cr-tab-btn-directive');
+
+  [submitContent, queueContent, directiveContent].forEach(c => c && c.classList.add('hidden'));
+  [btnSubmit, btnQueue, btnDirective].forEach(b => {
+    if (b) {
+      b.className = 'px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition flex items-center gap-1.5';
+    }
+  });
+
+  if (tabName === 'submit') {
+    if (submitContent) submitContent.classList.remove('hidden');
+    if (btnSubmit) btnSubmit.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-sm transition';
+  } else if (tabName === 'queue') {
+    if (queueContent) queueContent.classList.remove('hidden');
+    if (btnQueue) btnQueue.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-sm transition flex items-center gap-1.5';
+    renderChangeRequestQueue();
+  } else if (tabName === 'directive') {
+    if (directiveContent) directiveContent.classList.remove('hidden');
+    if (btnDirective) btnDirective.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-sm transition flex items-center gap-1';
+    updateDirectivePreviewFromForm();
+  }
+}
+
+function populateCrDayOptions() {
+  const select = document.getElementById('cr-target-day-select');
+  if (!select || select.options.length > 1) return; // already populated
+
+  const days = (itineraryData && itineraryData.days) || [];
+  days.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d.day_number;
+    opt.innerText = `Day ${d.day_number}: ${d.destination} (${d.day_of_week}, ${d.date})`;
+    select.appendChild(opt);
+  });
+}
+
+function handleCrCategoryChange() {
+  const radios = document.getElementsByName('cr_category');
+  let selected = 'plan';
+  radios.forEach(r => { if (r.checked) selected = r.value; });
+
+  const titleInput = document.getElementById('cr-title-input');
+  const descInput = document.getElementById('cr-desc-input');
+  const criticBox = document.getElementById('cr-critic-hint-box');
+
+  if (selected === 'plan') {
+    if (titleInput && !titleInput.value) titleInput.placeholder = 'e.g. Switch Day 18 Koh Phangan villa to Panviman Resort';
+    if (descInput && !descInput.value) descInput.placeholder = 'Specify target hotel, route update, or activity adjustment for the agent to fix...';
+    if (criticBox) criticBox.classList.remove('hidden');
+  } else if (selected === 'site') {
+    if (titleInput && !titleInput.value) titleInput.placeholder = 'e.g. Add offline currency quick-tap buttons or map route pins';
+    if (descInput && !descInput.value) descInput.placeholder = 'Describe the UI feature, styling tweak, or layout change for the developer agent...';
+    if (criticBox) criticBox.classList.add('hidden');
+  } else if (selected === 'urgent') {
+    if (titleInput && !titleInput.value) titleInput.placeholder = 'e.g. URGENT: Flight BKK->USM delayed by 3 hours, replan transfer';
+    if (descInput && !descInput.value) descInput.placeholder = 'Describe the flight delay, storm contingency, or immediate disruption...';
+    if (criticBox) criticBox.classList.remove('hidden');
+  }
+}
+
+function handleCrDaySelectChange() {
+  const select = document.getElementById('cr-target-day-select');
+  const hintText = document.getElementById('cr-critic-hint-text');
+  if (!select || !hintText) return;
+
+  const dayVal = parseInt(select.value);
+  if (!dayVal) {
+    hintText.innerHTML = 'The agent will verify all updates against Phase constraints (Twin beds for Vietnam Phase 1, Romantic King bed for Thailand Phase 2, noise &amp; recent review screening &ge; 8.5/10).';
+    return;
+  }
+
+  if (dayVal <= 13) {
+    hintText.innerHTML = `<b>Phase 1 (Northern Vietnam Loop - Day ${dayVal}):</b> Adversarial Critic will strictly enforce <b>Twin Beds / Two Separate Beds</b>, 55L backpack compliance, and no nightlife noise strips.`;
+  } else {
+    hintText.innerHTML = `<b>Phase 2 (Gulf of Thailand &amp; Bangkok - Day ${dayVal}):</b> Adversarial Critic will strictly enforce <b>Romantic King Beds / Ocean Views</b>, relaxation pacing, and noise checks.`;
+  }
+}
+
+function applyCrPreset(preset) {
+  const titleInput = document.getElementById('cr-title-input');
+  const descInput = document.getElementById('cr-desc-input');
+  const radios = document.getElementsByName('cr_category');
+
+  if (preset === 'hotel') {
+    radios[0].checked = true;
+    handleCrCategoryChange();
+    if (titleInput) titleInput.value = 'Change accommodation to: [Enter Hotel Name]';
+    if (descInput) descInput.value = 'Please swap our stay to [Hotel Name]. Make sure it passes the 3-pass critic audit and meets bed specifications.';
+  } else if (preset === 'flight') {
+    radios[0].checked = true;
+    handleCrCategoryChange();
+    if (titleInput) titleInput.value = 'Adjust flight / transit departure time';
+    if (descInput) descInput.value = 'Update our departure time to [Time] and recalculate buffer time and door-to-door transit schedule.';
+  } else if (preset === 'restaurant') {
+    radios[0].checked = true;
+    handleCrCategoryChange();
+    if (titleInput) titleInput.value = 'Add restaurant recommendation: [Food Spot]';
+    if (descInput) descInput.value = 'Add [Food Spot] to our evening curated flow with specific dish recommendations.';
+  } else if (preset === 'rain') {
+    radios[0].checked = true;
+    handleCrCategoryChange();
+    if (titleInput) titleInput.value = 'Activate Rainy Day Plan B Contingency';
+    if (descInput) descInput.value = 'Weather forecast indicates heavy rain. Switch primary activity to indoor contingency Plan B.';
+  } else if (preset === 'ui') {
+    radios[1].checked = true;
+    handleCrCategoryChange();
+    if (titleInput) titleInput.value = 'Site Feature: [Describe Feature]';
+    if (descInput) descInput.value = 'Enhance the site UI by adding: [Feature description, styling, or buttons].';
+  }
+
+  if (titleInput) titleInput.focus();
+}
+
+function loadCachedRequests() {
+  try {
+    const raw = localStorage.getItem('travel_os_change_requests');
+    localChangeRequests = raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    localChangeRequests = [];
+  }
+  updateQueueBadge();
+}
+
+function saveCachedRequests() {
+  try {
+    localStorage.setItem('travel_os_change_requests', JSON.stringify(localChangeRequests));
+  } catch (e) {
+    console.warn('Could not save to localStorage', e);
+  }
+  updateQueueBadge();
+}
+
+function updateQueueBadge() {
+  const badge = document.getElementById('cr-queue-badge');
+  if (badge) badge.innerText = localChangeRequests.length;
+}
+
+async function loadChangeRequests(forceToast = false) {
+  loadCachedRequests();
+
+  if (bridgeOnline) {
+    try {
+      const resp = await fetch(`${bridgeApiUrl}/api/change-requests`);
+      if (resp.ok) {
+        const data = await resp.json();
+        const serverRequests = data.requests || [];
+        
+        // Merge server requests with local requests
+        const idMap = new Map();
+        serverRequests.forEach(r => idMap.set(r.id, r));
+        localChangeRequests.forEach(r => {
+          if (!idMap.has(r.id)) idMap.set(r.id, r);
+        });
+
+        localChangeRequests = Array.from(idMap.values());
+        saveCachedRequests();
+        renderChangeRequestQueue();
+        if (forceToast) showToast(`Loaded ${localChangeRequests.length} tickets from Antigravity Bridge.`, 'success');
+        return;
+      }
+    } catch (e) {
+      console.warn('Error fetching server change requests', e);
+    }
+  }
+
+  renderChangeRequestQueue();
+  if (forceToast) showToast(`Loaded ${localChangeRequests.length} tickets from offline storage.`, 'info');
+}
+
+function renderChangeRequestQueue() {
+  const container = document.getElementById('cr-queue-list');
+  const countEl = document.getElementById('cr-queue-filter-count');
+  if (!container) return;
+
+  if (countEl) countEl.innerText = `${localChangeRequests.length} ticket(s)`;
+
+  if (localChangeRequests.length === 0) {
+    container.innerHTML = `
+      <div class="p-8 text-center text-slate-400 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-800">
+        <span class="text-3xl block mb-2">📋</span>
+        <p class="font-bold text-sm text-slate-700 dark:text-slate-300">No change requests in queue.</p>
+        <p class="text-xs text-slate-500 mt-1">Submit your first travel plan or site change using the form.</p>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  localChangeRequests.forEach(ticket => {
+    const isResolved = ticket.status === 'RESOLVED';
+    const isQueued = ticket.status === 'QUEUED' || ticket.status === 'PENDING';
+    const badgeClass = isResolved 
+      ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-600'
+      : (isQueued 
+        ? 'bg-cyan-100 dark:bg-cyan-950/80 text-cyan-800 dark:text-cyan-300 border-cyan-300 dark:border-cyan-600'
+        : 'bg-indigo-100 dark:bg-indigo-950/80 text-indigo-800 dark:text-indigo-300 border-indigo-300 dark:border-indigo-600');
+
+    const dayBadge = ticket.target_day 
+      ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold">Day ${ticket.target_day}</span>`
+      : `<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold">General</span>`;
+
+    const diffsHtml = (ticket.diff_summary || []).map(d => `<li class="text-[11px] text-emerald-700 dark:text-emerald-300">✓ ${d}</li>`).join('');
+
+    html += `
+      <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 shadow-sm space-y-2.5">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs font-black text-slate-900 dark:text-white">${ticket.id}</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full uppercase font-bold border ${badgeClass}">
+              ${ticket.status}
+            </span>
+            ${dayBadge}
+          </div>
+          <span class="text-[10px] text-slate-400 font-mono">${(ticket.created_at || '').substring(0, 16).replace('T', ' ')}</span>
+        </div>
+
+        <div>
+          <h4 class="font-extrabold text-sm text-slate-900 dark:text-white">${ticket.title}</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">${ticket.description}</p>
+        </div>
+
+        ${ticket.agent_resolution ? `
+          <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-200 space-y-1.5">
+            <div class="font-bold flex items-center gap-1">
+              <span>🤖</span> Agent Resolution:
+            </div>
+            <p class="leading-relaxed">${ticket.agent_resolution}</p>
+            ${diffsHtml ? `<ul class="space-y-0.5 pt-1 border-t border-emerald-200 dark:border-emerald-800/40">${diffsHtml}</ul>` : ''}
+          </div>
+        ` : ''}
+
+        <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs">
+          <span class="text-slate-400 text-[11px]">Submitter: <b>${ticket.submitter || 'Traveler'}</b></span>
+          <div class="flex items-center gap-2">
+            ${bridgeOnline && !isResolved ? `
+              <button onclick="reapplyTicketWithAgent('${ticket.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">
+                Fix with Agent ⚡
+              </button>
+            ` : ''}
+            <button onclick="copySingleTicketDirective('${ticket.id}')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-semibold transition">
+              Copy Directive 📋
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+async function handleCrSubmit(event) {
+  event.preventDefault();
+  const submitBtn = document.getElementById('cr-submit-btn');
+
+  const radios = document.getElementsByName('cr_category');
+  let category = 'plan';
+  radios.forEach(r => { if (r.checked) category = r.value; });
+
+  const dayVal = document.getElementById('cr-target-day-select').value;
+  const targetDay = dayVal ? parseInt(dayVal) : null;
+  const priority = document.getElementById('cr-priority-select').value;
+  const title = document.getElementById('cr-title-input').value.trim();
+  const description = document.getElementById('cr-desc-input').value.trim();
+  const submitter = document.getElementById('cr-submitter-input').value.trim() || 'Eyal';
+
+  if (!title && !description) {
+    showToast('Please provide a title or description for your change.', 'error');
+    return;
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Processing with Agent...</span> <span class="animate-spin">⚙️</span>';
+  }
+
+  const payload = {
+    category: category,
+    target_day: targetDay,
+    day: targetDay,
+    priority: priority,
+    title: title,
+    description: description,
+    submitter: submitter,
+    auto_apply: true
+  };
+
+  let ticketId = `CR-${new Date().toISOString().slice(0,10).replace(/-/g,'')}-${Math.floor(100 + Math.random()*900)}`;
+
+  if (bridgeOnline) {
+    try {
+      const resp = await fetch(`${bridgeApiUrl}/api/change-requests`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (resp.ok) {
+        const res = await resp.json();
+        ticketId = res.ticket_id || ticketId;
+        const newReq = res.request || { ...payload, id: ticketId, status: res.auto_applied ? 'RESOLVED' : 'QUEUED' };
+
+        localChangeRequests.unshift(newReq);
+        saveCachedRequests();
+
+        if (res.auto_applied) {
+          showToast(`🚀 Ticket ${ticketId} auto-resolved by Antigravity Agent! Reloading data...`, 'success');
+          // Reload page data after slight delay to show updated day
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else {
+          showToast(`✓ Ticket ${ticketId} dispatched to Antigravity Agent queue.`, 'success');
+        }
+
+        resetCrForm();
+        switchCrTab('queue');
+        return;
+      }
+    } catch (e) {
+      console.warn('Bridge request failed, falling back to local queue', e);
+    }
+  }
+
+  // Fallback: Local Offline Queue & Directive Generator
+  const offlineTicket = {
+    id: ticketId,
+    created_at: new Date().toISOString(),
+    category: category,
+    target_day: targetDay,
+    priority: priority,
+    title: title,
+    description: description,
+    submitter: submitter,
+    status: 'QUEUED',
+    agent_resolution: null,
+    diff_summary: ['Saved to local offline queue. Direct prompt ready for Antigravity.']
+  };
+
+  localChangeRequests.unshift(offlineTicket);
+  saveCachedRequests();
+
+  // Copy directive to clipboard automatically
+  const directiveText = generateCrDirectiveText(offlineTicket);
+  copyTextToClipboard(directiveText);
+
+  showToast(`📋 Ticket ${ticketId} queued! Antigravity Directive copied to clipboard.`, 'success');
+  switchCrTab('directive');
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span>Dispatch to Agent</span> <span>🚀</span>';
+  }
+}
+
+async function reapplyTicketWithAgent(ticketId) {
+  if (!bridgeOnline) {
+    showToast('Bridge not online. Start `python agent_bridge_server.py` to auto-fix.', 'info');
+    return;
+  }
+  showToast(`Running agent fixer on ${ticketId}...`, 'info');
+  try {
+    const resp = await fetch(`${bridgeApiUrl}/api/change-requests/${ticketId}/apply`, {
+      method: 'POST'
+    });
+    if (resp.ok) {
+      showToast(`✓ ${ticketId} successfully resolved by agent!`, 'success');
+      loadChangeRequests();
+      setTimeout(() => window.location.reload(), 1200);
+    } else {
+      showToast(`Agent error fixing ${ticketId}`, 'error');
+    }
+  } catch (e) {
+    showToast(`Network error communicating with bridge`, 'error');
+  }
+}
+
+function resetCrForm() {
+  const form = document.getElementById('cr-form');
+  if (form) form.reset();
+  const submitBtn = document.getElementById('cr-submit-btn');
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span>Dispatch to Agent</span> <span>🚀</span>';
+  }
+}
+
+function generateCrDirectiveText(data) {
+  const tid = data.id || 'CR-NEW';
+  const category = (data.category || 'plan').toUpperCase();
+  const dayStr = data.target_day ? `Day ${data.target_day}` : 'General / Whole Trip';
+  const priority = (data.priority || 'NORMAL').toUpperCase();
+  const title = data.title || '';
+  const desc = data.description || '';
+  const submitter = data.submitter || 'Traveler';
+
+  return `# [ANTIGRAVITY DIRECTIVE: ${tid}]
+**Ticket**: \`${tid}\`
+**Category**: ${category}
+**Target**: ${dayStr}
+**Priority**: ${priority}
+**Submitter**: ${submitter}
+
+## Traveler Request
+**Title**: ${title}
+**Details**:
+${desc}
+
+## Execution Directives for Antigravity Agent
+1. Inspect \`core/itinerary_data.json\` at target ${dayStr}.
+2. Apply modifications adhering to travel rules (Phase 1 Twin Beds, Phase 2 Romantic King).
+3. Validate candidate accommodation and routes with \`core/critic_engine.py\` (minimum score >= 8.5/10).
+4. Run \`core/sync_engine.py\` to synchronize \`web/data.json\`, \`web/itinerary_data.js\`, and \`web/master_itinerary_doc.html\`.
+5. Update \`${tid}\` status in \`change_requests.json\` to \`RESOLVED\`.
+6. Run test suite: \`python -m unittest discover -s tests\`.`;
+}
+
+function updateDirectivePreviewFromForm() {
+  const radios = document.getElementsByName('cr_category');
+  let category = 'plan';
+  radios.forEach(r => { if (r.checked) category = r.value; });
+
+  const dayVal = document.getElementById('cr-target-day-select').value;
+  const targetDay = dayVal ? parseInt(dayVal) : null;
+  const priority = document.getElementById('cr-priority-select').value;
+  const title = document.getElementById('cr-title-input').value.trim() || 'Travel Plan / Site Modification';
+  const description = document.getElementById('cr-desc-input').value.trim() || 'Describe requested updates here...';
+  const submitter = document.getElementById('cr-submitter-input').value.trim() || 'Eyal';
+
+  const previewEl = document.getElementById('cr-directive-preview');
+  if (previewEl) {
+    previewEl.innerText = generateCrDirectiveText({
+      id: 'CR-PREVIEW',
+      category,
+      target_day: targetDay,
+      priority,
+      title,
+      description,
+      submitter
+    });
+  }
+}
+
+function copyCrDirectiveFromForm() {
+  updateDirectivePreviewFromForm();
+  const previewEl = document.getElementById('cr-directive-preview');
+  if (previewEl && previewEl.innerText) {
+    copyTextToClipboard(previewEl.innerText);
+    showToast('📋 Antigravity Directive copied to clipboard!', 'success');
+  }
+}
+
+function copyGeneratedDirective() {
+  const previewEl = document.getElementById('cr-directive-preview');
+  if (previewEl && previewEl.innerText) {
+    copyTextToClipboard(previewEl.innerText);
+    showToast('📋 Antigravity Directive copied to clipboard!', 'success');
+  }
+}
+
+function copySingleTicketDirective(ticketId) {
+  const ticket = localChangeRequests.find(r => r.id === ticketId);
+  if (!ticket) return;
+  const text = generateCrDirectiveText(ticket);
+  copyTextToClipboard(text);
+  showToast(`📋 Copied directive for ticket ${ticketId}!`, 'success');
+}
+
+function copyTextToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+}
+
 

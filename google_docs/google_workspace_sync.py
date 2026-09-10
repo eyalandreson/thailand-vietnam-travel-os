@@ -350,8 +350,8 @@ class GoogleWorkspaceSync:
             dow = day.get("day_of_week")
             dest = day.get("destination")
             phase = day.get("phase")
-            status = day.get("status")
-            badge_class = "badge-confirmed" if "CONFIRMED" in status else "badge-vetted"
+            status = day.get("status") or "VETTED"
+            badge_class = "badge-confirmed" if "CONFIRMED" in str(status) else "badge-vetted"
             weather = day.get("weather_radar", {})
             logistics = day.get("door_to_door_logistics", {})
             flow = day.get("curated_daily_flow", {})

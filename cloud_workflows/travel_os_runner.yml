@@ -28,7 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Execute Travel OS Runner Cycle (Routines 1 - 4)
+      - name: Execute Travel OS Runner Cycle (Routines 1 - 5)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -39,5 +39,5 @@ jobs:
         run: |
           git config --global user.name "Travel-OS-Autonomous-Runner"
           git config --global user.email "travel-os@antigravity.internal"
-          git add core/ google_docs/ web/ last_runner_execution.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(sync): automated dual blueprint & booking update [skip ci]" && git push)
+          git add core/ google_docs/ web/ last_runner_execution.json change_requests.json .agents/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(sync): automated dual blueprint, change requests & booking update [skip ci]" && git push)

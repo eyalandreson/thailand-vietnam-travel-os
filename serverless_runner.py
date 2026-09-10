@@ -19,6 +19,7 @@ from core.gmail_monitor import GmailMonitorEngine
 from core.sync_engine import DualSyncEngine
 from core.critic_engine import AdversarialCriticEngine
 from core.scraper_chain import AggressiveScraperChain
+from core.agent_fixer import AgentFixerEngine
 
 def run_serverless_cycle():
     print(f"[{datetime.datetime.utcnow().isoformat()}Z] === STARTING TRAVEL OS SERVERLESS RUNNER CYCLE ===")
@@ -53,6 +54,12 @@ def run_serverless_cycle():
     print(f"Live Met Check (Hanoi): {hanoi_weather.get('temp_range')}, {hanoi_weather.get('precipitation_pct')} precip ({hanoi_weather.get('source')})")
     print(f"Flight Radar: {radar.get('target_flight')} @ ${radar.get('current_est_usd')} USD ({radar.get('cheapest_bucket')})")
 
+    # --- ROUTINE 5: AUTONOMOUS TRAVELER CHANGE PROCESSOR ---
+    print("\n--- [Routine 5] Ingesting & Resolving Traveler Change Requests ---")
+    fixer = AgentFixerEngine()
+    change_res = fixer.process_all_pending()
+    print(f"Traveler Changes: {change_res.get('processed_count')} processed out of {change_res.get('total_pending_found')} pending.")
+
     # --- ROUTINE 4: WEB DEPLOYMENT INTEGRITY CHECK ---
     print("\n--- [Routine 4] Web Application & Document Integrity Verification ---")
     index_html = os.path.join(BASE_DIR, "web", "index.html")
@@ -66,6 +73,7 @@ def run_serverless_cycle():
         "routine_1_ingestion": ingest_res,
         "routine_2_sync": sync_res,
         "routine_3_critic": audit_report,
+        "routine_5_traveler_changes": change_res,
         "routine_4_web": "VERIFIED_READY"
     }
 

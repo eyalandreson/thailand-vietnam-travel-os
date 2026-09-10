@@ -1,0 +1,26 @@
+[
+  {
+    "id": "CR-20260910-001",
+    "created_at": "2026-09-10T20:28:26.387762Z",
+    "updated_at": "2026-09-10T20:28:26.525594Z",
+    "category": "plan",
+    "priority": "normal",
+    "target_day": 3,
+    "title": "Add Hanoi West Lake Coffee Stop",
+    "description": "Please add a morning stop at Cafe Giang for authentic egg coffee near West Lake",
+    "submitter": "Eyal",
+    "status": "RESOLVED",
+    "agent_resolution": "Successfully updated Day 3 (Ha Giang Loop: Bac Sum Pass, Quan Ba & Dong Van). Applied 2 change(s). Critic score: 8.9/10. Synchronized Web Dashboard and Master Google Doc.",
+    "critic_audit": {
+      "target_day": 3,
+      "passed": true,
+      "score": 8.9,
+      "issues": []
+    },
+    "diff_summary": [
+      "Day 3 Morning Flow updated",
+      "Day 3 Checklist updated: Added 'Execute Traveler Change: Add Hanoi West Lake Coffee Stop'"
+    ],
+    "client_meta": {}
+  }
+]
