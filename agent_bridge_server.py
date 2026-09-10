@@ -5,6 +5,14 @@ Usage:
 """
 import sys
 import argparse
+
+# Ensure UTF-8 output on Windows consoles
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 from core.agent_bridge import create_server
 
 def main():
@@ -14,13 +22,13 @@ def main():
     args = parser.parse_args()
 
     server = create_server(args.host, args.port)
-    print(f"================================================================")
-    print(f"⚡ ANTIGRAVITY AGENT BRIDGE RUNNING AT http://{args.host}:{args.port}")
-    print(f"Endpoints:")
-    print(f"  - GET  /api/status            : Bridge health & Antigravity status")
-    print(f"  - GET  /api/change-requests   : List all submitted change requests")
-    print(f"  - POST /api/change-requests   : Submit new change request (auto-resolves)")
-    print(f"================================================================")
+    print("================================================================")
+    print(f"[ONLINE] Antigravity Agent Bridge running at http://{args.host}:{args.port}")
+    print("Endpoints:")
+    print("  - GET  /api/status            : Bridge health & Antigravity status")
+    print("  - GET  /api/change-requests   : List all submitted change requests")
+    print("  - POST /api/change-requests   : Submit new change request (auto-resolves)")
+    print("================================================================")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

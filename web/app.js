@@ -2304,11 +2304,46 @@ async function loadChangeRequests(forceToast = false) {
         // Merge server requests with local requests
         const idMap = new Map();
         serverRequests.forEach(r => idMap.set(r.id, r));
+
+        // Auto-flush any unsynced local queued tickets to bridge
+        const unsyncedQueued = localChangeRequests.filter(r => 
+          (r.status === 'QUEUED' || r.status === 'PENDING') && !idMap.has(r.id)
+        );
+
+        for (const localReq of unsyncedQueued) {
+          try {
+            const syncPost = await fetch(`${bridgeApiUrl}/api/change-requests`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                category: localReq.category || 'plan',
+                target_day: localReq.target_day,
+                day: localReq.target_day,
+                title: localReq.title,
+                description: localReq.description,
+                priority: localReq.priority || 'normal',
+                submitter: localReq.submitter || 'Traveler',
+                auto_apply: true
+              })
+            });
+            if (syncPost.ok) {
+              const postRes = await syncPost.json();
+              if (postRes.request) {
+                idMap.set(postRes.request.id, postRes.request);
+                localChangeRequests = localChangeRequests.filter(r => r.id !== localReq.id);
+                localChangeRequests.unshift(postRes.request);
+              }
+            }
+          } catch (syncErr) {
+            console.warn('Could not auto-flush local ticket to bridge', syncErr);
+          }
+        }
+
         localChangeRequests.forEach(r => {
           if (!idMap.has(r.id)) idMap.set(r.id, r);
         });
 
-        const newlyResolved = serverRequests.filter(r => 
+        const newlyResolved = Array.from(idMap.values()).filter(r => 
           r.status === 'RESOLVED' && !prevResolvedSet.has(r.id)
         );
 
@@ -2360,13 +2395,46 @@ function renderChangeRequestQueue() {
   }
 
   let html = '';
+
+  const queuedTickets = localChangeRequests.filter(r => r.status === 'QUEUED' || r.status === 'PENDING');
+  if (queuedTickets.length > 0) {
+    if (bridgeOnline) {
+      html += `
+        <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700/50 text-xs text-emerald-900 dark:text-emerald-200 flex items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span><b>Antigravity Bridge Connected (:5055)</b> • Auto-syncing tickets...</span>
+          </div>
+          <button onclick="loadChangeRequests(true)" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">Sync Now 🔄</button>
+        </div>
+      `;
+    } else {
+      html += `
+        <div class="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/50 text-xs text-amber-900 dark:text-amber-200 space-y-2 mb-3">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-bold flex items-center gap-1.5"><span>⚠️</span> <span>Local Bridge Offline (:5055)</span></span>
+            <button onclick="checkBridgeStatus(true)" class="px-2.5 py-1 rounded-lg bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-200 text-xs font-bold">Retry Connect 🔄</button>
+          </div>
+          <p class="leading-relaxed">
+            Your request is queued in this browser. To resolve it immediately: copy the prompt below and paste it into Antigravity chat, OR start the bridge: <code class="bg-amber-100 dark:bg-amber-900/60 px-1 py-0.5 rounded font-mono">python agent_bridge_server.py</code>.
+          </p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button onclick="copyQueuedTicketsToAntigravity()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-sm flex items-center gap-1">
+              <span>💬</span> <span>Copy Request for Antigravity Chat</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+  }
+
   localChangeRequests.forEach(ticket => {
     const isResolved = ticket.status === 'RESOLVED';
     const isQueued = ticket.status === 'QUEUED' || ticket.status === 'PENDING';
     const badgeClass = isResolved 
       ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-600'
       : (isQueued 
-        ? 'bg-cyan-100 dark:bg-cyan-950/80 text-cyan-800 dark:text-cyan-300 border-cyan-300 dark:border-cyan-600'
+        ? 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-600 animate-pulse'
         : 'bg-indigo-100 dark:bg-indigo-950/80 text-indigo-800 dark:text-indigo-300 border-indigo-300 dark:border-indigo-600');
 
     const dayBadge = ticket.target_day 
@@ -2403,12 +2471,17 @@ function renderChangeRequestQueue() {
           </div>
         ` : ''}
 
-        <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs">
+        <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs flex-wrap gap-2">
           <span class="text-slate-400 text-[11px]">Submitter: <b>${ticket.submitter || 'Traveler'}</b></span>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
             ${bridgeOnline && !isResolved ? `
               <button onclick="reapplyTicketWithAgent('${ticket.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">
                 Fix with Agent ⚡
+              </button>
+            ` : ''}
+            ${!isResolved ? `
+              <button onclick="copySingleTicketToChat('${ticket.id}')" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs transition flex items-center gap-1">
+                <span>💬</span> Ask Agent in Chat
               </button>
             ` : ''}
             <button onclick="copySingleTicketDirective('${ticket.id}')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-semibold transition">
@@ -2689,6 +2762,27 @@ function enableBrowserNotifications() {
     }
   });
 }
+
+function copyQueuedTicketsToAntigravity() {
+  const queued = localChangeRequests.filter(r => r.status === 'QUEUED' || r.status === 'PENDING');
+  if (queued.length === 0) {
+    showToast('No pending tickets in queue.', 'info');
+    return;
+  }
+  const summary = queued.map(q => `- Ticket ${q.id} (${q.target_day ? 'Day ' + q.target_day : 'General'}): ${q.title}\n  Details: ${q.description}`).join('\n\n');
+  const text = `Antigravity, please process and fix my queued change request:\n\n${summary}`;
+  copyTextToClipboard(text);
+  showToast('📋 Copied! Paste this directly into Antigravity chat to resolve it now.', 'success', 6000);
+}
+
+function copySingleTicketToChat(ticketId) {
+  const ticket = localChangeRequests.find(r => r.id === ticketId);
+  if (!ticket) return;
+  const text = `Antigravity, please fix my request for ${ticket.target_day ? 'Day ' + ticket.target_day : 'the site'}: "${ticket.title}".\nDetails: ${ticket.description}`;
+  copyTextToClipboard(text);
+  showToast('📋 Copied! Paste this directly into Antigravity chat to resolve it now.', 'success', 6000);
+}
+
 
 
 
