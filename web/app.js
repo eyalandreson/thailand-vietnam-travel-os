@@ -786,6 +786,8 @@ function setupEventListeners() {
       closeLuggageModal();
       closeRouteModal();
       closePriceRadarModal();
+      closeAllToolsModal();
+      closeChangeRequestModal();
     }
   });
 
@@ -1474,6 +1476,50 @@ function closeRouteModal() {
   const modal = document.getElementById('route-modal');
   if (modal) modal.classList.add('hidden');
 }
+
+// -------------------------------------------------------------
+// ALL-IN-ONE TRAVEL OS QUICK TOOLS HUB MODAL
+// -------------------------------------------------------------
+function openAllToolsModal() {
+  const modal = document.getElementById('all-tools-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+}
+window.openAllToolsModal = openAllToolsModal;
+
+function closeAllToolsModal() {
+  const modal = document.getElementById('all-tools-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+}
+window.closeAllToolsModal = closeAllToolsModal;
+
+function launchTool(toolName) {
+  closeAllToolsModal();
+  setTimeout(() => {
+    if (toolName === 'packing') openPackingModal();
+    else if (toolName === 'currency') openCurrencyModal();
+    else if (toolName === 'translations') openTranslationsModal();
+    else if (toolName === 'change_request') openChangeRequestModal();
+    else if (toolName === 'gemini') openGeminiModal();
+    else if (toolName === 'luggage') openLuggageModal();
+    else if (toolName === 'route') openRouteModal();
+    else if (toolName === 'radar') openPriceRadarModal();
+    else if (toolName === 'doc') switchView('doc');
+    else if (toolName === 'ops') {
+      const drawer = document.getElementById('ops-drawer-content');
+      if (drawer && drawer.classList.contains('hidden')) toggleOpsDrawer();
+      const overview = document.getElementById('app-view-container');
+      if (overview) overview.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, 50);
+}
+window.launchTool = launchTool;
+
 
 // =============================================================
 // GEMINI 3.8 FLASH GROUNDED TRAVEL ASSISTANT
