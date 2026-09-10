@@ -165,9 +165,9 @@ function setPhase(phase) {
   currentPhase = phase;
   document.querySelectorAll('.tab-phase').forEach(btn => {
     if (btn.dataset.phase === phase) {
-      btn.className = 'tab-phase flex-1 py-1.5 px-3 rounded-lg bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm transition whitespace-nowrap text-center font-bold text-xs flex items-center justify-center gap-1';
+      btn.className = 'tab-phase flex-1 py-1.5 px-2 rounded-lg bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm transition whitespace-nowrap text-center text-xs font-bold';
     } else {
-      btn.className = 'tab-phase flex-1 py-1.5 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap text-center font-medium text-xs flex items-center justify-center gap-1';
+      btn.className = 'tab-phase flex-1 py-1.5 px-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap text-center text-xs font-medium';
     }
   });
   renderDays();
@@ -207,7 +207,16 @@ function toggleDay(dayNum) {
   }
 }
 
+let isAllExpanded = false;
+
+function toggleAllDaysAdaptive() {
+  isAllExpanded = !isAllExpanded;
+  toggleAllDays(isAllExpanded);
+}
+window.toggleAllDaysAdaptive = toggleAllDaysAdaptive;
+
 function toggleAllDays(expand) {
+  isAllExpanded = expand;
   document.querySelectorAll('.day-content-block').forEach(el => {
     if (expand) el.classList.remove('hidden');
     else el.classList.add('hidden');
@@ -216,6 +225,10 @@ function toggleAllDays(expand) {
     if (expand) icon.classList.add('rotate-180');
     else icon.classList.remove('rotate-180');
   });
+  const label = document.getElementById('label-toggle-all-days');
+  const icon = document.getElementById('icon-toggle-all-days');
+  if (label) label.textContent = expand ? 'Collapse' : 'Expand';
+  if (icon) icon.textContent = expand ? '▴' : '▾';
 }
 
 // -------------------------------------------------------------
@@ -851,8 +864,8 @@ function scrollToDay(dayNum) {
     if (content) content.classList.remove('hidden');
     if (icon) icon.classList.add('rotate-180');
 
-    // Smooth scroll to card (offset for integrated sticky header + date strip ~ 100px)
-    const yOffset = window.innerWidth < 640 ? -104 : -112;
+    // Smooth scroll to card (offset for integrated sticky header + date strip ~ 116px)
+    const yOffset = window.innerWidth < 640 ? -116 : -124;
     const y = targetCard.getBoundingClientRect().top + window.pageYOffset + yOffset;
     window.scrollTo({ top: y, behavior: 'smooth' });
 
@@ -873,7 +886,7 @@ function scrollToCurrentActiveDay() {
 function updateActiveDayFromScroll() {
   if (!itineraryData) return;
   const days = itineraryData.days || [];
-  const scrollPos = window.scrollY + 130;
+  const scrollPos = window.scrollY + 140;
 
   for (let i = days.length - 1; i >= 0; i--) {
     const card = document.getElementById(`day-card-${days[i].day_number}`);
