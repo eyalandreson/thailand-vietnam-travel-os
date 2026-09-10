@@ -2639,27 +2639,42 @@ function generateCrDirectiveText(data) {
   const priority = (data.priority || 'NORMAL').toUpperCase();
   const title = data.title || '';
   const desc = data.description || '';
-  const submitter = data.submitter || 'Traveler';
+  const submitter = data.submitter || 'Eyal';
 
-  return `# [ANTIGRAVITY DIRECTIVE: ${tid}]
-**Ticket**: \`${tid}\`
+  const dayObj = (itineraryData && itineraryData.days && data.target_day) 
+    ? itineraryData.days.find(d => d.day_number === data.target_day) 
+    : null;
+
+  const dayContext = dayObj 
+    ? `\n- Date: ${dayObj.date} (${dayObj.day_of_week})\n- Destination: ${dayObj.destination}\n- Phase: ${dayObj.phase}`
+    : '';
+
+  return `# [ANTIGRAVITY TRAVEL OS DIRECTIVE: ${tid}]
+**Ticket ID**: \`${tid}\`
 **Category**: ${category}
-**Target**: ${dayStr}
+**Target**: ${dayStr}${dayContext}
 **Priority**: ${priority}
 **Submitter**: ${submitter}
+
+## Master Trip Context & Grounding
+- **Traveler**: Eyal Andreson
+- **Phase 1 (Sep 11–24, Vietnam)**: Eyal & Gilad. Strictly Twin Beds / Two Separate Beds per room. Strictly 55L clamshell backpack only (checked suitcases stored at BKK Floor B AIRPORTELs). Screen out party noise.
+- **Phase 2 (Sep 24–Oct 09, Thailand)**: Eyal & Girlfriend. Strictly Romantic King Bed / Ocean View / Plunge Pool. Relaxed couple pacing.
+- **Critic Threshold**: Adversarial Critic score must be >= 8.5/10.
+- **Master Dataset**: \`core/itinerary_data.json\` (29 days dual-synced with Web & Master Google Doc).
 
 ## Traveler Request
 **Title**: ${title}
 **Details**:
 ${desc}
 
-## Execution Directives for Antigravity Agent
-1. Inspect \`core/itinerary_data.json\` at target ${dayStr}.
-2. Apply modifications adhering to travel rules (Phase 1 Twin Beds, Phase 2 Romantic King).
-3. Validate candidate accommodation and routes with \`core/critic_engine.py\` (minimum score >= 8.5/10).
-4. Run \`core/sync_engine.py\` to synchronize \`web/data.json\`, \`web/itinerary_data.js\`, and \`web/master_itinerary_doc.html\`.
-5. Update \`${tid}\` status in \`change_requests.json\` to \`RESOLVED\`.
-6. Run test suite: \`python -m unittest discover -s tests\`.`;
+## Directives for Agent
+1. Review \`core/itinerary_data.json\` for target ${dayStr}.
+2. Apply modifications respecting Phase constraints (Twin Beds vs Romantic King Bed).
+3. Validate candidate accommodation and routes with \`core/critic_engine.py\` (score >= 8.5/10).
+4. Run Dual-Sync via \`core/sync_engine.py\` to simultaneously update Web App and Google Doc blueprint.
+5. Mark \`${tid}\` as \`RESOLVED\` in \`change_requests.json\` with diff summary and explanation.
+6. Push live via \`python deploy_gh_pages.py\`.`;
 }
 
 function updateDirectivePreviewFromForm() {

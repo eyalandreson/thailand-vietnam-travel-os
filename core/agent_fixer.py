@@ -145,8 +145,8 @@ class AgentFixerEngine:
         self.save_requests(requests_list)
         return result
 
-    def _ai_plan_update(self, day_obj: Dict[str, Any], text: str, phase: str, day_num: int) -> Optional[Tuple[Dict[str, Any], List[str], str]]:
-        """Uses Gemini AI (Gemini Flash) to deeply reason through traveler requests and update the itinerary day."""
+    def _ai_plan_update(self, day_obj: Dict[str, Any], text: str, phase: str, day_num: int, itinerary: Optional[Dict[str, Any]] = None) -> Optional[Tuple[Dict[str, Any], List[str], str]]:
+        """Uses Gemini AI (Gemini Flash) with full master trip context to reason through traveler requests."""
         import dotenv
         import requests
 
@@ -156,40 +156,47 @@ class AgentFixerEngine:
             return None
 
         is_phase_1 = "vietnam" in phase.lower() or day_num <= 13
-        constraint_instructions = (
-            "PHASE 1 (Northern Vietnam Loop - Days 1-13):\n"
-            "- Strictly Twin Beds / Two Separate Beds per room (guys adventure trip).\n"
-            "- Strictly 55L clamshell travel backpack ONLY.\n"
-            "- Screen out loud nightlife strips and party hostels.\n"
-            if is_phase_1 else
-            "PHASE 2 (Gulf of Thailand & Bangkok - Days 14-29):\n"
-            "- Strictly Romantic King Bed / Double Bed with Ocean Views / Private Plunge Pool.\n"
-            "- Boutique, relaxed, high-end romantic couple pacing.\n"
+        days = itinerary.get("days", []) if itinerary else []
+        prev_day = next((d for d in days if d.get("day_number") == day_num - 1), None)
+        next_day = next((d for d in days if d.get("day_number") == day_num + 1), None)
+
+        prev_str = f"Day {day_num-1}: {prev_day.get('destination', 'Departure')} ({prev_day.get('date', '')})" if prev_day else "Trip Departure"
+        next_str = f"Day {day_num+1}: {next_day.get('destination', 'Return')} ({next_day.get('date', '')})" if next_day else "End of Trip"
+
+        trip_context = (
+            "=== TRIP MASTER CONTEXT & OPERATIONAL PHILOSOPHY ===\n"
+            "- Traveler: Eyal Andreson\n"
+            f"- Phase: {'Phase 1 (Northern Vietnam Loop - Days 1-13, Eyal & Gilad)' if is_phase_1 else 'Phase 2 (Gulf of Thailand & Bangkok - Days 14-29, Eyal & Girlfriend)'}\n"
+            f"- Room Specs: {'STRICTLY Twin Beds / Two Separate Beds per room (Guys Adventure Trip)' if is_phase_1 else 'STRICTLY Romantic King Bed / Prime Ocean Views / Private Plunge Pool'}\n"
+            f"- Luggage Spec: {'55L Clamshell Backpack ONLY (Checked suitcases stored at BKK Floor B AIRPORTELs)' if is_phase_1 else 'Resort Attire / Checked Suitcase retrieved at BKK'}\n"
+            "- Pacing & Noise: Screen out loud nightlife strips and party hostels. Preserve buffers between travel segments.\n"
+            f"- Previous Leg: {prev_str}\n"
+            f"- Current Target (Day {day_num}): {day_obj.get('destination')} ({day_obj.get('date', '')})\n"
+            f"- Next Leg: {next_str}\n"
         )
 
-        prompt = f"""You are Antigravity, the autonomous AI Travel Operations Agent managing a 29-day master itinerary.
+        prompt = f"""You are Antigravity, the autonomous AI Travel Operations Agent managing Eyal Andreson's 29-day master itinerary.
 A traveler submitted this change request for Day {day_num} ({phase}):
 \"\"\"{text}\"\"\"
 
-Current Itinerary Day Data:
+{trip_context}
+
+Current Day {day_num} Data:
 {json.dumps(day_obj, indent=2)}
 
-Strict Phase Constraints:
-{constraint_instructions}
-
 Instructions:
-1. Deeply understand what the traveler wants to change (e.g. hotel swaps, departure timings, restaurants, activities, pace, notes).
-2. Produce an intelligently updated copy of the day object. Keep all existing fields valid and realistic.
+1. Deeply understand what the traveler wants to change (hotel swaps, departure timings, transport, activities, dining, pace).
+2. Maintain strict phase integrity: Twin beds for Phase 1, Romantic King for Phase 2.
 3. If changing accommodation, include: hotel_name, room_spec (must satisfy bed constraint), price_per_night, booking_url, status: "VETTED_OPTION", critic_score: 8.9, critic_notes.
 4. If modifying daily flow, refine curated_daily_flow (morning, afternoon, evening).
-5. If modifying transport, update door_to_door_logistics or transport_module.
+5. If modifying transport, update door_to_door_logistics.
 6. Add an actionable task to essential_checklist.
 7. Return ONLY valid JSON with keys:
    - "updated_day": the complete updated day dictionary
    - "diff_summary": list of strings concisely summarizing each applied change
-   - "agent_explanation": a detailed, polished explanation written to the traveler explaining the reasoning, new timings/hotels, and critic compliance.
+   - "agent_explanation": a detailed, polished, friendly explanation written directly to Eyal explaining the reasoning, new timings/hotels, and critic compliance.
 """
-        models_to_try = ["gemini-flash-latest", "gemini-3.8-flash", "gemini-2.5-flash"]
+        models_to_try = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-3.8-flash"]
         for model in models_to_try:
             try:
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
@@ -239,7 +246,7 @@ Instructions:
                 "room_spec": "Twin Beds / Shared Dorm (Pre-Tour Night Included)",
                 "price_per_night": "Included Free with Happy Loop Tour",
                 "booking_url": "https://happyhousehagiang.com",
-                "status": "CONFIRMED_INCLUDED",
+                "status": "INCLUDED_IN_TOUR",
                 "critic_notes": "Included in Happy Loop tour package. 24-hour reception, bell service for late night arrivals.",
                 "critic_score": 9.2
             }
@@ -269,7 +276,7 @@ Instructions:
                 "room_spec": "Twin Beds / Two Separate Beds (Private Room for 2-3 pax)",
                 "price_per_night": "Included in Happy Loop 3D/2N Tour",
                 "booking_url": "https://happyhousehagiang.com",
-                "status": "CONFIRMED_INCLUDED",
+                "status": "INCLUDED_IN_TOUR",
                 "critic_notes": "Private room with separate beds, strictly compliant with Phase 1 adventure specs. Border permit ($10) and food included.",
                 "critic_score": 9.0
             }
@@ -299,7 +306,7 @@ Instructions:
                 "room_spec": "Twin Beds / Two Separate Beds (Private Room)",
                 "price_per_night": "Included in Happy Loop Tour",
                 "booking_url": "https://happyhousehagiang.com",
-                "status": "CONFIRMED_INCLUDED",
+                "status": "INCLUDED_IN_TOUR",
                 "critic_notes": "Scenic Du Gia homestay with mountain views, private room twin beds, home-cooked local dinner.",
                 "critic_score": 9.1
             }
@@ -445,8 +452,8 @@ Instructions:
         diffs = []
         ai_explanation = None
 
-        # 1. Attempt deep AI reasoning with Gemini Flash
-        ai_result = self._ai_plan_update(day_obj, text, phase, day_num)
+        # 1. Attempt deep AI reasoning with Gemini Flash (Full Trip Context Grounding)
+        ai_result = self._ai_plan_update(day_obj, text, phase, day_num, itinerary=itinerary)
         if ai_result:
             day_obj, diffs, ai_explanation = ai_result
             print(f"[AgentFixer] Successfully applied Gemini AI reasoning to Day {day_num}!")
