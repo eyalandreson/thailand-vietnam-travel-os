@@ -30,10 +30,68 @@
     }
   </script>
   
-  <link rel="stylesheet" href="styles.css">
-  <script src="config.js"></script>
-  <script src="itinerary_data.js"></script>
-  <script src="app.js?v=3.3" defer></script>
+  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.0) -->
+  <script>
+    (function() {
+      const TARGET_CACHE = 'travel-os-v4.0';
+      
+      // 1. Purge obsolete caches
+      if ('caches' in window) {
+        caches.keys().then(function(keys) {
+          keys.forEach(function(key) {
+            if (key !== TARGET_CACHE) {
+              console.warn('[PWA Purge] Deleting stale cache:', key);
+              caches.delete(key);
+            }
+          });
+        });
+      }
+
+      // 2. One-time self-upgrade: unregister any legacy service workers
+      const lastVersion = localStorage.getItem('travel_os_active_version');
+      if (lastVersion !== '4.0') {
+        localStorage.setItem('travel_os_active_version', '4.0');
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(regs) {
+            for (let reg of regs) {
+              reg.unregister();
+            }
+          });
+        }
+      }
+
+      // 3. Register fresh v4.0 Service Worker with update listeners
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('sw.js?v=4.0')
+            .then(function(reg) {
+              console.log('[Travel OS v4.0] ServiceWorker registered:', reg.scope);
+              reg.update();
+            })
+            .catch(function(err) {
+              console.warn('SW registration error:', err);
+            });
+
+          navigator.serviceWorker.addEventListener('message', function(event) {
+            if (event.data && event.data.action === 'RELOAD_PAGE') {
+              console.log('[SW] New version activated, reloading...');
+              window.location.reload();
+            }
+          });
+
+          navigator.serviceWorker.addEventListener('controllerchange', function() {
+            console.log('[SW] Controller changed, reloading...');
+            window.location.reload();
+          });
+        });
+      }
+    })();
+  </script>
+  
+  <link rel="stylesheet" href="styles.css?v=4.0">
+  <script src="config.js?v=4.0"></script>
+  <script src="itinerary_data.js?v=4.0"></script>
+  <script src="app.js?v=4.0&b=20260912" defer></script>
 </head>
 <body class="antialiased min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
@@ -72,8 +130,9 @@
           OS
         </div>
         <div class="min-w-0">
-          <h1 class="font-extrabold text-slate-900 dark:text-white text-xs sm:text-base leading-tight tracking-tight truncate">
-            Thailand &amp; Vietnam
+          <h1 class="font-extrabold text-slate-900 dark:text-white text-xs sm:text-base leading-tight tracking-tight truncate flex items-center gap-1.5">
+            <span>Thailand &amp; Vietnam</span>
+            <button onclick="forceAppUpdate()" class="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/60 hover:bg-blue-200 text-blue-700 dark:text-blue-300 font-mono font-bold transition" title="Travel OS v4.0 (Tap to Force Clean Update)">v4.0</button>
           </h1>
           <p class="text-[10px] sm:text-xs text-blue-600 dark:text-cyan-400 font-semibold tracking-wide uppercase truncate">
             29 Days • Sep 11 – Oct 09
