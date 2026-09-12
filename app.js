@@ -16,7 +16,10 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js')
-      .then(reg => console.log('ServiceWorker registered with scope:', reg.scope))
+      .then(reg => {
+        console.log('ServiceWorker registered with scope:', reg.scope);
+        reg.update();
+      })
       .catch(err => console.log('ServiceWorker registration error:', err));
   });
 }
@@ -207,29 +210,58 @@ function filterStatus(status) {
   renderDays();
 }
 
+let isAllExpanded = false;
+const expandedDays = new Set();
+
+function updateToggleAllButtonState() {
+  const blocks = document.querySelectorAll('.day-content-block');
+  if (blocks.length === 0) return;
+  const anyCollapsed = Array.from(blocks).some(el => el.classList.contains('hidden'));
+  isAllExpanded = !anyCollapsed;
+  const label = document.getElementById('label-toggle-all-days');
+  const icon = document.getElementById('icon-toggle-all-days');
+  if (label) label.textContent = anyCollapsed ? 'Expand' : 'Collapse';
+  if (icon) icon.textContent = anyCollapsed ? '▾' : '▴';
+}
+window.updateToggleAllButtonState = updateToggleAllButtonState;
+
 function toggleDay(dayNum) {
   const content = document.getElementById(`day-content-${dayNum}`);
   const icon = document.getElementById(`day-icon-${dayNum}`);
   if (!content) return;
-  if (content.classList.contains('hidden')) {
+  const isHidden = content.classList.contains('hidden');
+  if (isHidden) {
     content.classList.remove('hidden');
     if (icon) icon.classList.add('rotate-180');
+    expandedDays.add(dayNum);
   } else {
     content.classList.add('hidden');
     if (icon) icon.classList.remove('rotate-180');
+    expandedDays.delete(dayNum);
   }
+  updateToggleAllButtonState();
 }
-
-let isAllExpanded = false;
+window.toggleDay = toggleDay;
 
 function toggleAllDaysAdaptive() {
-  isAllExpanded = !isAllExpanded;
-  toggleAllDays(isAllExpanded);
+  const blocks = document.querySelectorAll('.day-content-block');
+  if (blocks.length === 0) return;
+  // If ANY day is collapsed/hidden, the natural expectation of "toggle down" is to expand all days.
+  // If all days are already expanded, then collapse all days.
+  const anyCollapsed = Array.from(blocks).some(el => el.classList.contains('hidden'));
+  toggleAllDays(anyCollapsed);
 }
 window.toggleAllDaysAdaptive = toggleAllDaysAdaptive;
 
 function toggleAllDays(expand) {
   isAllExpanded = expand;
+  if (!expand) {
+    expandedDays.clear();
+  } else {
+    if (itineraryData && itineraryData.days) {
+      itineraryData.days.forEach(d => expandedDays.add(d.day_number));
+    }
+  }
   document.querySelectorAll('.day-content-block').forEach(el => {
     if (expand) el.classList.remove('hidden');
     else el.classList.add('hidden');
@@ -243,6 +275,7 @@ function toggleAllDays(expand) {
   if (label) label.textContent = expand ? 'Collapse' : 'Expand';
   if (icon) icon.textContent = expand ? '▴' : '▾';
 }
+window.toggleAllDays = toggleAllDays;
 
 // -------------------------------------------------------------
 // PLAN A / PLAN B EXPERIENCE TOGGLE
@@ -611,12 +644,19 @@ function renderDays() {
       `;
     }).join('');
 
+    const isSearching = Boolean(searchQuery && searchQuery.trim().length > 0);
+    const isExpanded = isAllExpanded || expandedDays.has(day.day_number) || isSearching;
+    const contentClass = isExpanded 
+      ? 'day-content-block p-3.5 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 space-y-3.5 sm:space-y-4' 
+      : 'day-content-block p-3.5 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 space-y-3.5 sm:space-y-4 hidden';
+    const iconRotateClass = isExpanded ? 'rotate-180' : '';
+
     const card = document.createElement('div');
     card.id = `day-card-${day.day_number}`;
     card.className = 'travel-card rounded-2xl overflow-hidden mb-5 transition-all duration-200 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md';
     card.innerHTML = `
       <!-- Card Header (Always Visible) -->
-      <div onclick="toggleDay(${day.day_number})" class="p-3.5 sm:p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 select-none transition-colors">
+      <div onclick="toggleDay(${day.day_number})" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDay(${day.day_number});}" class="p-3.5 sm:p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 select-none transition-colors" title="Click to toggle day details">
         <div class="flex items-center gap-3.5 sm:gap-5 flex-wrap sm:flex-nowrap">
           <div class="flex flex-col items-center justify-center w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-black border border-blue-200 dark:border-blue-800/60 shrink-0 shadow-sm">
             <span class="text-[8px] sm:text-[10px] uppercase font-bold text-blue-500 dark:text-blue-400 leading-none">DAY</span>
@@ -636,14 +676,14 @@ function renderDays() {
           </div>
         </div>
         <div class="flex items-center gap-2 shrink-0 ml-2">
-          <svg id="day-icon-${day.day_number}" class="day-toggle-icon w-5 h-5 text-slate-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg id="day-icon-${day.day_number}" class="day-toggle-icon w-5 h-5 text-slate-400 transform transition-transform duration-200 ${iconRotateClass}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
         </div>
       </div>
 
       <!-- Card Content (Expandable) -->
-      <div id="day-content-${day.day_number}" class="day-content-block p-3.5 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 space-y-3.5 sm:space-y-4">
+      <div id="day-content-${day.day_number}" class="${contentClass}">
         ${specialBanner}
 
         <!-- Weather & Attire Radar -->
@@ -764,6 +804,7 @@ function renderDays() {
 
     container.appendChild(card);
   });
+  updateToggleAllButtonState();
 }
 
 function resetFilters() {
@@ -840,6 +881,17 @@ function renderTimelineScrubber() {
   });
 }
 
+function scrollScrubberToPill(pillEl) {
+  if (!pillEl) return;
+  const scrubber = document.getElementById('timeline-scrubber-list');
+  if (!scrubber) return;
+  const pillLeft = pillEl.offsetLeft;
+  const pillWidth = pillEl.offsetWidth;
+  const scrubberWidth = scrubber.offsetWidth;
+  const targetLeft = Math.max(0, pillLeft - (scrubberWidth / 2) + (pillWidth / 2));
+  scrubber.scrollLeft = targetLeft;
+}
+
 function scrollToDay(dayNum) {
   if (!itineraryData) return;
   const days = itineraryData.days || [];
@@ -851,7 +903,7 @@ function scrollToDay(dayNum) {
   const activePill = document.getElementById(`scrubber-pill-${dayNum}`);
   if (activePill) {
     activePill.classList.add('active');
-    activePill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    scrollScrubberToPill(activePill);
   }
 
   // 2. Update active label
@@ -878,6 +930,8 @@ function scrollToDay(dayNum) {
     const icon = document.getElementById(`day-icon-${dayNum}`);
     if (content) content.classList.remove('hidden');
     if (icon) icon.classList.add('rotate-180');
+    expandedDays.add(dayNum);
+    updateToggleAllButtonState();
 
     // Smooth scroll to card (offset for integrated sticky header + date strip ~ 116px)
     const yOffset = window.innerWidth < 640 ? -116 : -124;
@@ -913,7 +967,7 @@ function updateActiveDayFromScroll() {
       if (targetPill && currentActive !== targetPill) {
         if (currentActive) currentActive.classList.remove('active');
         targetPill.classList.add('active');
-        targetPill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        scrollScrubberToPill(targetPill);
         const label = document.getElementById('active-day-label');
         if (label) label.innerText = `Day ${activeNum} • ${days[i].destination}`;
       }
@@ -993,6 +1047,8 @@ function jumpToToday() {
         content.classList.remove('hidden');
         if (icon) icon.classList.add('rotate-180');
       }
+      expandedDays.add(targetDayNum);
+      updateToggleAllButtonState();
 
       card.scrollIntoView({ behavior: 'smooth', block: 'start' });
       card.classList.add('highlight-target-day');
@@ -2863,7 +2919,48 @@ function copySingleTicketToChat(ticketId) {
   copyTextToClipboard(text);
   showToast('📋 Copied! Paste this directly into Antigravity chat to resolve it now.', 'success', 6000);
 }
-
-
-
-
+// -------------------------------------------------------------
+// GLOBAL WINDOW EXPORTS FOR HTML INLINE HANDLERS
+// -------------------------------------------------------------
+window.toggleDay = toggleDay;
+window.toggleAllDaysAdaptive = toggleAllDaysAdaptive;
+window.toggleAllDays = toggleAllDays;
+window.updateToggleAllButtonState = updateToggleAllButtonState;
+window.toggleOpsDrawer = toggleOpsDrawer;
+window.toggleExperience = toggleExperience;
+window.toggleDailyTask = toggleDailyTask;
+window.togglePackingItem = togglePackingItem;
+window.toggleTheme = toggleTheme;
+window.toggleGeminiSettings = toggleGeminiSettings;
+window.toggleKeyVisibility = toggleKeyVisibility;
+window.scrollToDay = scrollToDay;
+window.jumpToToday = jumpToToday;
+window.scrollToCurrentActiveDay = scrollToCurrentActiveDay;
+window.setPhase = setPhase;
+window.filterStatus = filterStatus;
+window.resetFilters = resetFilters;
+window.switchView = switchView;
+window.openGeminiModal = openGeminiModal;
+window.closeGeminiModal = closeGeminiModal;
+window.openChangeRequestModal = openChangeRequestModal;
+window.closeChangeRequestModal = closeChangeRequestModal;
+window.openAllToolsModal = openAllToolsModal;
+window.closeAllToolsModal = closeAllToolsModal;
+window.openPackingModal = openPackingModal;
+window.closePackingModal = closePackingModal;
+window.openCurrencyModal = openCurrencyModal;
+window.closeCurrencyModal = closeCurrencyModal;
+window.openTranslationsModal = openTranslationsModal;
+window.closeTranslationsModal = closeTranslationsModal;
+window.openLuggageModal = openLuggageModal;
+window.closeLuggageModal = closeLuggageModal;
+window.openPriceRadarModal = openPriceRadarModal;
+window.closePriceRadarModal = closePriceRadarModal;
+window.openRouteModal = openRouteModal;
+window.closeRouteModal = closeRouteModal;
+window.openDocModal = openDocModal;
+window.closeDocModal = closeDocModal;
+window.launchTool = launchTool;
+window.enableBrowserNotifications = enableBrowserNotifications;
+window.copyQueuedTicketsToAntigravity = copyQueuedTicketsToAntigravity;
+window.copySingleTicketToChat = copySingleTicketToChat;

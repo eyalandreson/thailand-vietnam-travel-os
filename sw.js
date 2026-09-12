@@ -1,5 +1,5 @@
 // Service Worker: Adaptive Travel OS Offline Resilience Engine
-const CACHE_NAME = 'travel-os-v3.2';
+const CACHE_NAME = 'travel-os-v3.3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
