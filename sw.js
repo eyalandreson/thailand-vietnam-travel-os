@@ -1,12 +1,12 @@
-// Service Worker: Adaptive Travel OS Offline Resilience Engine
-const CACHE_NAME = 'travel-os-v3.3';
+// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.0)
+const CACHE_NAME = 'travel-os-v4.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css',
-  './config.js',
-  './app.js',
-  './itinerary_data.js',
+  './styles.css?v=4.0',
+  './config.js?v=4.0',
+  './app.js?v=4.0',
+  './itinerary_data.js?v=4.0',
   './data.json',
   './master_itinerary_doc.html',
   './manifest.json',
@@ -21,9 +21,9 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Pre-caching offline Travel OS assets and PDF documents');
+      console.log('[SW v4.0] Pre-caching offline Travel OS assets and PDF documents');
       return cache.addAll(ASSETS_TO_CACHE).catch((err) => {
-        console.warn('[SW] Cache addAll warning:', err);
+        console.warn('[SW v4.0] Cache addAll warning:', err);
       });
     })
   );
@@ -36,14 +36,24 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log('[SW] Clearing stale cache:', key);
+            console.log('[SW v4.0] Clearing stale cache:', key);
             return caches.delete(key);
           }
         })
       );
+    }).then(() => {
+      return self.clients.claim();
+    }).then(() => {
+      // Force all active client tabs to reload with fresh v4.0 assets
+      return self.clients.matchAll({ type: 'window' });
+    }).then((clients) => {
+      if (clients && clients.length > 0) {
+        clients.forEach((client) => {
+          client.postMessage({ action: 'RELOAD_PAGE', version: CACHE_NAME });
+        });
+      }
     })
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
@@ -52,29 +62,28 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  const requestUrl = new URL(event.request.url);
-
-  // Stale-While-Revalidate strategy for app shell and assets
+  // Network-First Strategy for HTML, JS, CSS, JSON:
+  // When online, ALWAYS serve the newest version from server and update cache.
+  // Fallback to cache ONLY when offline.
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-          }
-          return networkResponse;
-        })
-        .catch(() => {
-          // If offline and requesting navigation, fallback to cached index.html
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // Device is offline: fallback to cached assets
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) return cachedResponse;
           if (event.request.mode === 'navigate') {
             return caches.match('./index.html');
           }
         });
-
-      return cachedResponse || fetchPromise;
-    })
+      })
   );
 });

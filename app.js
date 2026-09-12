@@ -12,17 +12,7 @@
  * - Real-time Search & Phase/Status Filtering
  */
 
-// Service Worker Registration for PWA Offline Resilience
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(reg => {
-        console.log('ServiceWorker registered with scope:', reg.scope);
-        reg.update();
-      })
-      .catch(err => console.log('ServiceWorker registration error:', err));
-  });
-}
+// Application Core State (Travel OS v4.0)
 
 let currentPhase = 'all';
 let currentFilter = 'all';
@@ -955,7 +945,8 @@ function scrollToCurrentActiveDay() {
 function updateActiveDayFromScroll() {
   if (!itineraryData) return;
   const days = itineraryData.days || [];
-  const scrollPos = window.scrollY + 140;
+  const initialScrollY = window.scrollY;
+  const scrollPos = initialScrollY + 140;
 
   for (let i = days.length - 1; i >= 0; i--) {
     const card = document.getElementById(`day-card-${days[i].day_number}`);
@@ -973,6 +964,11 @@ function updateActiveDayFromScroll() {
       }
       break;
     }
+  }
+
+  // Absolute Guard: Under no circumstance allow document scrollY to jump during scroll handler
+  if (Math.abs(window.scrollY - initialScrollY) > 5) {
+    window.scrollTo(0, initialScrollY);
   }
 }
 
@@ -2964,3 +2960,23 @@ window.launchTool = launchTool;
 window.enableBrowserNotifications = enableBrowserNotifications;
 window.copyQueuedTicketsToAntigravity = copyQueuedTicketsToAntigravity;
 window.copySingleTicketToChat = copySingleTicketToChat;
+
+async function forceAppUpdate() {
+  try {
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+    localStorage.removeItem('travel_os_active_version');
+    localStorage.removeItem('travel_os_custom_data');
+  } catch (e) {
+    console.warn('Force update error:', e);
+  }
+  window.location.href = window.location.origin + window.location.pathname + '?v=4.0&t=' + Date.now();
+}
+window.forceAppUpdate = forceAppUpdate;
+
