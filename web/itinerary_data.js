@@ -1148,15 +1148,6 @@ window.TRAVEL_OS_DATA = {
       "luggage_action": "Backpack strapped to bike rack in waterproof cover.",
       "accommodation_matrix": [
         {
-          "hotel_name": "dinner",
-          "room_spec": "Twin Beds / Two Separate Beds",
-          "price_per_night": "Verified Market Rate",
-          "booking_url": "https://www.booking.com/searchresults.html?ss=dinner",
-          "status": "VETTED_OPTION",
-          "critic_notes": "Updated by Antigravity Agent per traveler ticket CR-829A18F7: Sunset Viewpoint Exploration",
-          "critic_score": 8.9
-        },
-        {
           "hotel_name": "Du Gia Ethnic Homestay (Happy Loop)",
           "room_spec": "Twin Beds / Two Separate Beds (Private Room)",
           "price_per_night": "Included in Happy Loop Tour",
@@ -1177,21 +1168,21 @@ window.TRAVEL_OS_DATA = {
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "08:00 AM: Ride from Dong Van onto Ma Pi Leng Pass. Stop at monumental viewpoint. 10:30 AM: Descend to Nho Que River for Tu San Canyon motorboat cruise. 13:00 PM: Ride through Meo Vac and across mountain ridges into Du Gia Valley.",
+        "primary_transit": "08:00 AM: Ride from Dong Van onto Ma Pi Leng Pass. Stop at monumental viewpoint. 10:30 AM: Descend to Nho Que River for Tu San Canyon motorboat cruise. 13:00 PM: Ride through Meo Vac and across mountain ridges into Du Gia Valley, arriving in time for the 17:30 Sunset Viewpoint Exploration.",
         "departure_time": "08:00 AM Dong Van",
-        "arrival_time": "17:00 PM Du Gia Valley",
-        "buffer_time": "1.5 hrs for Tu San Chasm canyon boat cruise",
-        "tips": "Highlight of the entire loop. Emerald waters of Nho Que river between 1,000m sheer limestone cliffs."
+        "arrival_time": "17:30 PM Du Gia Valley (including sunset viewpoint stop)",
+        "buffer_time": "1.5 hrs for Tu San Chasm canyon boat cruise, plus designated golden hour window",
+        "tips": "Highlight of the entire loop. Emerald waters of Nho Que river between 1,000m sheer limestone cliffs, finished with ridge sunset views."
       },
       "curated_daily_flow": {
         "morning": "07:30 Breakfast in Dong Van. Conquer legendary Ma Pi Leng Pass — the king of Vietnamese mountain passes with towering limestone gorges.",
         "afternoon": "Descend to Nho Que River for scenic canyon boat cruise (tickets included). Ride through Meo Vac mountain passes towards Du Gia valley.",
-        "evening": "Arrive at Du Gia ethnic homestay. Authentic family dinner with 'happy water' toasts, waterfall swim option, and homestay relaxation. • [Agent Update: Sunset Viewpoint Exploration]"
+        "evening": "17:30 Evening sunset viewpoint stop along the ridge before descending into Du Gia ethnic homestay for authentic family dinner with 'happy water' toasts and relaxation."
       },
       "essential_checklist": [
-        "Full battery charge on phone / camera for Ma Pi Leng panoramas",
+        "Full battery charge on phone / camera for Ma Pi Leng panoramas and sunset ridge views",
         "Swimwear under trekking clothes for Du Gia stream dip",
-        "Execute Traveler Change: Sunset Viewpoint Exploration"
+        "Executed Traveler Change: Sunset Viewpoint Exploration at 17:30"
       ],
       "attached_documents": [],
       "google_maps_links": [
@@ -1205,17 +1196,21 @@ window.TRAVEL_OS_DATA = {
         },
         {
           "label": "Du Gia Valley",
-          "url": "https://maps.google.com/?q=Du+Gia+Ha+Giang"
+          "url": "https://maps.google.com/q=Du+Gia+Ha+Giang"
+        },
+        {
+          "label": "Du Gia Ridge Sunset Viewpoint",
+          "url": "https://maps.google.com/?q=Du+Gia+Pass+Viewpoint"
         }
       ],
       "experiences": {
         "primary": {
-          "title": "Ha Giang Loop (Day 2): Ma Pi Leng Pass, Tu San Canyon Boat & Du Gia Hotel",
-          "type": "Legendary Pass, Emerald River Cruise & Valley Hotel",
-          "duration": "Full Day (08:00 - 17:30)",
+          "title": "Ha Giang Loop (Day 2): Ma Pi Leng Pass, Tu San Canyon Boat & Sunset Viewpoint",
+          "type": "Legendary Pass, Emerald River Cruise & Ridge Sunset Stop",
+          "duration": "Full Day (08:00 - 18:00)",
           "opening_hours": "Nho Que boat pier: 07:30 - 17:00",
           "cost_estimate": "All-inclusive in 3D Tour (Private Twin Room in Du Gia, boat pass, meals)",
-          "time_sensitive_tip": "Highlight of the loop! Stop at the Ma Pi Leng monument, descend to the river for the motorboat cruise through Tu San Chasm (deepest canyon in SEA), then ride over mountain ridges to your private twin bungalow in Du Gia.",
+          "time_sensitive_tip": "Highlight of the loop! Stop at the Ma Pi Leng monument, descend to the river for the motorboat cruise through Tu San Chasm, ride over mountain ridges, and catch the 17:30 golden hour sunset viewpoint before arriving at your private twin bungalow in Du Gia.",
           "links": [
             {
               "label": "Ma Pi Leng Viewpoint",
@@ -1251,11 +1246,11 @@ window.TRAVEL_OS_DATA = {
         }
       },
       "transport_module": {
-        "route": "Dong Van -> Ma Pi Leng Pass -> Tu San Canyon Boat -> Meo Vac -> Du Gia",
+        "route": "Dong Van -> Ma Pi Leng Pass -> Tu San Canyon Boat -> Meo Vac -> Sunset Viewpoint -> Du Gia",
         "transit_type": "Licensed Easy-Riders + Nho Que Motorboat Cruise (Hotels Included)",
         "pickup_hub": "Dong Van Hotel Doorstep (08:00 AM)",
         "dropoff_terminal": "Du Gia Valley Hotel / Private Bungalow (Twin Beds Included)",
-        "duration": "Full-day scenic ride & canyon cruise",
+        "duration": "Full-day scenic ride, canyon cruise & sunset stop",
         "baggage_allowance": "Waterproof bag on bike rack",
         "booking_provider": "Ha Giang 3D Tour Operator",
         "booking_url": "https://cheershagiang.com/",
