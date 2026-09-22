@@ -1,12 +1,12 @@
-// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.2)
-const CACHE_NAME = 'travel-os-v4.2';
+// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.3)
+const CACHE_NAME = 'travel-os-v4.3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=4.2',
-  './config.js?v=4.2',
-  './app.js?v=4.2&b=2026092301',
-  './itinerary_data.js?v=4.2',
+  './styles.css?v=4.3',
+  './config.js?v=4.3',
+  './app.js?v=4.3&b=2026092302',
+  './itinerary_data.js?v=4.3',
   './data.json',
   './master_itinerary_doc.html',
   './manifest.json',

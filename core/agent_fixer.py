@@ -196,7 +196,7 @@ Instructions:
    - "diff_summary": list of strings concisely summarizing each applied change
    - "agent_explanation": a detailed, polished, friendly explanation written directly to Eyal explaining the reasoning, new timings/hotels, and critic compliance.
 """
-        models_to_try = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-3.8-flash"]
+        models_to_try = ["gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-3.1-flash-lite", "gemini-3.8-flash"]
         for model in models_to_try:
             try:
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
@@ -204,7 +204,7 @@ Instructions:
                     "contents": [{"parts": [{"text": prompt}]}],
                     "generationConfig": {"responseMimeType": "application/json", "temperature": 0.2}
                 }
-                resp = requests.post(url, json=payload, timeout=18)
+                resp = requests.post(url, json=payload, timeout=12)
                 if resp.status_code == 200:
                     raw_text = resp.json()["candidates"][0]["content"]["parts"][0]["text"]
                     data = json.loads(raw_text)

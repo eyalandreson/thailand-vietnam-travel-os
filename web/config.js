@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Travel OS AI Configuration
  * Manages Gemini 3.8 Flash model endpoint, fallback chains, and credentials.
  */
@@ -27,7 +27,8 @@ window.TRAVEL_OS_CONFIG = {
     }
   },
 
-  defaultModel: 'gemini-3.8-flash',
-  fallbackModel: 'gemini-2.5-flash',
+  defaultModel: 'gemini-3.5-flash-lite',
+  fallbackModel: 'gemini-3.6-flash',
+  modelsChain: ['gemini-3.5-flash-lite', 'gemini-3.6-flash', 'gemini-3.1-flash-lite', 'gemini-3.8-flash'],
   apiEndpoint: 'https://generativelanguage.googleapis.com/v1beta'
 };

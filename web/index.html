@@ -30,10 +30,10 @@
     }
   </script>
   
-  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.0) -->
+  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.3) -->
   <script>
     (function() {
-      const TARGET_CACHE = 'travel-os-v4.2';
+      const TARGET_CACHE = 'travel-os-v4.3';
       
       // 1. Purge obsolete caches
       if ('caches' in window) {
@@ -88,10 +88,10 @@
     })();
   </script>
   
-  <link rel="stylesheet" href="styles.css?v=4.2">
-  <script src="config.js?v=4.2"></script>
-  <script src="itinerary_data.js?v=4.2"></script>
-  <script src="app.js?v=4.2&b=2026092301" defer></script>
+  <link rel="stylesheet" href="styles.css?v=4.3">
+  <script src="config.js?v=4.3"></script>
+  <script src="itinerary_data.js?v=4.3"></script>
+  <script src="app.js?v=4.3&b=2026092302" defer></script>
 </head>
 <body class="antialiased min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
@@ -1263,9 +1263,10 @@ e.g.:
           <div>
             <label class="block text-slate-400 text-[11px] mb-1 font-medium">Target Gemini Model:</label>
             <select id="gemini-model-select" onchange="saveGeminiModelPreference()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:border-indigo-500 focus:outline-none">
-              <option value="gemini-3.8-flash" selected>gemini-3.8-flash (Primary - High Performance)</option>
-              <option value="gemini-2.5-flash">gemini-2.5-flash (Fast & Stable)</option>
-              <option value="gemini-flash-latest">gemini-flash-latest</option>
+              <option value="gemini-3.5-flash-lite" selected>gemini-3.5-flash-lite (Recommended - Instant & Stable)</option>
+              <option value="gemini-3.6-flash">gemini-3.6-flash (Deep Reasoning)</option>
+              <option value="gemini-3.1-flash-lite">gemini-3.1-flash-lite (Fast Lite)</option>
+              <option value="gemini-3.8-flash">gemini-3.8-flash (High Performance)</option>
             </select>
           </div>
 
