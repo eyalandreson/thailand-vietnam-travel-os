@@ -28,6 +28,7 @@ def main():
     print("  - GET  /api/status            : Bridge health & Antigravity status")
     print("  - GET  /api/change-requests   : List all submitted change requests")
     print("  - POST /api/change-requests   : Submit new change request (auto-resolves)")
+    print("  - POST /api/gmail-sync        : Autonomous Gmail booking scan & dual sync")
     print("================================================================")
     try:
         server.serve_forever()

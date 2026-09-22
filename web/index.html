@@ -33,7 +33,7 @@
   <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.0) -->
   <script>
     (function() {
-      const TARGET_CACHE = 'travel-os-v4.0';
+      const TARGET_CACHE = 'travel-os-v4.2';
       
       // 1. Purge obsolete caches
       if ('caches' in window) {
@@ -49,8 +49,8 @@
 
       // 2. One-time self-upgrade: unregister any legacy service workers
       const lastVersion = localStorage.getItem('travel_os_active_version');
-      if (lastVersion !== '4.0') {
-        localStorage.setItem('travel_os_active_version', '4.0');
+      if (lastVersion !== '4.2') {
+        localStorage.setItem('travel_os_active_version', '4.2');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(function(regs) {
             for (let reg of regs) {
@@ -60,12 +60,12 @@
         }
       }
 
-      // 3. Register fresh v4.0 Service Worker with update listeners
+      // 3. Register fresh v4.2 Service Worker with update listeners
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('sw.js?v=4.0')
+          navigator.serviceWorker.register('sw.js?v=4.2')
             .then(function(reg) {
-              console.log('[Travel OS v4.0] ServiceWorker registered:', reg.scope);
+              console.log('[Travel OS v4.2] ServiceWorker registered:', reg.scope);
               reg.update();
             })
             .catch(function(err) {
@@ -88,10 +88,10 @@
     })();
   </script>
   
-  <link rel="stylesheet" href="styles.css?v=4.0">
-  <script src="config.js?v=4.0"></script>
-  <script src="itinerary_data.js?v=4.0"></script>
-  <script src="app.js?v=4.0&b=20260912" defer></script>
+  <link rel="stylesheet" href="styles.css?v=4.2">
+  <script src="config.js?v=4.2"></script>
+  <script src="itinerary_data.js?v=4.2"></script>
+  <script src="app.js?v=4.2&b=2026092301" defer></script>
 </head>
 <body class="antialiased min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
@@ -107,9 +107,9 @@
     </button>
 
     <!-- Request Changes / Antigravity Agent Floating Button -->
-    <button onclick="openChangeRequestModal()" class="floating-cr-btn px-4 py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white rounded-full font-bold text-xs flex items-center gap-2 border border-emerald-400/50 shadow-2xl transition-all transform hover:scale-105 active:scale-95 shadow-emerald-500/30" title="Tell Antigravity about changes in plans or site">
-      <span class="text-sm">🛠️</span>
-      <span>Request Changes (Agent)</span>
+    <button onclick="openChangeRequestModal()" class="floating-cr-btn px-4 py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white rounded-full font-bold text-xs flex items-center gap-2 border border-emerald-400/50 shadow-2xl transition-all transform hover:scale-105 active:scale-95 shadow-emerald-500/30" title="Make quick travel plan or site changes with AI Agent">
+      <span class="text-sm">✨</span>
+      <span>AI Agent Changes</span>
       <span id="floating-bridge-dot" class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
     </button>
 
@@ -132,7 +132,7 @@
         <div class="min-w-0">
           <h1 class="font-extrabold text-slate-900 dark:text-white text-xs sm:text-base leading-tight tracking-tight truncate flex items-center gap-1.5">
             <span>Thailand &amp; Vietnam</span>
-            <button onclick="forceAppUpdate()" class="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/60 hover:bg-blue-200 text-blue-700 dark:text-blue-300 font-mono font-bold transition" title="Travel OS v4.0 (Tap to Force Clean Update)">v4.0</button>
+            <button onclick="forceAppUpdate()" class="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 dark:blue-900/60 hover:bg-blue-200 text-blue-700 dark:text-blue-300 font-mono font-bold transition" title="Travel OS v4.2 (Tap to Force Clean Update)">v4.2</button>
           </h1>
           <p class="text-[10px] sm:text-xs text-blue-600 dark:text-cyan-400 font-semibold tracking-wide uppercase truncate">
             29 Days • Sep 11 – Oct 09
@@ -163,9 +163,15 @@
         </button>
 
         <!-- CLOUD AGENT / CHANGE REQUEST BUTTON (Desktop Only) -->
-        <button onclick="openChangeRequestModal()" class="hidden sm:inline-flex px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold border border-emerald-400/40 transition items-center gap-1.5 shadow-sm shadow-emerald-500/20" title="Request travel plan or site changes with Cloud Agent (0% PC battery)">
-          <span>☁️</span> <span>Cloud Agent</span>
+        <button onclick="openChangeRequestModal()" class="hidden sm:inline-flex px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold border border-emerald-400/40 transition items-center gap-1.5 shadow-sm shadow-emerald-500/20" title="Request travel plan or site changes with AI Agent">
+          <span>✨</span> <span>Agent Fix</span>
           <span id="header-bridge-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
+        </button>
+
+        <!-- AUTONOMOUS GMAIL BOOKING SYNC BUTTON -->
+        <button id="gmail-sync-btn" onclick="syncGmailBookings()" class="px-2.5 sm:px-3 py-1.5 rounded-full sm:rounded-xl bg-gradient-to-r from-rose-600 via-red-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white text-xs font-bold border border-rose-400/40 transition flex items-center gap-1.5 shadow-sm shadow-rose-500/20" title="Scan Gmail for new bookings (flights, hotels, buses) and update site">
+          <span id="gmail-sync-icon" class="text-xs">🔄</span>
+          <span class="hidden sm:inline">Sync Gmail</span>
         </button>
 
         <button onclick="openPackingModal()" class="hidden md:inline-flex px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition items-center gap-1.5 shadow-sm" title="Split Luggage & Packing Checklist">
@@ -365,12 +371,17 @@
             </div>
           </div>
 
-          <!-- 6 Verified Gmail Ground Truth Documents -->
+          <!-- Verified Gmail Ground Truth Documents -->
           <div>
-            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-1.5">
-              <span>🔒</span> 6 Confirmed Flight &amp; Hotel Bookings (Instant PDF Download)
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span>🔒</span> <span id="confirmed-docs-count-label">Confirmed Flight &amp; Hotel Bookings</span> (Instant PDF Download)
+              </div>
+              <button onclick="syncGmailBookings()" class="text-[10px] text-rose-500 hover:text-rose-600 dark:text-rose-400 font-bold flex items-center gap-1 transition" title="Scan Gmail for new bookings">
+                <span>🔄</span> Scan Gmail
+              </button>
             </div>
-            <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+            <div id="confirmed-docs-strip" class="flex gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
               <a href="documents/Emirates_Flight_TLV_BKK_G5M8CF.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
                 <span>✈️</span>
                 <span class="text-[11px]">Emirates TLV-BKK</span>
@@ -393,6 +404,18 @@
                 <span>✈️</span>
                 <span class="text-[11px]">Flight BKK ⇄ HAN</span>
                 <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">1145-554-179</span>
+                <span>📥</span>
+              </a>
+              <a href="documents/Travel Reservation 24SEP for EYAL ANDRESON.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
+                <span>✈️</span>
+                <span class="text-[11px]">Bangkok Airways BKK-USM</span>
+                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">D7XZQW</span>
+                <span>📥</span>
+              </a>
+              <a href="documents/Confirmation_for_Booking_ID__1777544987.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
+                <span>🏨</span>
+                <span class="text-[11px]">The Fair House Samui</span>
+                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">1777544987</span>
                 <span>📥</span>
               </a>
               <a href="documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
@@ -1006,7 +1029,7 @@
   </div>
 
   <!-- ================================================================= -->
-  <!-- MODAL: ANTIGRAVITY AGENT HUB & TRAVELER CHANGE REQUEST            -->
+  <!-- MODAL: AI AGENT HUB & CONVERSATIONAL TRAVEL COMPANION               -->
   <!-- ================================================================= -->
   <div id="change-request-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-md hidden p-0 sm:p-4 modal-sheet-container">
     <div class="travel-card modal-sheet-card rounded-2xl max-w-3xl w-full h-[94vh] sm:h-[86vh] flex flex-col border border-emerald-500/30 shadow-2xl relative overflow-hidden bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-t-3xl sm:rounded-2xl">
@@ -1015,19 +1038,19 @@
       <!-- MODAL HEADER -->
       <div class="px-5 py-3.5 sm:py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex items-center justify-between shrink-0">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-cyan-600 flex items-center justify-center text-white text-lg shadow-lg shadow-emerald-500/30">
-            🛠️
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-cyan-600 flex items-center justify-center text-white text-lg shadow-lg shadow-emerald-500/30 shrink-0">
+            ✨
           </div>
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white leading-none">Cloud Agent Hub</h3>
-              <span id="bridge-connection-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-mono font-bold border border-emerald-300 dark:border-emerald-500/40 flex items-center gap-1">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white leading-none">Travel OS AI Agent</h3>
+              <span id="bridge-connection-badge" class="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-mono font-bold border border-emerald-300 dark:border-emerald-500/40 flex items-center gap-1.5">
                 <span id="bridge-connection-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span id="bridge-connection-text">☁️ Cloud Agent: Ready</span>
+                <span id="bridge-connection-text">Instant In-Browser AI &amp; Cloud Ready</span>
               </span>
             </div>
             <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
-              <span>Autonomous Cloud AI: Instant plan & site fixes across mobile & desktop with zero pairing</span>
+              <span>Tell the AI what to change, paste booking messages, or dictate hands-free</span>
             </p>
           </div>
         </div>
@@ -1036,7 +1059,7 @@
           <button onclick="enableBrowserNotifications()" class="px-2.5 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50 text-amber-800 dark:text-amber-300 transition border border-amber-300 dark:border-amber-700/50 text-xs font-bold flex items-center gap-1 shadow-sm" title="Enable Completion Alerts (Desktop & Mobile)">
             <span>🔔</span> <span class="hidden sm:inline">Alerts</span>
           </button>
-          <button onclick="checkBridgeStatus(true)" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700 text-xs font-bold" title="Refresh Cloud Agent Status">
+          <button onclick="checkBridgeStatus(true)" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition border border-slate-200 dark:border-slate-700 text-xs font-bold" title="Refresh Status">
             🔄
           </button>
           <button onclick="closeChangeRequestModal()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 dark:hover:bg-rose-900/40 text-slate-700 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-300 transition border border-slate-200 dark:border-slate-700 ml-1 text-sm font-bold" title="Close">
@@ -1048,160 +1071,126 @@
       <!-- TABS BAR -->
       <div class="px-5 py-2.5 bg-slate-100/80 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
         <div class="flex items-center gap-2">
-          <button id="cr-tab-btn-submit" onclick="switchCrTab('submit')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-sm transition">
-            ✏️ New Request
+          <button id="cr-tab-btn-submit" onclick="switchCrTab('submit')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-sm transition flex items-center gap-1.5">
+            <span>✨</span> <span>AI Itinerary Editor</span>
           </button>
           <button id="cr-tab-btn-queue" onclick="switchCrTab('queue')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition flex items-center gap-1.5">
-            <span>📋 Queue &amp; History</span>
+            <span>📋 History &amp; Undo</span>
             <span id="cr-queue-badge" class="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-200 dark:bg-slate-700 font-bold">0</span>
           </button>
-          <button id="cr-tab-btn-directive" onclick="switchCrTab('directive')" class="hidden sm:inline-flex px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition items-center gap-1">
-            <span>⚡ Prompt / Directive</span>
-          </button>
         </div>
-        <span class="text-[11px] text-slate-400 hidden sm:inline font-mono">
-          Zero-Pairing Cloud Service
+        <span class="text-[11px] text-emerald-600 dark:text-emerald-400 hidden sm:inline font-mono font-medium">
+          Zero Form Fields • 100% Free Text
         </span>
       </div>
 
-      <!-- TAB 1: SUBMIT NEW CHANGE REQUEST -->
+      <!-- TAB 1: 100% PURE FREE-TEXT AI PROMPT -->
       <div id="cr-tab-content-submit" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
         <form id="cr-form" onsubmit="handleCrSubmit(event)" class="space-y-4">
-          <!-- Category Selector -->
+
+          <!-- The Single Free-Text Magic Box -->
+          <div class="magic-prompt-container p-4 sm:p-5 rounded-2xl relative shadow-sm border border-emerald-500/25 bg-emerald-50/20 dark:bg-emerald-950/20">
+            <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-emerald-500/20 text-xs">
+              <span class="font-extrabold text-emerald-800 dark:text-emerald-300 flex items-center gap-2 text-sm">
+                <span>💬</span> Write whatever you want to change in free text:
+              </span>
+              <!-- Voice Dictation Trigger -->
+              <button type="button" id="cr-voice-btn" onclick="toggleVoiceDictation()" class="px-3 py-1.5 rounded-xl bg-emerald-100 dark:bg-emerald-950 hover:bg-emerald-200 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-300 font-bold text-xs flex items-center gap-1.5 transition shadow-xs" title="Tap to dictate your change">
+                <span id="cr-voice-icon">🎙️</span>
+                <span id="cr-voice-label">Voice Dictate</span>
+              </button>
+            </div>
+
+            <textarea 
+              id="cr-prompt-input" 
+              rows="5" 
+              required
+              autofocus
+              oninput="handleCrPromptInput(this.value)"
+              placeholder="Write whatever you want to change in plain English...
+e.g.:
+• 'Change Day 5 hotel to an eco-bungalow with twin beds and move dinner to 8 PM'
+• 'We want to rent a scooter in Ninh Binh on Day 8'
+• 'Our flight to Bangkok on Day 14 was delayed by 3 hours, adjust the schedule'
+• 'Switch to a quieter beach resort on Koh Tao on Day 22'"
+              class="w-full bg-transparent border-0 text-sm sm:text-base text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-0 resize-none leading-relaxed"
+            ></textarea>
+
+            <!-- Subtle Live AI Detection Pill (Read-Only Confirmation, NO inputs) -->
+            <div class="pt-3 border-t border-emerald-500/20 flex items-center justify-between flex-wrap gap-2 text-xs">
+              <div id="cr-detected-pill" class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/90 text-emerald-800 dark:text-emerald-300 font-semibold border border-emerald-300 dark:border-emerald-700/60 flex items-center gap-1.5">
+                  <span id="cr-detected-icon">🎯</span>
+                  <span id="cr-detected-text">Target: Whole Trip (Auto-detects as you type)</span>
+                </span>
+              </div>
+              <button type="button" onclick="clearCrPrompt()" class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 underline">
+                Clear text
+              </button>
+            </div>
+          </div>
+
+          <!-- Clickable Example Prompts (Instant Complete Sentences - No brackets to fill!) -->
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">1. Change Category:</label>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              <label class="cr-category-card flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer bg-slate-50 dark:bg-slate-800/60 hover:border-emerald-500 transition">
-                <input type="radio" name="cr_category" value="plan" checked onchange="handleCrCategoryChange()" class="accent-emerald-600">
-                <div>
-                  <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-1">
-                    <span>🗓️</span> Travel Plan Change
-                  </div>
-                  <div class="text-[11px] text-slate-500 dark:text-slate-400">Hotel, flight, dates, route</div>
-                </div>
-              </label>
-              <label class="cr-category-card flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer bg-slate-50 dark:bg-slate-800/60 hover:border-emerald-500 transition">
-                <input type="radio" name="cr_category" value="site" onchange="handleCrCategoryChange()" class="accent-emerald-600">
-                <div>
-                  <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-1">
-                    <span>💻</span> Site / UI Change
-                  </div>
-                  <div class="text-[11px] text-slate-500 dark:text-slate-400">Features, styling, bug fixes</div>
-                </div>
-              </label>
-              <label class="cr-category-card flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer bg-slate-50 dark:bg-slate-800/60 hover:border-emerald-500 transition">
-                <input type="radio" name="cr_category" value="urgent" onchange="handleCrCategoryChange()" class="accent-rose-600">
-                <div>
-                  <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-1">
-                    <span>🚨</span> Urgent Disruption
-                  </div>
-                  <div class="text-[11px] text-slate-500 dark:text-slate-400">Flight delay, storm reroute</div>
-                </div>
-              </label>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 block">
+              💡 Need inspiration? Click any example to try:
+            </span>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="setCrPrompt('Switch Day 18 Koh Phangan villa to Panviman Resort with romantic sea view')" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-700 transition">
+                🏨 "Switch Day 18 hotel to Panviman Resort"
+              </button>
+              <button type="button" onclick="setCrPrompt('Activate rainy day indoor plan for Sa Pa on Day 7')" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-700 transition">
+                🌧️ "Add rainy day backup for Sa Pa on Day 7"
+              </button>
+              <button type="button" onclick="setCrPrompt('Delay Day 14 Bangkok flight transfer by 2 hours and update buffer')" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-700 transition">
+                ✈️ "Delay Day 14 flight transfer by 2 hours"
+              </button>
+              <button type="button" onclick="setCrPrompt('Recommend a scenic sunset seafood restaurant on Koh Tao on Day 22')" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-700 transition">
+                🍜 "Recommend sunset dinner on Koh Tao Day 22"
+              </button>
             </div>
           </div>
 
-          <!-- Scope / Target Day -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">2. Target Day or Scope:</label>
-              <select id="cr-target-day-select" onchange="handleCrDaySelectChange()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 transition">
-                <option value="">Whole Trip / General Feature</option>
-                <!-- Populated dynamically by populateCrDayOptions() -->
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">3. Urgency / Priority:</label>
-              <select id="cr-priority-select" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 transition">
-                <option value="normal" selected>Normal (Standard automated cycle)</option>
-                <option value="high">High (Upcoming within 48 hours)</option>
-                <option value="urgent">🚨 Urgent (Immediate today / tomorrow)</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Phase & Critic Helper Pill -->
-          <div id="cr-critic-hint-box" class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-300 flex items-start gap-2">
+          <!-- Adversarial Critic Protection Helper Pill -->
+          <div id="cr-critic-hint-box" class="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-300 flex items-start gap-2.5">
             <span class="text-base">🛡️</span>
             <div>
-              <span class="font-bold">Adversarial Critic Protection:</span>
-              <span id="cr-critic-hint-text">The agent will verify all updates against Phase constraints (Twin beds for Vietnam Phase 1, Romantic King bed for Thailand Phase 2, noise &amp; recent review screening &ge; 8.5/10).</span>
+              <span class="font-bold">Automated Critic Rules Active:</span>
+              <p id="cr-critic-hint-text" class="mt-0.5 leading-relaxed text-slate-600 dark:text-slate-300">
+                The AI agent screens candidate hotels &amp; routes against master rules (Twin Beds &amp; 55L backpack for Phase 1; Romantic King for Phase 2; noise screening &ge; 8.5/10).
+              </p>
             </div>
           </div>
 
-          <!-- Quick Preset Chips -->
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">Quick Inspiration Chips:</label>
-            <div class="flex flex-wrap gap-1.5">
-              <button type="button" onclick="applyCrPreset('hotel')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-700 transition">
-                🏨 Change Hotel / Homestay
-              </button>
-              <button type="button" onclick="applyCrPreset('flight')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-700 transition">
-                ✈️ Adjust Flight / Transit Time
-              </button>
-              <button type="button" onclick="applyCrPreset('restaurant')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-700 transition">
-                🍜 Add Restaurant / Street Food
-              </button>
-              <button type="button" onclick="applyCrPreset('rain')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-700 transition">
-                🌧️ Switch to Rain Plan B
-              </button>
-              <button type="button" onclick="applyCrPreset('ui')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-700 transition">
-                🎨 Site UI / Feature Request
-              </button>
-            </div>
-          </div>
-
-          <!-- Title -->
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">4. Short Title / Summary:</label>
-            <input type="text" id="cr-title-input" required placeholder="e.g. Switch Day 18 Koh Phangan villa to Panviman Resort" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition">
-          </div>
-
-          <!-- Description -->
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">5. Instructions for Antigravity Agent (What should change?):</label>
-            <textarea id="cr-desc-input" rows="3" required placeholder="Describe the change in detail. For itinerary changes, mention target hotel, time adjustments, or activities. For site improvements, describe desired buttons, layout, or data formatting..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition"></textarea>
-          </div>
-
-          <!-- Submitter Name & Submit Actions -->
-          <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            <div class="flex items-center gap-2">
-              <span class="text-xs text-slate-500">Submitter:</span>
-              <input type="text" id="cr-submitter-input" value="Eyal" class="w-28 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
-            </div>
-
-            <div class="flex items-center gap-2">
-              <button type="button" onclick="copyCrDirectiveFromForm()" class="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold border border-slate-200 dark:border-slate-700 transition flex items-center justify-center gap-1.5" title="Copy formatted prompt for Antigravity chat or CLI">
-                <span>📋</span> Copy Directive
-              </button>
-              <button type="submit" id="cr-submit-btn" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold shadow-lg shadow-emerald-500/25 transition flex items-center justify-center gap-1.5">
-                <span>Dispatch to Cloud Agent</span> <span>🚀</span>
-              </button>
-            </div>
+          <!-- Submit Action Button Bar (Only 1 primary button!) -->
+          <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-end gap-3">
+            <button type="submit" id="cr-submit-btn" class="w-full sm:w-auto px-7 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-sm font-bold shadow-lg shadow-emerald-500/25 transition flex items-center justify-center gap-2 transform active:scale-95">
+              <span>✨ Apply Changes with AI</span> <span>🚀</span>
+            </button>
           </div>
         </form>
       </div>
 
-      <!-- TAB 2: REQUEST QUEUE & AGENT HISTORY -->
+      <!-- TAB 2: REQUEST QUEUE, VISUAL DIFFS & 1-CLICK UNDO -->
       <div id="cr-tab-content-queue" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
         <div class="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-slate-200 dark:border-slate-800">
           <div class="flex items-center gap-2">
-            <span class="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white">Active Requests &amp; Agent History</span>
+            <span class="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white">Active Requests &amp; Change History</span>
             <span id="cr-queue-filter-count" class="text-xs text-slate-400">0 tickets</span>
           </div>
           <div class="flex items-center gap-1.5">
-            <button onclick="loadChangeRequests(true)" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition">
-              🔄 Refresh
+            <button onclick="loadChangeRequests(true)" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition flex items-center gap-1">
+              <span>🔄</span> Refresh
             </button>
           </div>
         </div>
 
         <div id="cr-queue-list" class="space-y-3">
-          <!-- Populated dynamically by renderChangeRequestQueue() -->
+          <!-- Populated dynamically with Visual Diff & Undo buttons -->
         </div>
       </div>
 
-      <!-- TAB 3: ANTIGRAVITY AGENT DIRECTIVE GENERATOR -->
+      <!-- TAB 3: ANTIGRAVITY AGENT DIRECTIVE GENERATOR (DEVELOPER) -->
       <div id="cr-tab-content-directive" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
         <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
           <div class="flex items-center justify-between">
@@ -1219,6 +1208,7 @@
 
     </div>
   </div>
+
 
   <!-- MODAL: GEMINI 3.8 FLASH GROUNDED ASSISTANT -->
   <div id="gemini-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-md hidden p-0 sm:p-4 modal-sheet-container">
@@ -1373,8 +1363,8 @@
       <span>Days</span>
     </button>
     <button onclick="openChangeRequestModal()" class="mobile-nav-item text-emerald-500">
-      <span class="text-base">☁️</span>
-      <span>Cloud Fix</span>
+      <span class="text-base">✨</span>
+      <span>AI Fix</span>
     </button>
     <button onclick="openGeminiModal()" class="mobile-nav-item text-indigo-400">
       <span class="text-base">✨</span>

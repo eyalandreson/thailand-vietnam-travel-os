@@ -39,6 +39,19 @@ class CloudServerHandler(handler):
                     "health": "/api/health"
                 }
             }).encode("utf-8"))
+        elif self.path in ("/api/gmail-sync", "/api/sync-gmail", "/api/gmail/sync"):
+            from core.gmail_auth_ingest import GmailLiveIngestion
+            try:
+                res = GmailLiveIngestion().sync_and_ingest()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps(res, indent=2).encode("utf-8"))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "ERROR", "error": str(e)}).encode("utf-8"))
         elif self.path in ("/api/agent_fix", "/api/agent-fix", "/api/status"):
             super().do_GET()
         else:
@@ -48,7 +61,21 @@ class CloudServerHandler(handler):
             self.wfile.write(json.dumps({"error": "Route not found"}).encode("utf-8"))
 
     def do_POST(self):
-        if self.path in ("/api/agent_fix", "/api/agent-fix", "/api/change-requests"):
+        if self.path in ("/api/gmail-sync", "/api/sync-gmail", "/api/gmail/sync"):
+            from core.gmail_auth_ingest import GmailLiveIngestion
+            self._send_cors_headers()
+            try:
+                res = GmailLiveIngestion().sync_and_ingest()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps(res, indent=2).encode("utf-8"))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "ERROR", "error": str(e)}).encode("utf-8"))
+        elif self.path in ("/api/agent_fix", "/api/agent-fix", "/api/change-requests"):
             super().do_POST()
         else:
             self.send_response(404)

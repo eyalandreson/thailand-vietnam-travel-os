@@ -92,6 +92,182 @@
       "file_path": "documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf",
       "file_status": "LOCAL_FILE_VERIFIED",
       "file_category": "Flight E-Ticket"
+    },
+    {
+      "id": "HOTEL-LADO-SAPA-2050574832",
+      "type": "ACCOMMODATION",
+      "date": "2026-09-16",
+      "checkout_date": "2026-09-17",
+      "title": "Lá Đỏ Homestay & Coffee Sa Pa",
+      "reference_code": "2050574832",
+      "status": "[CONFIRMED - BOOKED]",
+      "location": "031 Hoang Lien Street, Sa Pa, Lao Cai",
+      "room_type": "Deluxe Mountain View",
+      "details": "Confirmed valley-facing homestay stay in Sa Pa via Agoda.",
+      "file_path": "documents/Confirmation_for_Booking_ID__2050574832.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Hotel Voucher"
+    },
+    {
+      "id": "HOTEL-PRAHA-SAPA-2050577065",
+      "type": "ACCOMMODATION",
+      "date": "2026-09-15",
+      "checkout_date": "2026-09-16",
+      "title": "Sapa Praha Hotel",
+      "reference_code": "2050577065",
+      "status": "[CONFIRMED - BOOKED]",
+      "location": "85 Violet, Sapa, Lao Cai",
+      "room_type": "Superior Double Room",
+      "details": "Confirmed mountain arrival stay in Sa Pa via Agoda.",
+      "file_path": "documents/Confirmation_for_Booking_ID__2050577065.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Hotel Voucher"
+    },
+    {
+      "id": "HOTEL-MOON-CATBA-2051512276",
+      "type": "ACCOMMODATION",
+      "date": "2026-09-19",
+      "checkout_date": "2026-09-20",
+      "title": "The Moon Boutique Hotel Cat Ba",
+      "reference_code": "2051512276",
+      "status": "[CONFIRMED - BOOKED]",
+      "location": "04 Nui Ngoc, Cat Ba Island",
+      "room_type": "Deluxe Twin City View",
+      "details": "Confirmed island base for Lan Ha Bay kayaking via Agoda.",
+      "file_path": "documents/Confirmation_for_Booking_ID__2051512276.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Hotel Voucher"
+    },
+    {
+      "id": "HOTEL-LALUA-NINHBINH-2051965881",
+      "type": "ACCOMMODATION",
+      "date": "2026-09-20",
+      "checkout_date": "2026-09-21",
+      "title": "La Lua Resort Ninh Binh",
+      "reference_code": "2051965881",
+      "status": "[CONFIRMED - BOOKED]",
+      "location": "Ngo Thuong, Ninh Hoa, Hoa Lu, Ninh Binh",
+      "room_type": "Family Room with Garden View",
+      "details": "Confirmed scenic retreat stay in Ninh Binh via Agoda.",
+      "file_path": "documents/Confirmation_for_Booking_ID__2051965881.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Hotel Voucher"
+    },
+    {
+      "id": "HOTEL-MAYDEVILLE-HANOI-1777345669",
+      "type": "ACCOMMODATION",
+      "date": "2026-09-22",
+      "checkout_date": "2026-09-23",
+      "title": "May De Ville Lakeside Hotel (Hanoi Old Quarter)",
+      "reference_code": "1777345669",
+      "status": "[CONFIRMED - BOOKED]",
+      "location": "43 Gia Ngu, Hoan Kiem District, Hanoi",
+      "room_type": "Superior Room (Quiet High Floor, Twin Beds)",
+      "details": "Confirmed pre-departure stay in Hanoi Old Quarter via Agoda.",
+      "file_path": "documents/Confirmation_for_Booking_ID__1777345669.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Hotel Voucher"
+    },
+    {
+      "id": "HOTEL-FAIRHOUSE-SAMUI-1777544987",
+      "type": "ACCOMMODATION",
+      "date": "2026-09-24",
+      "checkout_date": "2026-09-26",
+      "title": "The Fair House Beach Resort and Hotel (Koh Samui)",
+      "reference_code": "1777544987",
+      "status": "[CONFIRMED - BOOKED]",
+      "location": "124-124/1-2 Moo 3 T. Bophut, Koh Samui (Chaweng Noi Beach)",
+      "room_type": "Grand Deluxe Bungalow (Romantic Beachfront)",
+      "details": "Confirmed 2-night stay for Eyal & Girlfriend via Agoda. Anniversary retreat kickoff.",
+      "file_path": "documents/Confirmation_for_Booking_ID__1777544987.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Hotel Voucher"
+    },
+    {
+      "id": "BOOKING-QI2514",
+      "type": "BUS_TRANSIT",
+      "date": "2026-09-16",
+      "title": "Vexere VIP Bus: Hà Giang - Sapa (Cabin) (QI2514)",
+      "reference_code": "QI2514",
+      "status": "[CONFIRMED - BOOKED]",
+      "details": "Ingested from Gmail: Vexere",
+      "file_path": "documents/Voucher_QI2514_Vexere Confirmation of successful  payme.html",
+      "file_status": "LOCAL_FILE_VERIFIED"
+    },
+    {
+      "id": "BUS-VEXERE-HG-SAPA-E8PB24",
+      "type": "BUS_TRANSIT",
+      "date": "2026-09-15",
+      "title": "Ha Giang -> Sa Pa VIP Cabin Sleeper Bus",
+      "reference_code": "E8PB24",
+      "status": "[CONFIRMED - BOOKED]",
+      "departure": "18:00 (15/09) - Ha Giang Bus Station",
+      "arrival": "00:30 (16/09) - SaPa Office (599 Dien Bien Phu)",
+      "operator": "Bằng Phấn VIP Cabin Bus",
+      "passengers": "Eyal Andreson & Friend",
+      "details": "Confirmed mountain transfer from Ha Giang to Sa Pa via Vexere.",
+      "file_path": "documents/Voucher_E8PB24_Vexere Confirmation of successful  payme.html",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Bus E-Ticket"
+    },
+    {
+      "id": "BUS-VEXERE-SAPA-CATBA-34GR92",
+      "type": "BUS_TRANSIT",
+      "date": "2026-09-18",
+      "title": "Sa Pa -> Cat Ba Island VIP Overnight Bus",
+      "reference_code": "34GR92",
+      "status": "[CONFIRMED - BOOKED]",
+      "departure": "22:00 (18/09) - SaPa 599 Dien Bien Phu",
+      "arrival": "07:20 (19/09) - Cat Ba Office (175B 1/4 Street)",
+      "operator": "Kết Đoàn Travel VIP Cabin Bus",
+      "passengers": "Eyal Andreson & Friend",
+      "details": "Confirmed overnight highway bus to Cat Ba Island via Vexere.",
+      "file_path": "documents/Voucher_34GR92_Vexere Confirmation of successful  payme.html",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Bus E-Ticket"
+    },
+    {
+      "id": "FLIGHT-BKK-USM-PG169-D7XZQW",
+      "type": "FLIGHT",
+      "date": "2026-09-24",
+      "title": "Bangkok (BKK) -> Koh Samui (USM) Direct Nonstop",
+      "reference_code": "D7XZQW",
+      "status": "[CONFIRMED - BOOKED]",
+      "departure": "16:40 PM (BKK Suvarnabhumi) - PG169",
+      "arrival": "17:45 PM (USM Koh Samui)",
+      "airline": "Bangkok Airways PG169 (Direct Nonstop)",
+      "passengers": "Eyal Andreson & Maria Miriam Malayev",
+      "details": "Confirmed flight from Bangkok to Koh Samui. 2h buffer after Hanoi landing.",
+      "file_path": "documents/Voucher_D7XZQW_windows-874BV2VsY29tZSB0byBCYW5na29rIEFp.html",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Flight E-Ticket"
+    },
+    {
+      "id": "FLIGHT-USM-BKK-PG124-D7XZQW",
+      "type": "FLIGHT",
+      "date": "2026-10-07",
+      "title": "Koh Samui (USM) -> Bangkok (BKK) Direct Nonstop",
+      "reference_code": "D7XZQW",
+      "status": "[CONFIRMED - BOOKED]",
+      "departure": "10:05 AM (USM Koh Samui) - PG124",
+      "arrival": "11:20 AM (BKK Suvarnabhumi)",
+      "airline": "Bangkok Airways PG124",
+      "passengers": "Eyal Andreson & Maria Miriam Malayev",
+      "details": "Confirmed return flight from Koh Samui to Bangkok for 2-day Bangkok finale.",
+      "file_path": "documents/Voucher_D7XZQW_windows-874BV2VsY29tZSB0byBCYW5na29rIEFp.html",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "file_category": "Flight E-Ticket"
+    },
+    {
+      "id": "BOOKING-12GO32785393",
+      "type": "BUS_TRANSIT",
+      "date": "2026-09-24",
+      "title": "12Go Asia Transit (12GO32785393)",
+      "reference_code": "12GO32785393",
+      "status": "[CONFIRMED - BOOKED]",
+      "details": "Ingested from Gmail: 12Go Asia",
+      "file_path": "documents/Voucher_12GO32785393_Receipt  12GO32785393.html",
+      "file_status": "LOCAL_FILE_VERIFIED"
     }
   ],
   "unbooked_action_items": [
@@ -124,7 +300,7 @@
       "category": "BUS_TRANSIT",
       "date": "2026-09-15",
       "title": "Ha Giang to Sa Pa VIP Mountain Minibus",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "status": "[RESOLVED - BOOKED IN GMAIL (Vexere Bang Phan Bus)]",
       "notes": "Direct transfer via Lao Cai (12Go Asia or local basecamp booking)."
     },
     {
@@ -132,7 +308,7 @@
       "category": "HOTEL",
       "date": "2026-09-15 to 2026-09-17",
       "title": "Sa Pa Accommodation (2 Nights, Twin Beds)",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "status": "[RESOLVED - BOOKED IN GMAIL (Sapa Praha & La Do Homestay)]",
       "notes": "Vetted properties: Eco Palms House or Pao's Sapa Leisure."
     },
     {
@@ -148,7 +324,7 @@
       "category": "HOTEL",
       "date": "2026-09-17 to 2026-09-19",
       "title": "Ninh Binh Retreat (2 Nights, Twin Beds)",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "status": "[RESOLVED - BOOKED IN GMAIL (La Lua Resort)]",
       "notes": "Vetted properties: Tam Coc Garden Resort or Hidden Charm Resort."
     },
     {
@@ -164,7 +340,7 @@
       "category": "HOTEL_TOUR",
       "date": "2026-09-19 to 2026-09-22",
       "title": "Cat Ba Island (3 Nights, Twin Beds) & Lan Ha Bay Kayak Cruise",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "status": "[RESOLVED - BOOKED IN GMAIL (The Moon Boutique Hotel)]",
       "notes": "Vetted properties: Hôtel Perle d'Orient Cat Ba MGallery or Cat Ba Eco Lodge."
     },
     {
@@ -180,7 +356,7 @@
       "category": "HOTEL",
       "date": "2026-09-22 to 2026-09-24",
       "title": "Hanoi Old Quarter Boutique Stay (2 Nights, Twin Beds)",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "status": "[RESOLVED - BOOKED IN GMAIL (May De Ville Lakeside)]",
       "notes": "Vetted: La Siesta Classic Ma May or Peridot Grand."
     },
     {
@@ -188,7 +364,7 @@
       "category": "FLIGHT",
       "date": "2026-09-24",
       "title": "Bangkok (BKK) -> Koh Samui (USM) Domestic Connection",
-      "status": "[ACTION REQUIRED - NOT BOOKED - FLUID STRATEGY ACTIVE]",
+      "status": "[RESOLVED - BOOKED IN GMAIL (PG 169)]",
       "notes": "Hanoi flight lands at 14:45. PG 169 (17:15) flagged as HIGH RISK (only 2h 30m window for immigration, BKK Basement suitcase retrieval, and re-check). Recommended stress-free primary: Bangkok Airways PG 177 (19:30) or PG 181 (20:00). Fluid Fallbacks: 1) Overnight in Bangkok on Sep 24, morning flight Sep 25; 2) Fly to Surat Thani (URT) + Lomprayah catamaran."
     },
     {
@@ -196,7 +372,7 @@
       "category": "HOTEL",
       "date": "2026-09-24 to 2026-09-25",
       "title": "Koh Samui Romance (1 Night, King Bed Ocean View)",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
+      "status": "[RESOLVED - BOOKED IN GMAIL (Fair House Beach Resort)]",
       "notes": "Vetted: Hansar Samui Resort or SALA Samui Choengmon."
     },
     {

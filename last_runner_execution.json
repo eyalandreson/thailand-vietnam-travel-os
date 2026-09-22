@@ -1,10 +1,20 @@
 {
-  "timestamp": "2026-09-10T20:28:19.356553Z",
+  "timestamp": "2026-09-22T18:46:25.944027Z",
   "routine_1_ingestion": {
     "status": "SUCCESS",
-    "total_confirmed_in_registry": 6,
-    "itinerary_days_synchronized": 2,
-    "message": "Ingestion verified: 6 documents active."
+    "total_confirmed_in_registry": 18,
+    "new_items_added": 0,
+    "itinerary_days_synchronized": 9,
+    "resolved_action_items": [
+      "ACTION-HG-SAPA-TRANSIT",
+      "ACTION-SAPA-STAYS",
+      "ACTION-NINHBINH-STAYS",
+      "ACTION-CATBA-STAYS-CRUISE",
+      "ACTION-HANOI-FINALE-STAYS",
+      "ACTION-BKK-USM-FLIGHT",
+      "ACTION-SAMUI-STAYS"
+    ],
+    "message": "Gmail Ingestion verified: 18 documents active."
   },
   "routine_2_sync": {
     "status": "DUAL_SYNC_COMPLETED",
@@ -15,8 +25,8 @@
     "integrity_verified": true
   },
   "routine_3_critic": {
-    "total_hotels_audited": 38,
-    "passed_count": 38,
+    "total_hotels_audited": 35,
+    "passed_count": 35,
     "failure_count": 0,
     "pass_rate_pct": 100.0,
     "failures": [],

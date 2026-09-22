@@ -81,6 +81,8 @@ class AgentBridgeHandler(BaseHTTPRequestHandler):
             self.handle_list_requests()
         elif path == "/api/mobile-pair-payload":
             self.handle_mobile_pair_payload()
+        elif path in ("/api/gmail-sync", "/api/sync-gmail", "/api/gmail/sync"):
+            self.handle_gmail_sync()
         else:
             self._set_headers(404)
             self.wfile.write(json.dumps({"error": f"Endpoint not found: {path}"}).encode("utf-8"))
@@ -105,9 +107,23 @@ class AgentBridgeHandler(BaseHTTPRequestHandler):
             self.handle_apply_request(ticket_id)
         elif path == "/api/generate-directive":
             self.handle_generate_directive(payload)
+        elif path in ("/api/gmail-sync", "/api/sync-gmail", "/api/gmail/sync"):
+            self.handle_gmail_sync()
         else:
             self._set_headers(404)
             self.wfile.write(json.dumps({"error": f"Endpoint not found: {path}"}).encode("utf-8"))
+
+    def handle_gmail_sync(self):
+        """Scans Gmail for new bookings, downloads vouchers, updates datasets and blueprints."""
+        try:
+            from core.gmail_auth_ingest import GmailLiveIngestion
+            ingestor = GmailLiveIngestion()
+            result = ingestor.sync_and_ingest()
+            self._set_headers(200)
+            self.wfile.write(json.dumps(result, indent=2).encode("utf-8"))
+        except Exception as e:
+            self._set_headers(500)
+            self.wfile.write(json.dumps({"status": "ERROR", "error": str(e)}).encode("utf-8"))
 
     def handle_status(self):
         """Returns bridge and Antigravity system health."""
