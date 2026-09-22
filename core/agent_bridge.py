@@ -283,10 +283,15 @@ class AgentBridgeHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps({"status": "SUCCESS", "directive": prompt}).encode("utf-8"))
 
 
+from socketserver import ThreadingMixIn
+
+class ThreadingAgentBridgeServer(ThreadingMixIn, HTTPServer):
+    daemon_threads = True
+
 def create_server(host: str = "127.0.0.1", port: int = 5055) -> HTTPServer:
     """Creates an instance of the Antigravity Agent Bridge HTTP server."""
     server_address = (host, port)
-    return HTTPServer(server_address, AgentBridgeHandler)
+    return ThreadingAgentBridgeServer(server_address, AgentBridgeHandler)
 
 
 if __name__ == "__main__":
