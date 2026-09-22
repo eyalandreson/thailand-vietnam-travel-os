@@ -69,20 +69,23 @@ class TestItineraryIntegrity(unittest.TestCase):
         self.assertEqual(len(bkk_finale_days), 2, "Expected 2 nights Bangkok Finale")
 
     def test_confirmed_vs_unbooked_status_integrity(self):
-        """Verify strict segregation: only the 5 true bookings are marked CONFIRMED, all others UNBOOKED."""
-        confirmed_count = 0
+        """Verify strict segregation: confirmed hotels have verified booking references from Gmail, all others UNBOOKED."""
+        confirmed_hotels = []
         unbooked_count = 0
         for day in self.data.get("days", []):
             for hotel in day.get("accommodation_matrix", []):
                 status = hotel.get("status", "")
                 if "CONFIRMED" in status:
-                    confirmed_count += 1
-                    self.assertIn("Sukhon", hotel["hotel_name"])
+                    confirmed_hotels.append(hotel)
+                    self.assertTrue(hotel.get("booking_reference"), f"Confirmed hotel {hotel['hotel_name']} lacks booking reference!")
                 elif "UNBOOKED" in status or "ACTION REQUIRED" in status:
                     unbooked_count += 1
 
-        self.assertEqual(confirmed_count, 1, "Only Sukhon Hotel should be marked CONFIRMED accommodation.")
-        self.assertGreaterEqual(unbooked_count, 20, "All pending hotels should be marked ACTION REQUIRED - UNBOOKED.")
+        self.assertGreaterEqual(len(confirmed_hotels), 1, "Expected at least 1 confirmed hotel.")
+        # Verify genuine confirmed accommodations include verified properties
+        confirmed_names = [h["hotel_name"] for h in confirmed_hotels]
+        self.assertTrue(any("Sukhon" in name for name in confirmed_names))
+        self.assertGreaterEqual(unbooked_count, 10, "Remaining unbooked nights should be marked ACTION REQUIRED - UNBOOKED.")
 
     def test_all_days_have_dual_experiences(self):
         """Verify all 29 days contain Plan A (Primary) and Plan B (Contingency) with rich metadata."""

@@ -314,16 +314,16 @@ class GmailLiveIngestion:
         if code_match:
             res["reference_code"] = code_match.group(1).strip()
 
-        route_match = re.search(r"([A-Za-zÀ-ỹ\s]+ - [A-Za-zÀ-ỹ\s]+(?:\s*\([^\)]+\))?)\s*\nBooking code:", body_text)
+        route_match = re.search(r"([A-Za-zÀ-ỹ\s]+ - [A-Za-zÀ-ỹ\s]+(?:\s*\([^\)]+\))?)\s+Booking code:", body_text)
         if route_match:
             res["route"] = route_match.group(1).strip()
 
-        op_match = re.search(r"Bus Operator\s*\n+([^\n]+)", body_text)
+        op_match = re.search(r"Bus Operator\s+([^\n]+)", body_text)
         if op_match:
             res["operator"] = op_match.group(1).strip()
 
         times_match = re.search(
-            r"([0-9:]{4,5})\s*\n+\((\d{1,2}\/\d{1,2})\)\s*\n+([^\n]+)\s*\n+[^\n]*\s*\n+([0-9:]{4,5})\s*\n+\((\d{1,2}\/\d{1,2})\)\s*\n+([^\n]+)",
+            r"([0-9:]{4,5})\s+\((\d{1,2}\/\d{1,2})\)\s+([^\n]+)\s+[^\n]*\s+([0-9:]{4,5})\s+\((\d{1,2}\/\d{1,2})\)\s+([^\n]+)",
             body_text
         )
         if times_match:
