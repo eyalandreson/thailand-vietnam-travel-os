@@ -83,9 +83,8 @@ def deploy():
     print("\nDeploying web/ dashboard to 'gh-pages' branch...")
     # Use git subtree or worktree or temporary branch
     web_dir = os.path.abspath("web")
-    # Initialize a temporary git in web_dir or use orphan branch
     gh_cmds = [
-        f"cd web; git init; git config user.name 'Eyal Andreson'; git config user.email 'eyal@example.com'; git checkout -B gh-pages; git add .; git commit -m 'deploy: web dashboard to GitHub Pages'; git remote add origin {remote_url}; git push -u origin gh-pages --force"
+        f"cd web; git init; git config user.name 'Eyal Andreson'; git config user.email 'eyal@example.com'; git checkout -B gh-pages; git add -A; git commit -m 'deploy: web dashboard to GitHub Pages'; git remote set-url origin {remote_url}; git push -u origin gh-pages --force"
     ]
     p = subprocess.run(["powershell", "-Command", gh_cmds[0]], capture_output=True, text=True)
     print(f"Pushed to gh-pages: returncode={p.returncode}")
