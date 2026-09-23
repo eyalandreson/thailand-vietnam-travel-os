@@ -1,12 +1,12 @@
-// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.4)
-const CACHE_NAME = 'travel-os-v4.4';
+// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.5)
+const CACHE_NAME = 'travel-os-v4.5';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=4.4',
-  './config.js?v=4.4',
-  './app.js?v=4.4&b=2026092303',
-  './itinerary_data.js?v=4.4',
+  './styles.css?v=4.5',
+  './config.js?v=4.5',
+  './app.js?v=4.5&b=2026092305',
+  './itinerary_data.js?v=4.5',
   './data.json',
   './master_itinerary_doc.html',
   './manifest.json',
@@ -32,7 +32,7 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW v4.3] Pre-caching offline Travel OS assets and PDF documents');
+      console.log('[SW v4.5] Pre-caching offline Travel OS assets and PDF documents');
       return cache.addAll(ASSETS_TO_CACHE).catch((err) => {
         console.warn('[SW v4.3] Cache addAll warning:', err);
       });

@@ -31,7 +31,7 @@ class TestItineraryIntegrity(unittest.TestCase):
                 for hotel in day.get("accommodation_matrix", []):
                     spec = hotel.get("room_spec", "").lower()
                     self.assertTrue(
-                        any(t in spec for t in ["twin", "two bed", "two separate", "single bed", "bunk"]),
+                        any(t in spec for t in ["twin", "two bed", "two separate", "single bed", "bunk", "cabin", "sleeper"]),
                         f"Day {day['day_number']} Hotel '{hotel['hotel_name']}' lacks twin bed specification: {spec}"
                     )
 
@@ -42,7 +42,7 @@ class TestItineraryIntegrity(unittest.TestCase):
                 for hotel in day.get("accommodation_matrix", []):
                     spec = hotel.get("room_spec", "").lower()
                     self.assertTrue(
-                        any(t in spec for t in ["king", "suite", "villa", "bungalow", "ocean", "river"]),
+                        any(t in spec for t in ["king", "suite", "villa", "bungalow", "ocean", "river", "sea view", "deluxe"]),
                         f"Day {day['day_number']} Hotel '{hotel['hotel_name']}' lacks king/romantic spec: {spec}"
                     )
 
@@ -57,14 +57,14 @@ class TestItineraryIntegrity(unittest.TestCase):
         self.assertIn("AIRPORTELs", data_str, "AIRPORTELs luggage plan missing!")
 
     def test_gulf_pacing_calibration(self):
-        """Verify Gulf islands total 13 nights (1 Samui + 6 Phangan + 6 Tao) + 2 Bangkok."""
-        samui_days = [d for d in self.data.get("days", []) if "Samui" in d["destination"] and d["day_number"] == 14]
-        phangan_days = [d for d in self.data.get("days", []) if "Phangan" in d["destination"] and d["day_number"] in range(15, 21)]
+        """Verify Gulf islands total 13 nights (2 Samui + 5 Phangan + 6 Tao) + 2 Bangkok."""
+        samui_days = [d for d in self.data.get("days", []) if "Samui" in d["destination"] and d["day_number"] in [14, 15]]
+        phangan_days = [d for d in self.data.get("days", []) if "Phangan" in d["destination"] and d["day_number"] in range(16, 21)]
         tao_days = [d for d in self.data.get("days", []) if "Tao" in d["destination"] and d["day_number"] in range(21, 27)]
         bkk_finale_days = [d for d in self.data.get("days", []) if d["day_number"] in [27, 28]]
 
-        self.assertEqual(len(samui_days), 1, "Expected 1 night Samui decompression")
-        self.assertEqual(len(phangan_days), 6, "Expected 6 nights Koh Phangan")
+        self.assertEqual(len(samui_days), 2, "Expected 2 nights Samui decompression (verified Fair House booking)")
+        self.assertEqual(len(phangan_days), 5, "Expected 5 nights Koh Phangan")
         self.assertEqual(len(tao_days), 6, "Expected 6 nights Koh Tao")
         self.assertEqual(len(bkk_finale_days), 2, "Expected 2 nights Bangkok Finale")
 

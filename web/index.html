@@ -30,10 +30,10 @@
     }
   </script>
   
-  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.4) -->
+  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.5) -->
   <script>
     (function() {
-      const TARGET_CACHE = 'travel-os-v4.4';
+      const TARGET_CACHE = 'travel-os-v4.5';
       
       // 1. Purge obsolete caches
       if ('caches' in window) {
@@ -49,8 +49,8 @@
 
       // 2. One-time self-upgrade: unregister any legacy service workers
       const lastVersion = localStorage.getItem('travel_os_active_version');
-      if (lastVersion !== '4.3') {
-        localStorage.setItem('travel_os_active_version', '4.3');
+      if (lastVersion !== '4.5') {
+        localStorage.setItem('travel_os_active_version', '4.5');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(function(regs) {
             for (let reg of regs) {
@@ -60,12 +60,12 @@
         }
       }
 
-      // 3. Register fresh v4.3 Service Worker with update listeners
+      // 3. Register fresh v4.5 Service Worker with update listeners
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('sw.js?v=4.3')
+          navigator.serviceWorker.register('sw.js?v=4.5')
             .then(function(reg) {
-              console.log('[Travel OS v4.3] ServiceWorker registered:', reg.scope);
+              console.log('[Travel OS v4.5] ServiceWorker registered:', reg.scope);
               reg.update();
             })
             .catch(function(err) {
@@ -88,10 +88,10 @@
     })();
   </script>
   
-  <link rel="stylesheet" href="styles.css?v=4.4">
-  <script src="config.js?v=4.4"></script>
-  <script src="itinerary_data.js?v=4.4"></script>
-  <script src="app.js?v=4.4&b=2026092303" defer></script>
+  <link rel="stylesheet" href="styles.css?v=4.5">
+  <script src="config.js?v=4.5"></script>
+  <script src="itinerary_data.js?v=4.5"></script>
+  <script src="app.js?v=4.5&b=2026092305" defer></script>
 </head>
 <body class="antialiased min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
 

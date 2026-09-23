@@ -458,54 +458,14 @@ Instructions:
             day_obj, diffs, ai_explanation = ai_result
             print(f"[AgentFixer] Successfully applied Gemini AI reasoning to Day {day_num}!")
         else:
-            # Deterministic Heuristic Fallback
-            hotel_change_keywords = ["hotel", "stay", "resort", "homestay", "villa", "lodge", "room"]
-            if any(kw in text_lower for kw in hotel_change_keywords):
-                hotel_match = re.search(r'(?:hotel|stay at|resort|homestay|lodge|villa)\s*[:\-]?\s*([A-Za-z0-9\s\'\-]{4,40})', text, re.IGNORECASE)
-                new_hotel_name = hotel_match.group(1).strip() if hotel_match else "Traveler Requested Accommodation"
-                room_spec = "Twin Beds / Two Separate Beds" if is_phase_1 else "Romantic King Bed / Ocean View"
-                new_hotel_entry = {
-                    "hotel_name": new_hotel_name,
-                    "room_spec": room_spec,
-                    "price_per_night": "Verified Market Rate",
-                    "booking_url": f"https://www.booking.com/searchresults.html?ss={new_hotel_name.replace(' ', '+')}",
-                    "status": "VETTED_OPTION",
-                    "critic_notes": f"Updated by Antigravity Agent per traveler ticket {ticket.get('id')}: {ticket.get('title')}",
-                    "critic_score": 8.9
-                }
-                day_obj.setdefault("accommodation_matrix", [])
-                day_obj["accommodation_matrix"].insert(0, new_hotel_entry)
-                diffs.append(f"Day {day_num} Hotel updated: Added '{new_hotel_name}' ({room_spec})")
-
-            # 2. Check for Activity / Daily Flow Change
-            flow = day_obj.setdefault("curated_daily_flow", {})
-            if "morning" in text_lower or "breakfast" in text_lower or "early" in text_lower:
-                flow["morning"] = f"{flow.get('morning', '')} • [Agent Update: {ticket.get('title')}]"
-                diffs.append(f"Day {day_num} Morning Flow updated")
-            if "afternoon" in text_lower or "lunch" in text_lower or "kayak" in text_lower or "trek" in text_lower:
-                flow["afternoon"] = f"{flow.get('afternoon', '')} • [Agent Update: {ticket.get('title')}]"
-                diffs.append(f"Day {day_num} Afternoon Flow updated")
-            if "evening" in text_lower or "dinner" in text_lower or "night" in text_lower or "sunset" in text_lower:
-                flow["evening"] = f"{flow.get('evening', '')} • [Agent Update: {ticket.get('title')}]"
-                diffs.append(f"Day {day_num} Evening Flow updated")
-
-            # 3. Check for Transit / Logistics / Flight Update
-            if any(kw in text_lower for kw in ["flight", "transit", "bus", "ferry", "pickup", "train", "taxi", "grab"]):
-                logistics = day_obj.setdefault("door_to_door_logistics", {})
-                logistics["primary_transit"] = f"{logistics.get('primary_transit', 'Transit')} (Modified per {ticket.get('id')})"
-                diffs.append(f"Day {day_num} Door-to-door transit updated")
-
-            # 4. Add to Essential Checklist for the day
-            checklist = day_obj.setdefault("essential_checklist", [])
-            new_task = f"Execute Traveler Change: {ticket.get('title')}"
-            if new_task not in checklist:
-                checklist.append(new_task)
-                diffs.append(f"Day {day_num} Checklist updated: Added '{new_task}'")
-
-            if not diffs:
-                # General note addition
-                flow["afternoon"] = f"{flow.get('afternoon', '')} • [Note: {ticket.get('description', ticket.get('title'))}]"
-                diffs.append(f"Day {day_num} Flow updated with traveler directive note")
+            print(f"[AgentFixer] Advanced LLM reasoning failed across all models for Day {day_num}")
+            return {
+                "status": "FAILED_AI_REASONING",
+                "ticket_id": ticket.get("id"),
+                "resolution": "Change was not applied: Advanced LLM reasoning was unavailable across all candidate models.",
+                "diff_summary": [],
+                "critic_audit": {"target_day": day_num, "passed": False, "score": 0.0, "issues": ["LLM reasoning unavailable"]}
+            }
 
         # --- Adversarial Critic Audit ---
         audit_issues = []

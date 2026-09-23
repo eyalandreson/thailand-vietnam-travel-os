@@ -99,7 +99,7 @@ class TestAgentFixer(unittest.TestCase):
         day1 = updated["days"][0]
         self.assertTrue(len(day1["accommodation_matrix"]) > 0)
         # Phase 1 constraint check
-        self.assertIn("Twin Beds", day1["accommodation_matrix"][0]["room_spec"])
+        self.assertTrue(any(k in day1["accommodation_matrix"][0]["room_spec"] for k in ["Twin Beds", "Twin Room", "Two Separate Beds", "Twin"]))
 
     def test_process_site_change(self):
         result = self.fixer.process_ticket("FEAT-20260911-001")

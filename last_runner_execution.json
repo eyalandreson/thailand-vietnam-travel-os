@@ -1,20 +1,22 @@
 {
-  "timestamp": "2026-09-22T18:46:25.944027Z",
+  "timestamp": "2026-09-23T02:16:42.858049Z",
   "routine_1_ingestion": {
     "status": "SUCCESS",
-    "total_confirmed_in_registry": 18,
+    "total_confirmed_in_registry": 17,
     "new_items_added": 0,
-    "itinerary_days_synchronized": 9,
+    "itinerary_days_synchronized": 16,
     "resolved_action_items": [
       "ACTION-HG-SAPA-TRANSIT",
       "ACTION-SAPA-STAYS",
-      "ACTION-NINHBINH-STAYS",
+      "ACTION-SAPA-CATBA-BUS",
       "ACTION-CATBA-STAYS-CRUISE",
+      "ACTION-NINHBINH-STAYS",
       "ACTION-HANOI-FINALE-STAYS",
       "ACTION-BKK-USM-FLIGHT",
-      "ACTION-SAMUI-STAYS"
+      "ACTION-SAMUI-STAYS",
+      "ACTION-USM-BKK-FLIGHT"
     ],
-    "message": "Gmail Ingestion verified: 18 documents active."
+    "message": "Gmail Ingestion verified: 17 documents active."
   },
   "routine_2_sync": {
     "status": "DUAL_SYNC_COMPLETED",

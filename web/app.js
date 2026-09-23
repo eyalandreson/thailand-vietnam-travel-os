@@ -2736,96 +2736,8 @@ function toggleVoiceDictation() {
 }
 
 // -------------------------------------------------------------
-// ZERO-FAILURE DETERMINISTIC & AI TRAVEL AGENT PLANNER
+// PURE ADVANCED LLM TRAVEL AGENT REASONING ENGINE
 // -------------------------------------------------------------
-function applyDeterministicDayPlan(targetDay, description, isPhase1, dayNum) {
-  const updatedDay = JSON.parse(JSON.stringify(targetDay));
-  const diffSummary = [];
-  const text = (description || '').trim();
-  const lower = text.toLowerCase();
-
-  // 1. Hotel / Accommodation Updates
-  const hotelMatch = text.match(/(?:hotel|resort|stay|lodge|homestay|villa)\s*(?:at|to|in|:)?\s*([A-Za-z0-9\s'&]+?)(?:(?:\.|\band\b|\bwith\b|\bfor\b|\bat\b|\b,\b)|$)/i);
-  if (hotelMatch && hotelMatch[1] && hotelMatch[1].trim().length > 3) {
-    const rawHotel = hotelMatch[1].trim();
-    const hotelName = rawHotel.charAt(0).toUpperCase() + rawHotel.slice(1);
-    const roomSpec = isPhase1 
-      ? 'Deluxe Twin Beds / Two Separate Beds (Phase 1 Compliant)' 
-      : 'Romantic King Bed / Ocean View Sanctuary (Phase 2 Compliant)';
-    
-    if (!Array.isArray(updatedDay.accommodation_matrix) || updatedDay.accommodation_matrix.length === 0) {
-      updatedDay.accommodation_matrix = [{
-        hotel_name: hotelName,
-        room_spec: roomSpec,
-        price_per_night: isPhase1 ? '850,000 VND (~$35)' : '3,800 THB (~$108)',
-        booking_url: 'https://agoda.com',
-        status: 'VETTED_OPTION',
-        critic_score: 9.1,
-        critic_notes: 'Noise screened >= 8.5/10. Bed constraint strictly verified.'
-      }];
-    } else {
-      updatedDay.accommodation_matrix[0].hotel_name = hotelName;
-      updatedDay.accommodation_matrix[0].room_spec = roomSpec;
-      updatedDay.accommodation_matrix[0].status = 'VETTED_OPTION';
-      updatedDay.accommodation_matrix[0].critic_score = 9.2;
-    }
-    diffSummary.push(`Switched accommodation to ${hotelName} (${isPhase1 ? 'Twin Beds' : 'Romantic King Bed'})`);
-  }
-
-  // 2. Departure / Timing / Transport Updates
-  const timeMatch = text.match(/\b(\d{1,2}:\d{2}(?:\s*(?:am|pm))?)\b/i);
-  if (timeMatch) {
-    const newTime = timeMatch[1].toUpperCase();
-    if (!updatedDay.door_to_door_logistics) updatedDay.door_to_door_logistics = {};
-    if (lower.includes('depart') || lower.includes('leave') || lower.includes('pickup') || lower.includes('bus') || lower.includes('flight')) {
-      updatedDay.door_to_door_logistics.departure_time = newTime;
-      diffSummary.push(`Updated departure time to ${newTime}`);
-    } else if (lower.includes('arrive') || lower.includes('check in')) {
-      updatedDay.door_to_door_logistics.arrival_time = newTime;
-      diffSummary.push(`Updated arrival time to ${newTime}`);
-    }
-  }
-
-  // 3. Daily Flow & Activities
-  if (!updatedDay.curated_daily_flow) {
-    updatedDay.curated_daily_flow = { morning: '', afternoon: '', evening: '' };
-  }
-  
-  if (lower.includes('morning') || lower.includes('breakfast') || lower.includes('early')) {
-    updatedDay.curated_daily_flow.morning = `${updatedDay.curated_daily_flow.morning || ''} • [Updated: ${text.slice(0, 70)}]`.trim();
-    diffSummary.push(`Adjusted morning flow: ${text.slice(0, 50)}`);
-  } else if (lower.includes('evening') || lower.includes('dinner') || lower.includes('sunset') || lower.includes('night')) {
-    updatedDay.curated_daily_flow.evening = `${updatedDay.curated_daily_flow.evening || ''} • [Updated: ${text.slice(0, 70)}]`.trim();
-    diffSummary.push(`Adjusted evening flow: ${text.slice(0, 50)}`);
-  } else {
-    // General afternoon / flow adjustment
-    updatedDay.curated_daily_flow.afternoon = `${updatedDay.curated_daily_flow.afternoon || ''} • [Updated: ${text.slice(0, 70)}]`.trim();
-    diffSummary.push(`Updated Day ${dayNum} flow: ${text.slice(0, 60)}`);
-  }
-
-  // 4. Checklist action
-  if (!Array.isArray(updatedDay.essential_checklist)) updatedDay.essential_checklist = [];
-  updatedDay.essential_checklist.push(`Action: ${text.slice(0, 55)} (Verified by Travel OS)`);
-
-  if (diffSummary.length === 0) {
-    diffSummary.push(`Applied traveler directive to Day ${dayNum}: ${text.slice(0, 60)}`);
-  }
-
-  const agentExplanation = `Eyal, I have updated your itinerary for **Day ${dayNum} (${updatedDay.destination})** according to your directive: "${text}".\n\n` +
-    `• **Phase Constraint**: Satisfies ${isPhase1 ? 'Phase 1 strictly Twin Beds / Guys Trip guidelines' : 'Phase 2 Romantic King Bed couple sanctuary guidelines'}.\n` +
-    `• **Adversarial Critic**: Passed with score 9.3/10 (noise screened >= 8.5/10, buffer preserved).\n` +
-    `• All confirmed Gmail hard bookings remain 100% intact.`;
-
-  return {
-    updated_day: updatedDay,
-    diff_summary: diffSummary,
-    agent_explanation: agentExplanation,
-    critic_audit: { passed: true, score: 9.3, issues: [] },
-    snapshot: JSON.parse(JSON.stringify(targetDay)),
-    dayNum: dayNum
-  };
-}
-
 async function applyChangeWithGeminiInBrowser(ticketData) {
   const days = (itineraryData && itineraryData.days) || [];
   let dayNum = ticketData.target_day;
@@ -2841,10 +2753,11 @@ async function applyChangeWithGeminiInBrowser(ticketData) {
   const oldDaySnapshot = JSON.parse(JSON.stringify(targetDay));
 
   const apiKey = window.TRAVEL_OS_CONFIG ? window.TRAVEL_OS_CONFIG.getApiKey() : '';
-  
-  if (apiKey) {
-    try {
-      const prompt = `You are Antigravity, the autonomous AI Travel Operations Agent managing Eyal Andreson's 29-day master trip to Thailand & Vietnam.
+  if (!apiKey) {
+    throw new Error('Gemini API key is not configured. Please enter your API key in Settings (⚙️).');
+  }
+
+  const prompt = `You are Antigravity, the autonomous AI Travel Operations Agent managing Eyal Andreson's 29-day master trip to Thailand & Vietnam.
 The traveler submitted this change request:
 """${ticketData.description}"""
 
@@ -2870,36 +2783,38 @@ INSTRUCTIONS:
    - "critic_audit": { "passed": true, "score": 9.2, "issues": [] }
 `;
 
-      const systemInstruction = 'You are an autonomous JSON-only Travel Operations Agent. Return ONLY valid JSON.';
-      const conversation = [{ role: 'user', parts: [{ text: prompt }] }];
+  const systemInstruction = 'You are an autonomous JSON-only Travel Operations Agent. Return ONLY valid JSON.';
+  const conversation = [{ role: 'user', parts: [{ text: prompt }] }];
 
-      const targetModel = (window.TRAVEL_OS_CONFIG && window.TRAVEL_OS_CONFIG.defaultModel) || 'gemini-3.8-flash';
-      const result = await callGeminiApiWithRetry(systemInstruction, conversation, targetModel, apiKey, 1, true);
-      
-      let cleaned = (result.text || '').trim();
-      if (cleaned.startsWith('```json')) cleaned = cleaned.slice(7);
-      if (cleaned.startsWith('```')) cleaned = cleaned.slice(3);
-      if (cleaned.endsWith('```')) cleaned = cleaned.slice(0, -3);
-      cleaned = cleaned.trim();
+  const targetModel = (window.TRAVEL_OS_CONFIG && window.TRAVEL_OS_CONFIG.defaultModel) || 'gemini-3.8-flash';
+  const result = await callGeminiApiWithRetry(systemInstruction, conversation, targetModel, apiKey, 1, true);
+  
+  let cleaned = (result.text || '').trim();
+  if (cleaned.startsWith('```json')) cleaned = cleaned.slice(7);
+  if (cleaned.startsWith('```')) cleaned = cleaned.slice(3);
+  if (cleaned.endsWith('```')) cleaned = cleaned.slice(0, -3);
+  cleaned = cleaned.trim();
 
-      const parsed = JSON.parse(cleaned);
-      if (parsed && parsed.updated_day) {
-        return {
-          updated_day: parsed.updated_day,
-          diff_summary: parsed.diff_summary || ['Updated itinerary according to your request.'],
-          agent_explanation: parsed.agent_explanation || 'Applied changes to your itinerary.',
-          critic_audit: parsed.critic_audit || { passed: true, score: 9.2, issues: [] },
-          snapshot: oldDaySnapshot,
-          dayNum: dayNum
-        };
-      }
-    } catch (apiErr) {
-      console.warn('[Gemini Browser Fixer] Cloud AI call failed, falling back to deterministic planner:', apiErr);
-    }
+  let parsed = null;
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch (parseErr) {
+    throw new Error(`LLM output was not valid JSON (${result.modelUsed}): ${cleaned.slice(0, 100)}`);
   }
 
-  // Zero-Failure Guaranteed Deterministic Fallback Planner
-  return applyDeterministicDayPlan(targetDay, ticketData.description, isPhase1, dayNum);
+  if (!parsed || !parsed.updated_day) {
+    throw new Error(`Advanced LLM (${result.modelUsed}) did not return a valid updated_day structure.`);
+  }
+
+  return {
+    updated_day: parsed.updated_day,
+    diff_summary: parsed.diff_summary || ['Updated itinerary according to your request.'],
+    agent_explanation: parsed.agent_explanation || 'Applied changes to your itinerary.',
+    critic_audit: parsed.critic_audit || { passed: true, score: 9.2, issues: [] },
+    snapshot: oldDaySnapshot,
+    dayNum: dayNum,
+    modelUsed: result.modelUsed
+  };
 }
 
 // -------------------------------------------------------------
@@ -3085,33 +3000,13 @@ async function handleCrSubmit(event) {
 
     return;
   } catch (browserAiErr) {
-    console.warn('In-browser AI execution fell back to local offline queue:', browserAiErr);
-  }
-
-  // Step 3: Local Offline Queue & Directive Generator (only if Gemini API completely fails)
-  const offlineTicket = {
-    id: ticketId,
-    created_at: new Date().toISOString(),
-    category: category,
-    target_day: targetDay,
-    priority: priority,
-    title: payload.title,
-    description: promptText,
-    submitter: submitter,
-    status: 'QUEUED',
-    agent_resolution: null,
-    diff_summary: ['Saved to local offline queue.']
-  };
-
-  localChangeRequests.unshift(offlineTicket);
-  saveCachedRequests();
-
-  showToast(`📋 Ticket ${ticketId} saved to offline queue.`, 'info', 5000);
-  switchCrTab('queue');
-
-  if (submitBtn) {
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span>✨ Apply Change with AI Agent</span> <span>🚀</span>';
+    console.error('Advanced LLM execution error:', browserAiErr);
+    showToast(`⚠️ AI Change Failed: ${browserAiErr.message || 'LLM reasoning could not be completed'}. Please verify your API key or connection.`, 'error', 8000);
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>✨ Apply Changes with AI</span> <span>🚀</span>';
+    }
+    return;
   }
 }
 
