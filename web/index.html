@@ -30,10 +30,10 @@
     }
   </script>
   
-  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.5) -->
+  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.7) -->
   <script>
     (function() {
-      const TARGET_CACHE = 'travel-os-v4.5';
+      const TARGET_CACHE = 'travel-os-v4.7';
       
       // 1. Purge obsolete caches
       if ('caches' in window) {
@@ -49,8 +49,8 @@
 
       // 2. One-time self-upgrade: unregister any legacy service workers
       const lastVersion = localStorage.getItem('travel_os_active_version');
-      if (lastVersion !== '4.5') {
-        localStorage.setItem('travel_os_active_version', '4.5');
+      if (lastVersion !== '4.7') {
+        localStorage.setItem('travel_os_active_version', '4.7');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(function(regs) {
             for (let reg of regs) {
@@ -60,12 +60,12 @@
         }
       }
 
-      // 3. Register fresh v4.5 Service Worker with update listeners
+      // 3. Register fresh v4.7 Service Worker with update listeners
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('sw.js?v=4.5')
+          navigator.serviceWorker.register('sw.js?v=4.7')
             .then(function(reg) {
-              console.log('[Travel OS v4.5] ServiceWorker registered:', reg.scope);
+              console.log('[Travel OS v4.7] ServiceWorker registered:', reg.scope);
               reg.update();
             })
             .catch(function(err) {
@@ -88,10 +88,10 @@
     })();
   </script>
   
-  <link rel="stylesheet" href="styles.css?v=4.5">
-  <script src="config.js?v=4.5"></script>
-  <script src="itinerary_data.js?v=4.5"></script>
-  <script src="app.js?v=4.5&b=2026092305" defer></script>
+  <link rel="stylesheet" href="styles.css?v=4.7">
+  <script src="config.js?v=4.7"></script>
+  <script src="itinerary_data.js?v=4.7"></script>
+  <script src="app.js?v=4.7&b=2026092307" defer></script>
 </head>
 <body class="antialiased min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
@@ -174,6 +174,11 @@
           <span class="hidden sm:inline">Sync Gmail</span>
         </button>
 
+        <!-- EXPEDITION FILES & TICKETS HUB BUTTON -->
+        <button onclick="openFilesModal()" class="hidden md:inline-flex px-2.5 sm:px-3 py-1.5 rounded-xl border border-blue-200 dark:border-slate-700 bg-blue-50/80 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 text-blue-700 dark:text-sky-300 text-xs font-bold transition items-center gap-1.5 shadow-sm" title="Expedition Files & Bookings Hub (Active vs History)">
+          <span>📁</span> <span>Files</span>
+        </button>
+
         <button onclick="openPackingModal()" class="hidden md:inline-flex px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition items-center gap-1.5 shadow-sm" title="Split Luggage & Packing Checklist">
           <span>🧳</span> <span>Packing</span>
         </button>
@@ -223,6 +228,9 @@
           <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 shrink-0 pl-1 flex items-center gap-1">
             <span>⚡</span> <span class="hidden sm:inline">Tools:</span>
           </span>
+          <button onclick="openFilesModal()" class="quick-tool-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-700 dark:text-sky-300 border border-blue-200 dark:border-blue-800/60 flex items-center gap-1.5 transition shadow-sm" title="View Active Files & Files History">
+            <span>📁</span> <span>Files</span>
+          </button>
           <button onclick="openPackingModal()" class="quick-tool-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 transition shadow-sm">
             <span>🧳</span> <span>Packing</span>
           </button>
@@ -334,16 +342,16 @@
               <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Stored Sep 12–24 • 55L Backpack VN</p>
             </button>
 
-            <!-- Op 2: Sep 24 Risk Radar -->
-            <button onclick="openPriceRadarModal()" class="travel-card rounded-xl p-3 text-left hover:border-rose-500/50 transition border-l-4 border-rose-500 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex flex-col justify-between">
+            <!-- Op 2: Sep 24 Connection Radar -->
+            <button onclick="openPriceRadarModal()" class="travel-card rounded-xl p-3 text-left hover:border-emerald-500/50 transition border-l-4 border-emerald-500 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex flex-col justify-between">
               <div class="flex items-center justify-between w-full">
-                <span class="text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
-                  <span>✈️</span> Sep 24 Risk Radar
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                  <span>✈️</span> Sep 24 Connection Radar
                 </span>
-                <span class="text-[10px] text-slate-400">Audit →</span>
+                <span class="text-[10px] text-slate-400">View →</span>
               </div>
-              <p class="text-[11px] text-slate-700 dark:text-slate-300 mt-1 truncate">PG 169 (17:15) High Risk</p>
-              <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold truncate">Recommended: PG 177 / PG 181</p>
+              <p class="text-[11px] text-slate-700 dark:text-slate-300 mt-1 truncate">PG 169 Confirmed (PNR: D7XZQW)</p>
+              <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold truncate">Fast-Track Gate Protocol Active</p>
             </button>
 
             <!-- Op 3: Route Resilience -->
@@ -371,59 +379,39 @@
             </div>
           </div>
 
-          <!-- Verified Gmail Ground Truth Documents -->
+          <!-- Verified Travel Documents & Bookings (Active vs Files History) -->
           <div>
-            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 flex items-center justify-between">
-              <div class="flex items-center gap-1.5">
-                <span>🔒</span> <span id="confirmed-docs-count-label">Confirmed Flight &amp; Hotel Bookings</span> (Instant PDF Download)
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                  <span>🔒</span> <span id="confirmed-docs-count-label">Confirmed Flight &amp; Hotel Bookings</span>
+                </span>
               </div>
-              <button onclick="syncGmailBookings()" class="text-[10px] text-rose-500 hover:text-rose-600 dark:text-rose-400 font-bold flex items-center gap-1 transition" title="Scan Gmail for new bookings">
-                <span>🔄</span> Scan Gmail
-              </button>
+              <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                <!-- Segmented Tabs: Active vs Files History -->
+                <div class="bg-slate-200/90 dark:bg-slate-800 p-0.5 rounded-xl flex items-center text-xs">
+                  <button id="files-tab-btn-active" onclick="switchFilesTab('active')" class="px-2.5 py-1 rounded-lg font-bold bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm transition flex items-center gap-1">
+                    <span>📁</span> <span>Active Files</span>
+                    <span id="badge-active-files-count" class="ml-0.5 text-[10px] px-1.5 py-0.2 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 font-mono font-bold">5</span>
+                  </button>
+                  <button id="files-tab-btn-history" onclick="switchFilesTab('history')" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition flex items-center gap-1">
+                    <span>🕒</span> <span>Files History</span>
+                    <span id="badge-history-files-count" class="ml-0.5 text-[10px] px-1.5 py-0.2 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-mono font-bold">10</span>
+                  </button>
+                </div>
+
+                <button onclick="openFilesModal()" class="text-[11px] px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 text-blue-600 dark:text-sky-300 border border-slate-200 dark:border-slate-700 font-bold transition flex items-center gap-1 shadow-sm" title="Open Full Files & Tickets Hub">
+                  <span>Open Hub ↗</span>
+                </button>
+
+                <button onclick="syncGmailBookings()" class="text-[10px] text-rose-500 hover:text-rose-600 dark:text-rose-400 font-bold flex items-center gap-1 transition" title="Scan Gmail for new bookings">
+                  <span>🔄</span> <span class="hidden sm:inline">Sync Gmail</span>
+                </button>
+              </div>
             </div>
+
             <div id="confirmed-docs-strip" class="flex gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
-              <a href="documents/Emirates_Flight_TLV_BKK_G5M8CF.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
-                <span>✈️</span>
-                <span class="text-[11px]">Emirates TLV-BKK</span>
-                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">G5M8CF</span>
-                <span>📥</span>
-              </a>
-              <a href="documents/TDAC_Arrival_Card_30C4358.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
-                <span>📋</span>
-                <span class="text-[11px]">Thai Arrival (TDAC)</span>
-                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">#30C4358</span>
-                <span>📥</span>
-              </a>
-              <a href="documents/Sukhon_Hotel_Agoda_697155847.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
-                <span>🏨</span>
-                <span class="text-[11px]">Sukhon Hotel Bangkok</span>
-                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">697155847</span>
-                <span>📥</span>
-              </a>
-              <a href="documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
-                <span>✈️</span>
-                <span class="text-[11px]">Flight BKK ⇄ HAN</span>
-                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">1145-554-179</span>
-                <span>📥</span>
-              </a>
-              <a href="documents/Travel Reservation 24SEP for EYAL ANDRESON.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
-                <span>✈️</span>
-                <span class="text-[11px]">Bangkok Airways BKK-USM</span>
-                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">D7XZQW</span>
-                <span>📥</span>
-              </a>
-              <a href="documents/Confirmation_for_Booking_ID__1777544987.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
-                <span>🏨</span>
-                <span class="text-[11px]">The Fair House Samui</span>
-                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">1777544987</span>
-                <span>📥</span>
-              </a>
-              <a href="documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf" target="_blank" download class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 text-slate-800 dark:text-slate-200 transition flex items-center gap-1.5 text-xs font-semibold shadow-sm">
-                <span>✈️</span>
-                <span class="text-[11px]">Etihad BKK-TLV</span>
-                <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">9KDEH2</span>
-                <span>📥</span>
-              </a>
+              <!-- Dynamically populated by renderConfirmedDocsStrip() in app.js -->
             </div>
           </div>
         </div>
@@ -564,11 +552,11 @@
               </div>
             </button>
 
-            <button onclick="launchTool('radar')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 hover:bg-rose-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-left transition flex items-center gap-3">
+            <button onclick="launchTool('radar')" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 hover:bg-emerald-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-left transition flex items-center gap-3">
               <span class="text-2xl">✈️</span>
               <div>
-                <div class="text-xs font-bold text-rose-700 dark:text-rose-400">Sep 24 Risk Radar</div>
-                <div class="text-[11px] text-slate-500 dark:text-slate-400">PG 169 flight risk audit</div>
+                <div class="text-xs font-bold text-emerald-700 dark:text-emerald-400">Sep 24 Connection Radar</div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400">PG 169 Confirmed & Protocol</div>
               </div>
             </button>
 
@@ -584,28 +572,41 @@
 
         <!-- Category 3: Verified Bookings & Instant Documents -->
         <div>
-          <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
-            Verified Documents &amp; Tickets
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              Expedition Files &amp; Tickets
+            </div>
+            <button onclick="launchTool('files')" class="text-xs font-bold text-blue-600 dark:text-sky-400 hover:underline flex items-center gap-1">
+              <span>Open Files Hub</span> <span>→</span>
+            </button>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            <a href="documents/Emirates_Flight_TLV_BKK_G5M8CF.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-              <span>✈️</span> <div class="truncate"><div class="text-xs font-bold">Emirates Flight</div><div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">G5M8CF</div></div>
+            <button onclick="launchTool('files')" class="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 hover:border-blue-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <span class="text-xl">📁</span>
+              <div class="truncate text-left">
+                <div class="text-xs font-bold text-blue-700 dark:text-sky-300">Active Files</div>
+                <div class="text-[10px] text-slate-500 dark:text-slate-400">Current &amp; upcoming tickets</div>
+              </div>
+            </button>
+            <button onclick="openFilesModal(); switchFilesModalTab('history');" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-purple-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <span class="text-xl">🕒</span>
+              <div class="truncate text-left">
+                <div class="text-xs font-bold text-purple-700 dark:text-purple-300">Files History</div>
+                <div class="text-[10px] text-slate-500 dark:text-slate-400">Completed vouchers &amp; passes</div>
+              </div>
+            </button>
+            <a href="documents/Travel Reservation 24SEP for EYAL ANDRESON.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <span>✈️</span> <div class="truncate"><div class="text-xs font-bold">Bangkok Airways</div><div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">D7XZQW</div></div>
             </a>
-            <a href="documents/TDAC_Arrival_Card_30C4358.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-              <span>📋</span> <div class="truncate"><div class="text-xs font-bold">Thai TDAC Card</div><div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">#30C4358</div></div>
+            <a href="documents/Confirmation_for_Booking_ID__1777544987.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <span>🏨</span> <div class="truncate"><div class="text-xs font-bold">Fair House Samui</div><div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">#1777544987</div></div>
             </a>
-            <a href="documents/Sukhon_Hotel_Bangkok_697155847.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-              <span>🏨</span> <div class="truncate"><div class="text-xs font-bold">Sukhon Hotel BKK</div><div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">#697155847</div></div>
+            <a href="documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <span>✈️</span> <div class="truncate"><div class="text-xs font-bold">VietJet HAN-BKK</div><div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">1145-554-179</div></div>
             </a>
-            <a href="documents/VietJet_Flight_BKK_HAN_1145554179.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-              <span>✈️</span> <div class="truncate"><div class="text-xs font-bold">VietJet BKK-HAN</div><div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">#1145-554-179</div></div>
-            </a>
-            <a href="documents/Etihad_Return_BKK_AUH_TLV_9KDEH2.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+            <a href="documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf" target="_blank" download class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
               <span>✈️</span> <div class="truncate"><div class="text-xs font-bold">Etihad Return</div><div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">9KDEH2</div></div>
             </a>
-            <button onclick="launchTool('ops')" class="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 hover:border-blue-500 transition text-xs font-bold text-blue-700 dark:text-sky-300 flex items-center gap-2">
-              <span>📂</span> <div class="truncate"><div class="text-xs font-bold">All Documents</div><div class="text-[10px] text-blue-500 dark:text-blue-400">View In Drawer →</div></div>
-            </button>
           </div>
         </div>
 
@@ -873,6 +874,61 @@
     </div>
   </div>
 
+  <!-- MODAL: EXPEDITION FILES & TICKETS HUB (ACTIVE VS FILES HISTORY) -->
+  <div id="files-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
+    <div class="travel-card modal-sheet-card rounded-2xl max-w-2xl w-full p-4 sm:p-6 border border-slate-200 dark:border-slate-700 shadow-2xl relative bg-white dark:bg-slate-900 text-slate-900 dark:text-white max-h-[90vh] flex flex-col">
+      <div class="modal-drag-indicator sm:hidden"></div>
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-blue-600/10 dark:bg-blue-500/20 text-blue-600 dark:text-sky-400 flex items-center justify-center text-xl font-bold">
+            📁
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-slate-900 dark:text-white leading-tight">Expedition Files &amp; Tickets</h3>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">All Gmail-verified vouchers, passes &amp; e-tickets</p>
+          </div>
+        </div>
+        <button onclick="closeFilesModal()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition">✕</button>
+      </div>
+
+      <!-- Main Tabs: Active Files vs Files History -->
+      <div class="pt-3 pb-2 shrink-0 space-y-2.5">
+        <div class="bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl flex items-center gap-1 text-xs font-bold">
+          <button id="modal-tab-btn-active" onclick="switchFilesModalTab('active')" class="flex-1 py-2 px-3 rounded-lg bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm transition flex items-center justify-center gap-1.5 font-bold">
+            <span>📁</span> <span>Active Files</span>
+            <span id="modal-badge-active-count" class="text-[10px] px-1.5 py-0.2 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 font-mono font-bold">5</span>
+          </button>
+          <button id="modal-tab-btn-history" onclick="switchFilesModalTab('history')" class="flex-1 py-2 px-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition flex items-center justify-center gap-1.5 font-medium">
+            <span>🕒</span> <span>Files History</span>
+            <span id="modal-badge-history-count" class="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-mono font-bold">10</span>
+          </button>
+        </div>
+
+        <!-- Filter Tags: All, Flights, Hotels, Transit -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px]">
+          <span class="text-slate-400 text-[10px] uppercase font-bold tracking-wider shrink-0 mr-1">Filter:</span>
+          <button onclick="setFilesModalFilter('all')" data-file-filter="all" class="file-filter-pill px-2.5 py-1 rounded-lg bg-blue-600 text-white font-bold transition shrink-0">All</button>
+          <button onclick="setFilesModalFilter('FLIGHT')" data-file-filter="FLIGHT" class="file-filter-pill px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 font-medium transition shrink-0">✈️ Flights</button>
+          <button onclick="setFilesModalFilter('ACCOMMODATION')" data-file-filter="ACCOMMODATION" class="file-filter-pill px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 font-medium transition shrink-0">🏨 Hotels</button>
+          <button onclick="setFilesModalFilter('BUS_TRANSIT')" data-file-filter="BUS_TRANSIT" class="file-filter-pill px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 font-medium transition shrink-0">🚌 Transit</button>
+        </div>
+      </div>
+
+      <!-- Scrollable File List Container -->
+      <div id="modal-files-list" class="flex-1 overflow-y-auto py-2 space-y-2.5 min-h-[220px]">
+        <!-- Dynamically populated by renderFilesModalContent() in app.js -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 shrink-0">
+        <span id="modal-files-footer-hint" class="text-[11px]">Showing current and upcoming files.</span>
+        <button onclick="closeFilesModal()" class="px-4 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold transition">Done</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: BKK -> USM FLIGHT CONNECTION & PRICE RADAR -->
   <div id="price-radar-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
     <div class="travel-card modal-sheet-card rounded-2xl max-w-xl w-full p-5 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
@@ -881,53 +937,45 @@
       <div class="flex items-center gap-2 mb-3">
         <span class="text-xl">✈️</span>
         <div>
-          <h3 class="text-base font-bold text-slate-900 dark:text-white">Sep 24 Connection Risk Radar & Price Strategy</h3>
-          <p class="text-xs text-cyan-400">Hanoi (HAN) -> Bangkok (BKK) -> Koh Samui (USM)</p>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Sep 24 Connection &amp; Flight Protocol</h3>
+          <p class="text-xs text-cyan-400">Hanoi (HAN) -&gt; Bangkok (BKK) -&gt; Koh Samui (USM)</p>
         </div>
       </div>
 
       <div class="space-y-3 text-xs text-slate-300">
-        <!-- High Risk Warning -->
-        <div class="bg-red-950/40 p-3.5 rounded-xl border border-red-500/50 text-red-200">
-          <div class="font-bold text-red-300 mb-1 flex items-center gap-1.5">
-            <span>⚠️</span> PG 169 (17:15 PM) — FLAGGED HIGH RISK / TIGHT
-          </div>
-          <p class="leading-relaxed">
-            Hanoi flight lands at <b>14:45 PM</b>. Deplaning, international immigration (45–60 mins), and descending to <b>Floor B (Basement)</b> for AIRPORTELs suitcase retrieval leaves you at domestic check-in past 16:15 PM. Domestic check-in strictly closes at <b>16:30 PM</b>. Any 20-minute tarmac delay means a missed flight. <b>NOT RECOMMENDED</b>.
-          </p>
-        </div>
-
-        <!-- Recommended Flight -->
+        <!-- Confirmed Flight Protocol -->
         <div class="bg-emerald-950/50 p-3.5 rounded-xl border border-emerald-500/50 text-emerald-200">
           <div class="font-bold text-emerald-300 mb-1 flex items-center gap-1.5">
-            <span>🎯</span> Recommended Primary: Bangkok Airways PG 177 or PG 181
+            <span>✅</span> PG 169 CONFIRMED &amp; BOOKED — PNR: D7XZQW
           </div>
           <p class="leading-relaxed">
-            • <b>PG 177:</b> Dep 19:30 BKK &rarr; Arr 20:35 USM<br>
-            • <b>PG 181:</b> Dep 20:00 BKK &rarr; Arr 21:05 USM<br>
-            • <b>Stress-Free Buffer:</b> <b>4h 45m connection window</b>. Zero anxiety for baggage retrieval, unhurried reunion with girlfriend, and 2 hours of complimentary access to the <b>Bangkok Airways Boutique Lounge</b> (free pastries, espresso, soft drinks, charging stations in Concourse A/F).
+            • <b>Flight:</b> Bangkok Airways PG 169 (Dep 16:40 BKK &rarr; Arr 17:45 USM)<br>
+            • <b>Arrival &amp; Transit:</b> VietJet VJ901 lands at <b>14:45 PM</b> at BKK Suvarnabhumi.<br>
+            • <b>Fast-Track Step 1:</b> Take elevator to <b>Floor B (Basement Level)</b> to collect stored suitcase from AIRPORTELs.<br>
+            • <b>Fast-Track Step 2:</b> Reunite with girlfriend at arrivals hall, head directly to <b>Level 4 Domestic Check-in Row F</b> before 16:00 PM.<br>
+            • <b>Boutique Lounge:</b> Complimentary access to the <b>Bangkok Airways Boutique Lounge</b> (free refreshments, coffee &amp; pastries) at Concourse A/F before boarding.
           </p>
         </div>
 
-        <!-- Price Strategy -->
+        <!-- Connection Buffer & Safeguards -->
         <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800">
-          <div class="font-bold text-white mb-1">💰 Price Tier & Buying Window:</div>
-          <p>• <b>Fare Tier:</b> "Web Saver" (Approx. <b>$115 – $135 USD / ~4,200 THB</b> per person, includes 20kg checked bag).</p>
-          <p>• <b>Optimal Window:</b> <b>Mid-July to Early August 2026 (6 to 8 weeks prior)</b>. Bangkok Airways holds monopoly pricing on USM; Web Saver promo seats sell out 3–4 weeks prior.</p>
+          <div class="font-bold text-white mb-1">⏱️ Connection Buffer &amp; Safeguards:</div>
+          <p>• <b>Total Buffer:</b> <b>1h 55m</b> transfer window between VietJet international landing and Bangkok Airways departure.</p>
+          <p>• <b>Contingency Flights:</b> If immigration queue is delayed, Bangkok Airways operates subsequent evening departures (PG 177 at 19:30, PG 181 at 20:00).</p>
         </div>
 
-        <!-- Fluid Fallbacks -->
+        <!-- Arrival in Koh Samui -->
         <div class="bg-blue-950/40 p-3 rounded-xl border border-blue-600/40 text-blue-200">
-          <span class="font-bold">🌊 Fluid Fallbacks if PG 177/181 Sells Out:</span><br>
-          • <b>Fallback 1:</b> Overnight in Bangkok on Sep 24; take relaxed morning flight Sep 25.<br>
-          • <b>Fallback 2:</b> Fly into Surat Thani (URT) on AirAsia/Nok Air + Lomprayah high-speed catamaran.
+          <span class="font-bold">🏝️ Koh Samui Ground Arrival:</span><br>
+          • <b>Landing:</b> 17:45 USM Koh Samui Airport.<br>
+          • <b>Check-in:</b> The Fair House Beach Resort and Hotel (Chaweng Noi Beach, Booking ID: 1777544987).
         </div>
       </div>
 
       <div class="mt-5 flex justify-end gap-2">
         <button onclick="closePriceRadarModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition">Close</button>
-        <a href="https://www.bangkokair.com/booking" target="_blank" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition flex items-center gap-1">
-          Open Bangkok Airways ↗
+        <a href="documents/Travel Reservation 24SEP for EYAL ANDRESON.pdf" target="_blank" download class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-xs text-white font-semibold transition flex items-center gap-1">
+          View PG 169 E-Ticket ↗
         </a>
       </div>
     </div>
@@ -977,6 +1025,76 @@
 
       <div class="mt-5 flex justify-end">
         <button onclick="closeRouteModal()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GMAIL SYNC STATUS & OPERATIONS -->
+  <div id="gmail-sync-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm hidden p-0 sm:p-4 modal-sheet-container">
+    <div class="travel-card modal-sheet-card rounded-2xl max-w-2xl w-full p-5 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-2xl relative max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+      <button onclick="closeGmailSyncModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
+      
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xl">🔄</span>
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Gmail Autonomous Ingestion Engine</h3>
+          <p class="text-xs text-rose-500 dark:text-rose-400 font-medium">Live Booking Synchronization &amp; Ground Truth Registry</p>
+        </div>
+      </div>
+
+      <!-- Sync Status Banner -->
+      <div class="bg-gradient-to-r from-emerald-950/60 to-slate-900 p-4 rounded-xl border border-emerald-500/50 mb-4">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-bold text-sm text-emerald-300">Autonomous Sync Pipeline Active</span>
+          </div>
+          <span id="gmail-sync-status-badge" class="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-900/80 text-emerald-200 border border-emerald-500/40 font-bold">17 BOOKINGS VERIFIED</span>
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Your Travel OS operates under the <b>"Hard Anchors, Fluid Routes"</b> rule. All genuine flight, hotel, and transit confirmations in Gmail are automatically mirrored into the itinerary as immutable anchors.
+        </p>
+      </div>
+
+      <!-- Operations & Schedule Details -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+        <div class="bg-slate-50 dark:bg-slate-800/70 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+          <div class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-1.5">
+            <span>☁️</span> Cloud Auto-Sync Schedule
+          </div>
+          <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-[11px]">
+            Automated via GitHub Actions (<b>travel_os_runner.yml</b>) running every <b>4 hours</b> and on every repository push. It scans Gmail, parses vouchers, reconciles dates, and updates the live site.
+          </p>
+        </div>
+
+        <div class="bg-slate-50 dark:bg-slate-800/70 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+          <div class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-1.5">
+            <span>⚡</span> Local Bridge Server
+          </div>
+          <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-[11px]">
+            When running locally with <code class="bg-slate-200 dark:bg-slate-900 px-1 py-0.5 rounded font-mono text-cyan-500">python agent_bridge_server.py</code>, clicking "Sync Gmail" triggers instant local ingestion and direct file synchronization on port 5055.
+          </p>
+        </div>
+      </div>
+
+      <!-- Verified Ground Truth List Container -->
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-300">📋 Verified Bookings in Registry</span>
+          <span id="gmail-modal-count-indicator" class="text-[10px] text-slate-400">17 confirmed items</span>
+        </div>
+        <div id="gmail-modal-bookings-list" class="max-h-60 overflow-y-auto space-y-2 pr-1">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-800">
+        <a href="https://github.com/eyalandreson/thailand-vietnam-travel-os/actions/workflows/travel_os_runner.yml" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700 transition flex items-center gap-1.5">
+          <span>⚙️</span> GitHub Actions Runner ↗
+        </a>
+        <button onclick="closeGmailSyncModal()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs text-white font-semibold transition">
+          Close
+        </button>
       </div>
     </div>
   </div>
@@ -1288,8 +1406,8 @@ e.g.:
         <button type="button" onclick="sendQuickPrompt('What is our plan for Sa Pa with the Mamas, where do we stay, and what do we eat?')" class="quick-chip whitespace-nowrap px-3 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 text-slate-300 hover:text-indigo-200 border border-slate-700 hover:border-indigo-500/50 text-[11px] transition">
           🌾 Sa Pa Mamas Trek & Homestay
         </button>
-        <button type="button" onclick="sendQuickPrompt('What are all 6 confirmed Gmail bookings and their PNR / confirmation codes?')" class="quick-chip whitespace-nowrap px-3 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 text-slate-300 hover:text-indigo-200 border border-slate-700 hover:border-indigo-500/50 text-[11px] transition">
-          ✈️ 6 Confirmed Gmail Anchors
+        <button type="button" onclick="sendQuickPrompt('What are all 17 confirmed Gmail bookings and their PNR / confirmation codes?')" class="quick-chip whitespace-nowrap px-3 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 text-slate-300 hover:text-indigo-200 border border-slate-700 hover:border-indigo-500/50 text-[11px] transition">
+          ✈️ 17 Confirmed Gmail Anchors
         </button>
         <button type="button" onclick="sendQuickPrompt('How does the sleeper bus from Hanoi Airport to Ha Giang work on Day 2?')" class="quick-chip whitespace-nowrap px-3 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 text-slate-300 hover:text-indigo-200 border border-slate-700 hover:border-indigo-500/50 text-[11px] transition">
           🚌 Hanoi Airport Sleeper Bus
@@ -1362,6 +1480,10 @@ e.g.:
     <button onclick="scrollToCurrentActiveDay()" class="mobile-nav-item">
       <span class="text-base">📅</span>
       <span>Days</span>
+    </button>
+    <button onclick="openFilesModal()" class="mobile-nav-item text-blue-600 dark:text-sky-400 font-bold">
+      <span class="text-base">📁</span>
+      <span>Files</span>
     </button>
     <button onclick="openChangeRequestModal()" class="mobile-nav-item text-emerald-500">
       <span class="text-base">✨</span>
