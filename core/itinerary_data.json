@@ -76,6 +76,14 @@
       {
         "item": "VIP Sleeper Bus: Hanoi Airport (HAN) -> Ha Giang (61 Cau Me)",
         "ref": "Booking: 12GO32785393"
+      },
+      {
+        "item": "Bangkok Airways Boarding Pass (PG 169 - BKK -> USM)",
+        "ref": "Booking: 829231173371901"
+      },
+      {
+        "item": "Thailand Digital Arrival Card (Re-Entry Sep 24)",
+        "ref": "Booking: TDAC #B9A1ABB"
       }
     ]
   },
@@ -185,10 +193,10 @@
       "location": "Phaya Thai / Ratchathewi, Bangkok (BTS Phaya Thai Exit 2)",
       "room_type": "Superior Double / Twin (Backpack Transition Hub)",
       "details": "Confirmed arrival basecamp in Bangkok booked via Agoda.",
-      "file_path": "documents/Confirmation_for_Booking_ID__697155847.pdf",
+      "file_path": "documents/Confirmation_for_Booking_ID_#_697155847.pdf",
       "file_status": "LOCAL_FILE_VERIFIED",
       "file_category": "Hotel Voucher",
-      "file_name": "Confirmation_for_Booking_ID__697155847.pdf"
+      "file_name": "Confirmation_for_Booking_ID_#_697155847.pdf"
     },
     {
       "id": "FLIGHT-BKK-HAN-1145554179",
@@ -234,10 +242,10 @@
       "departure": "15:55 PM (BKK Suvarnabhumi) - Etihad Airways",
       "passengers": "Eyal Andreson & Maria Miriam Malayev",
       "details": "Confirmed international return flight. E-tickets issued for both passengers.",
-      "file_path": "documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf",
+      "file_path": "documents/EYAL-ANDRESON-9KDEH2-09OCT-1555-BKK.pdf",
       "file_status": "LOCAL_FILE_VERIFIED",
       "file_category": "Flight E-Ticket",
-      "file_name": "Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf"
+      "file_name": "EYAL-ANDRESON-9KDEH2-09OCT-1555-BKK.pdf"
     },
     {
       "id": "HOTEL-LADO-SAPA-2050574832",
@@ -250,10 +258,10 @@
       "location": "031 Hoang Lien Street, Sa Pa, Lao Cai",
       "room_type": "Deluxe Mountain View",
       "details": "Confirmed valley-facing homestay stay in Sa Pa via Agoda.",
-      "file_path": "documents/Confirmation_for_Booking_ID__2050574832.pdf",
+      "file_path": "documents/Confirmation_for_Booking_ID_#_2050574832.pdf",
       "file_status": "LOCAL_FILE_VERIFIED",
       "file_category": "Hotel Voucher",
-      "file_name": "Confirmation_for_Booking_ID__2050574832.pdf"
+      "file_name": "Confirmation_for_Booking_ID_#_2050574832.pdf"
     },
     {
       "id": "HOTEL-PRAHA-SAPA-2050577065",
@@ -266,10 +274,10 @@
       "location": "85 Violet, Sapa, Lao Cai",
       "room_type": "Superior Double Room",
       "details": "Confirmed mountain arrival stay in Sa Pa via Agoda.",
-      "file_path": "documents/Confirmation_for_Booking_ID__2050577065.pdf",
+      "file_path": "documents/Confirmation_for_Booking_ID_#_2050577065.pdf",
       "file_status": "LOCAL_FILE_VERIFIED",
       "file_category": "Hotel Voucher",
-      "file_name": "Confirmation_for_Booking_ID__2050577065.pdf"
+      "file_name": "Confirmation_for_Booking_ID_#_2050577065.pdf"
     },
     {
       "id": "HOTEL-MOON-CATBA-2051512276",
@@ -282,10 +290,10 @@
       "location": "04 Nui Ngoc, Cat Ba Island",
       "room_type": "Deluxe Twin City View",
       "details": "Confirmed island base for Lan Ha Bay kayaking via Agoda.",
-      "file_path": "documents/Confirmation_for_Booking_ID__2051512276.pdf",
+      "file_path": "documents/Confirmation_for_Booking_ID_#_2051512276.pdf",
       "file_status": "LOCAL_FILE_VERIFIED",
       "file_category": "Hotel Voucher",
-      "file_name": "Confirmation_for_Booking_ID__2051512276.pdf"
+      "file_name": "Confirmation_for_Booking_ID_#_2051512276.pdf"
     },
     {
       "id": "HOTEL-LALUA-NINHBINH-2051965881",
@@ -298,10 +306,10 @@
       "location": "Ngo Thuong, Ninh Hoa, Hoa Lu, Ninh Binh",
       "room_type": "Family Room with Garden View",
       "details": "Confirmed serene karst resort in Ninh Binh via Agoda.",
-      "file_path": "documents/Confirmation_for_Booking_ID__2051965881.pdf",
+      "file_path": "documents/Confirmation_for_Booking_ID_#_2051965881.pdf",
       "file_status": "LOCAL_FILE_VERIFIED",
       "file_category": "Hotel Voucher",
-      "file_name": "Confirmation_for_Booking_ID__2051965881.pdf"
+      "file_name": "Confirmation_for_Booking_ID_#_2051965881.pdf"
     },
     {
       "id": "HOTEL-MAYDEVILLE-HANOI-1777345669",
@@ -314,10 +322,10 @@
       "location": "43 Gia Ngu, Old Quarter, Hoan Kiem, Hanoi",
       "room_type": "Superior Quiet High Floor Room",
       "details": "Confirmed boutique hotel in Hanoi Old Quarter via Agoda.",
-      "file_path": "documents/Confirmation_for_Booking_ID__1777345669.pdf",
+      "file_path": "documents/Confirmation_for_Booking_ID_#_1777345669.pdf",
       "file_status": "LOCAL_FILE_VERIFIED",
       "file_category": "Hotel Voucher",
-      "file_name": "Confirmation_for_Booking_ID__1777345669.pdf"
+      "file_name": "Confirmation_for_Booking_ID_#_1777345669.pdf"
     },
     {
       "id": "HOTEL-FAIRHOUSE-SAMUI-1777544987",
@@ -330,10 +338,10 @@
       "location": "124-124/1-2 Moo 3 T. Bophut, Koh Samui (Chaweng Noi Beach)",
       "room_type": "Grand Deluxe Bungalow (Romantic Beachfront)",
       "details": "Confirmed 2-night stay for Eyal & Girlfriend via Agoda. Anniversary retreat kickoff.",
-      "file_path": "documents/Confirmation_for_Booking_ID__1777544987.pdf",
+      "file_path": "documents/Confirmation_for_Booking_ID_#_1777544987.pdf",
       "file_status": "LOCAL_FILE_VERIFIED",
       "file_category": "Hotel Voucher",
-      "file_name": "Confirmation_for_Booking_ID__1777544987.pdf"
+      "file_name": "Confirmation_for_Booking_ID_#_1777544987.pdf"
     },
     {
       "id": "BUS-VEXERE-HG-SAPA-E8PB24",
@@ -418,6 +426,34 @@
       "arrival": "20:00 PM (61 Cau Me, Ha Giang)",
       "passengers": "Eyal Andreson & Gilad Shaked",
       "operator": "Manh Quan Ha Giang (Single Royal Cabin)"
+    },
+    {
+      "id": "DOC-BOARDING-PASS-PG169-D7XZQW",
+      "type": "BOARDING_PASS",
+      "date": "2026-09-24",
+      "title": "Bangkok Airways Boarding Pass (PG 169 - BKK -> USM)",
+      "reference_code": "829231173371901",
+      "status": "[CONFIRMED - BOOKED]",
+      "details": "Confirmed online check-in boarding pass. Boarding gate opens 16:00 PM.",
+      "file_path": "documents/Your flight information - BANGKOK AIRWAYS.pdf",
+      "file_name": "Your flight information - BANGKOK AIRWAYS.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED",
+      "departure": "16:40 PM (BKK Suvarnabhumi) - PG 169",
+      "arrival": "17:45 PM (USM Koh Samui)",
+      "airline": "Bangkok Airways PG 169 (Economy, Ticket: 829231173371901)",
+      "passengers": "Eyal Andreson"
+    },
+    {
+      "id": "DOC-TDAC-B9A1ABB",
+      "type": "IMMIGRATION_PASS",
+      "date": "2026-09-24",
+      "title": "Thailand Digital Arrival Card (Re-Entry Sep 24)",
+      "reference_code": "TDAC #B9A1ABB",
+      "status": "[CONFIRMED - BOOKED]",
+      "details": "Official Thailand Digital Arrival Card approved for re-entry on 2026-09-24 from Hanoi to Bangkok.",
+      "file_path": "documents/20260923010739842_842708495_96485234.pdf",
+      "file_name": "20260923010739842_842708495_96485234.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED"
     }
   ],
   "unbooked_action_items": [
@@ -2690,6 +2726,24 @@
           "badge": "CONFIRMED & DOWNLOADED",
           "file_path": "documents/Travel Reservation 24SEP for EYAL ANDRESON.pdf",
           "file_name": "Travel Reservation 24SEP for EYAL ANDRESON.pdf"
+        },
+        {
+          "doc_id": "DOC-BOARDING-PASS-PG169-D7XZQW",
+          "title": "Boarding Pass: Bangkok Airways PG 169 (Koh Samui)",
+          "ref": "Bangkok Airways: D7XZQW (Seat Issued)",
+          "status": "Verified Boarding Pass (Gmail Online Check-in)",
+          "badge": "CONFIRMED & DOWNLOADED",
+          "file_path": "documents/Your flight information - BANGKOK AIRWAYS.pdf",
+          "file_name": "Your flight information - BANGKOK AIRWAYS.pdf"
+        },
+        {
+          "doc_id": "DOC-TDAC-B9A1ABB",
+          "title": "Thailand Digital Arrival Card (Re-entry Sep 24)",
+          "ref": "Arrival Card: B9A1ABB",
+          "status": "Verified Digital Arrival Pass (Thai Immigration)",
+          "badge": "CONFIRMED & DOWNLOADED",
+          "file_path": "documents/20260923010739842_842708495_96485234.pdf",
+          "file_name": "20260923010739842_842708495_96485234.pdf"
         },
         {
           "doc_id": "HOTEL-FAIRHOUSE-SAMUI-1777544987",

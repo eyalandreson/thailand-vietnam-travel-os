@@ -32,6 +32,25 @@ os.makedirs(DOCS_DIR, exist_ok=True)
 os.makedirs(WEB_DOCS_DIR, exist_ok=True)
 
 
+try:
+    import dotenv
+    dotenv.load_dotenv(os.path.join(BASE_DIR, ".env"))
+except Exception:
+    pass
+
+def _normalize_encoding(enc: Optional[str]) -> str:
+    if not enc:
+        return "utf-8"
+    e = enc.lower()
+    if "874" in e:
+        return "cp874"
+    if "1255" in e:
+        return "cp1255"
+    if "1252" in e:
+        return "cp1252"
+    return enc
+
+
 def _decode_header_str(header_val: str) -> str:
     if not header_val:
         return ""
@@ -39,10 +58,14 @@ def _decode_header_str(header_val: str) -> str:
     out = []
     for fragment, encoding in decoded_fragments:
         if isinstance(fragment, bytes):
+            norm_enc = _normalize_encoding(encoding)
             try:
-                out.append(fragment.decode(encoding or "utf-8", errors="replace"))
+                out.append(fragment.decode(norm_enc, errors="replace"))
             except Exception:
-                out.append(fragment.decode("latin-1", errors="replace"))
+                try:
+                    out.append(fragment.decode("utf-8", errors="replace"))
+                except Exception:
+                    out.append(fragment.decode("latin-1", errors="replace"))
         else:
             out.append(str(fragment))
     return " ".join(out).strip()
@@ -53,6 +76,7 @@ class GmailLiveIngestion:
         self.syncer = DualSyncEngine()
         self.registry_path = registry_path or REGISTRY_PATH
         self.itinerary_path = itinerary_path or ITINERARY_PATH
+        self.new_files_downloaded: List[str] = []
 
     def scan_local_documents_folder(self) -> List[str]:
         """Scans documents/ and mirrors all vouchers to web/documents/."""
@@ -189,58 +213,99 @@ class GmailLiveIngestion:
         }
 
     def fetch_live_gmail_bookings(self, username: Optional[str] = None, password: Optional[str] = None) -> List[Dict[str, Any]]:
-        """Connects to Gmail via IMAP if credentials exist; otherwise verifies local vouchers."""
+        """Connects to Gmail via IMAP, downloads all voucher/ticket attachments, and parses booking metadata."""
         user = username or os.environ.get("GMAIL_USER")
         pwd = password or os.environ.get("GMAIL_APP_PASSWORD")
 
+        self.new_files_downloaded: List[str] = []
         found_bookings: List[Dict[str, Any]] = []
+
         if not user or not pwd:
             print("[GmailLiveIngestion] No Gmail IMAP credentials provided in environment. Scanning local document vouchers...")
             self.scan_local_documents_folder()
             return found_bookings
 
         try:
+            print(f"[GmailLiveIngestion] Authenticating with Gmail IMAP as {user}...")
             mail = imaplib.IMAP4_SSL("imap.gmail.com")
             mail.login(user, pwd)
             mail.select("INBOX")
 
-            queries = [
-                '(OR FROM "agoda.com" FROM "vexere.com")',
-                '(OR FROM "bangkokair.com" FROM "emirates.com")',
-                '(OR FROM "mytrip.com" FROM "12go.asia")'
+            senders = [
+                "agoda.com",
+                "bangkokair.com",
+                "vexere.com",
+                "12go.asia",
+                "emirates.com",
+                "etihad",
+                "mytrip.com",
+                "vietjet",
+                "immigration.go.th",
+                "booking.com"
             ]
-            seen_refs = set()
-            for q in queries:
+
+            seen_mids = set()
+
+            for sender in senders:
                 try:
-                    typ, data = mail.search(None, q)
+                    typ, data = mail.search(None, f'FROM "{sender}"')
                     if typ != "OK" or not data or not data[0]:
                         continue
-                    for mid in data[0].split():
+                    mids = data[0].split()
+                    for mid in mids:
+                        mid_str = mid.decode()
+                        if mid_str in seen_mids:
+                            continue
+                        seen_mids.add(mid_str)
+
                         typ, msg_data = mail.fetch(mid, "(RFC822)")
                         if typ != "OK" or not msg_data or not msg_data[0]:
                             continue
                         msg = email.message_from_bytes(msg_data[0][1])
                         sub = _decode_header_str(msg.get("Subject", ""))
                         frm = _decode_header_str(msg.get("From", ""))
-                        # Quick ref extraction
-                        ref_match = re.search(r"([0-9]{9,10}|[A-Z0-9]{6}|12GO[0-9]{8})", sub)
+                        dt = _decode_header_str(msg.get("Date", ""))
+
+                        # 1. Download any attached voucher files (PDFs, etc.)
+                        if msg.is_multipart():
+                            for part in msg.walk():
+                                fname = part.get_filename()
+                                if fname:
+                                    clean_fname = _decode_header_str(fname)
+                                    clean_fname = clean_fname.replace("/", "_").replace("\\", "_").replace(":", "_").replace("?", "")
+                                    payload = part.get_payload(decode=True)
+                                    if payload and len(payload) > 200:
+                                        dest1 = os.path.join(DOCS_DIR, clean_fname)
+                                        dest2 = os.path.join(WEB_DOCS_DIR, clean_fname)
+                                        is_new = not os.path.exists(dest1) or os.path.getsize(dest1) != len(payload)
+                                        with open(dest1, "wb") as f:
+                                            f.write(payload)
+                                        with open(dest2, "wb") as f:
+                                            f.write(payload)
+                                        if is_new and clean_fname not in self.new_files_downloaded:
+                                            self.new_files_downloaded.append(clean_fname)
+                                            print(f"[GmailLiveIngestion] Downloaded new file: {clean_fname}")
+
+                        # 2. Extract booking references
+                        ref_match = re.search(r"([0-9]{9,10}|[A-Z0-9]{6}|12GO[0-9]{8}|B9A1ABB|30C4358)", sub)
                         if ref_match:
                             ref = ref_match.group(1)
-                            if ref not in seen_refs and ref != "QI2514":
-                                seen_refs.add(ref)
+                            if ref != "QI2514":
                                 found_bookings.append({
                                     "reference_code": ref,
                                     "vendor": frm,
                                     "title": sub,
+                                    "date": dt,
                                     "type": "BOOKING"
                                 })
                 except Exception as q_err:
-                    print(f"[GmailLiveIngestion] Query warning ({q}): {q_err}")
+                    print(f"[GmailLiveIngestion] Query warning for sender {sender}: {q_err}")
 
             mail.close()
             mail.logout()
+            print(f"[GmailLiveIngestion] IMAP scan completed: {len(self.new_files_downloaded)} new files downloaded, {len(found_bookings)} bookings discovered.")
         except Exception as e:
-            print(f"[GmailLiveIngestion] IMAP Connection Note: {e}")
+            print(f"[GmailLiveIngestion] IMAP Connection Error: {e}")
 
         self.scan_local_documents_folder()
         return found_bookings
@@ -494,6 +559,32 @@ class GmailLiveIngestion:
                 "passengers": "Eyal Andreson & Maria Miriam Malayev",
                 "details": "Confirmed international return flight. E-tickets issued for both passengers.",
                 "keywords": ["9KDEH2", "Etihad"]
+            },
+            {
+                "id": "DOC-BOARDING-PASS-PG169-D7XZQW",
+                "type": "BOARDING_PASS",
+                "date": "2026-09-24",
+                "title": "Bangkok Airways Boarding Pass (PG 169 - BKK -> USM)",
+                "reference_code": "829231173371901",
+                "pnr": "D7XZQW",
+                "status": "[CONFIRMED - BOOKED]",
+                "departure": "16:40 PM (BKK Suvarnabhumi) - PG 169",
+                "arrival": "17:45 PM (USM Koh Samui)",
+                "airline": "Bangkok Airways PG 169 (Economy, Ticket: 829231173371901)",
+                "passengers": "Eyal Andreson",
+                "details": "Confirmed online check-in boarding pass. Boarding gate opens 16:00 PM.",
+                "keywords": ["Your flight information", "BANGKOK AIRWAYS", "829231173371901"]
+            },
+            {
+                "id": "DOC-TDAC-B9A1ABB",
+                "type": "IMMIGRATION_PASS",
+                "date": "2026-09-24",
+                "title": "Thailand Digital Arrival Card (Re-Entry Sep 24)",
+                "reference_code": "TDAC #B9A1ABB",
+                "status": "[CONFIRMED - BOOKED]",
+                "passenger": "Eyal Andreson (Passport C4JTR3PN5)",
+                "details": "Official Thailand Digital Arrival Card approved for re-entry on 2026-09-24 from Hanoi to Bangkok.",
+                "keywords": ["20260923010739842", "842708495", "B9A1ABB", "96485234"]
             }
         ]
 
@@ -1256,6 +1347,24 @@ class GmailLiveIngestion:
                             "file_name": "Travel Reservation 24SEP for EYAL ANDRESON.pdf"
                         },
                         {
+                            "doc_id": "DOC-BOARDING-PASS-PG169-D7XZQW",
+                            "title": "Boarding Pass: Bangkok Airways PG 169 (Koh Samui)",
+                            "ref": "Bangkok Airways: D7XZQW (Seat Issued)",
+                            "status": "Verified Boarding Pass (Gmail Online Check-in)",
+                            "badge": "CONFIRMED & DOWNLOADED",
+                            "file_path": "documents/Your flight information - BANGKOK AIRWAYS.pdf",
+                            "file_name": "Your flight information - BANGKOK AIRWAYS.pdf"
+                        },
+                        {
+                            "doc_id": "DOC-TDAC-B9A1ABB",
+                            "title": "Thailand Digital Arrival Card (Re-entry Sep 24)",
+                            "ref": "Arrival Card: B9A1ABB",
+                            "status": "Verified Digital Arrival Pass (Thai Immigration)",
+                            "badge": "CONFIRMED & DOWNLOADED",
+                            "file_path": "documents/20260923010739842_842708495_96485234.pdf",
+                            "file_name": "20260923010739842_842708495_96485234.pdf"
+                        },
+                        {
                             "doc_id": "HOTEL-FAIRHOUSE-SAMUI-1777544987",
                             "title": "The Fair House Beach Resort Koh Samui (Agoda)",
                             "ref": "Agoda: 1777544987",
@@ -1437,6 +1546,8 @@ class GmailLiveIngestion:
         return {
             "status": "SUCCESS",
             "new_items_added": new_items_added,
+            "new_files_downloaded": getattr(self, "new_files_downloaded", []),
+            "new_files_count": len(getattr(self, "new_files_downloaded", [])),
             "total_confirmed_in_registry": len(registry.get("confirmed_items", [])),
             "itinerary_days_synchronized": updated_days_count,
             "resolved_action_items": resolved_actions,

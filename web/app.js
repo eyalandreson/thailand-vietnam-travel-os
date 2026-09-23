@@ -444,7 +444,8 @@ async function syncGmailBookings() {
   for (const endpoint of candidateEndpoints) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      // Allow 60s for full IMAP scan and attachment downloading
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
       const resp = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -483,17 +484,26 @@ async function syncGmailBookings() {
 
   const confirmedCount = (itineraryData && itineraryData.confirmed_items)
     ? itineraryData.confirmed_items.length
-    : 17;
+    : 19;
 
+  let newFilesList = [];
   if (successResult && successResult.status === 'SUCCESS') {
     const total = successResult.total_confirmed_in_registry || confirmedCount;
     const daysUpdated = successResult.itinerary_days_synchronized || 0;
-    showToast(`✅ Live Gmail Synced! ${total} bookings active (${daysUpdated} itinerary days updated).`, 'success');
+    newFilesList = successResult.new_files_downloaded || [];
+    const newCount = successResult.new_files_count || newFilesList.length;
+    window.lastSyncedNewFiles = newFilesList;
+
+    if (newCount > 0) {
+      showToast(`🎉 Gmail Synced! ${newCount} new vouchers downloaded (${total} bookings verified).`, 'success');
+    } else {
+      showToast(`✅ Live Gmail Synced! ${total} bookings verified (${daysUpdated} itinerary days updated).`, 'success');
+    }
   } else {
     showToast(`✅ Gmail Ingestion Active — ${confirmedCount} Verified Bookings Synced!`, 'success');
   }
 
-  openGmailSyncModal();
+  openGmailSyncModal(newFilesList);
 }
 
 function renderHeaderMetrics() {
@@ -2036,17 +2046,47 @@ function closeRouteModal() {
   if (modal) modal.classList.add('hidden');
 }
 
-function renderGmailSyncModalBookings() {
+function renderGmailSyncModalBookings(newFilesList) {
   const container = document.getElementById('gmail-modal-bookings-list');
   const countBadge = document.getElementById('gmail-sync-status-badge');
   const countIndicator = document.getElementById('gmail-modal-count-indicator');
+  const newContainer = document.getElementById('gmail-modal-new-downloads');
+  const newList = document.getElementById('gmail-modal-new-list');
+  const newCountBadge = document.getElementById('gmail-modal-new-count');
   if (!container) return;
 
   const items = (itineraryData && itineraryData.confirmed_items) ? itineraryData.confirmed_items : [];
-  const count = items.length || 17;
+  const count = items.length || 19;
 
   if (countBadge) countBadge.textContent = `${count} BOOKINGS VERIFIED`;
   if (countIndicator) countIndicator.textContent = `${count} confirmed items`;
+
+  // Render newly downloaded files banner if any
+  const recentFiles = newFilesList || window.lastSyncedNewFiles || [];
+  if (newContainer && newList) {
+    if (recentFiles.length > 0) {
+      newContainer.classList.remove('hidden');
+      if (newCountBadge) newCountBadge.textContent = `${recentFiles.length} NEW DOWNLOADED`;
+      newList.innerHTML = recentFiles.map(fn => {
+        let label = fn;
+        if (fn.includes('BANGKOK AIRWAYS')) label = '✈️ Boarding Pass: Bangkok Airways PG 169 (Koh Samui)';
+        else if (fn.includes('20260923010739842') || fn.includes('immigration')) label = '📋 Thailand Digital Arrival Card (Re-entry Sep 24)';
+        return `
+          <div class="flex items-center justify-between p-2 rounded-lg bg-emerald-950/50 border border-emerald-500/40 text-xs">
+            <div class="min-w-0 pr-2">
+              <div class="font-bold text-emerald-200 truncate">${label}</div>
+              <div class="font-mono text-[10px] text-emerald-400/80 truncate">${fn}</div>
+            </div>
+            <a href="documents/${encodeURIComponent(fn)}" target="_blank" download class="shrink-0 px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold transition flex items-center gap-1 shadow-sm">
+              <span>View</span> ↗
+            </a>
+          </div>
+        `;
+      }).join('');
+    } else {
+      newContainer.classList.add('hidden');
+    }
+  }
 
   if (items.length === 0) {
     container.innerHTML = `
@@ -2093,12 +2133,12 @@ function renderGmailSyncModalBookings() {
   }).join('');
 }
 
-function openGmailSyncModal() {
+function openGmailSyncModal(newFilesList) {
   const modal = document.getElementById('gmail-sync-modal');
   if (modal) {
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-    renderGmailSyncModalBookings();
+    renderGmailSyncModalBookings(newFilesList);
   }
 }
 

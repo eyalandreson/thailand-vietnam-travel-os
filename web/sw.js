@@ -1,12 +1,12 @@
-// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.7)
-const CACHE_NAME = 'travel-os-v4.7';
+// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.8)
+const CACHE_NAME = 'travel-os-v4.8';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=4.7',
-  './config.js?v=4.7',
-  './app.js?v=4.7&b=2026092307',
-  './itinerary_data.js?v=4.7',
+  './styles.css?v=4.8',
+  './config.js?v=4.8',
+  './app.js?v=4.8&b=2026092308',
+  './itinerary_data.js?v=4.8',
   './data.json',
   './master_itinerary_doc.html',
   './manifest.json',
@@ -25,6 +25,8 @@ const ASSETS_TO_CACHE = [
   './documents/Confirmation_for_Booking_ID__2051965881.pdf',
   './documents/Confirmation_for_Booking_ID__697155847.pdf',
   './documents/Travel Reservation 24SEP for EYAL ANDRESON.pdf',
+  './documents/Your flight information - BANGKOK AIRWAYS.pdf',
+  './documents/20260923010739842_842708495_96485234.pdf',
   './documents/Voucher_34GR92_Vexere Confirmation of successful  payme.html',
   './documents/Voucher_E8PB24_Vexere Confirmation of successful  payme.html'
 ];

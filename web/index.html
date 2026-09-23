@@ -30,10 +30,10 @@
     }
   </script>
   
-  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.7) -->
+  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.8) -->
   <script>
     (function() {
-      const TARGET_CACHE = 'travel-os-v4.7';
+      const TARGET_CACHE = 'travel-os-v4.8';
       
       // 1. Purge obsolete caches
       if ('caches' in window) {
@@ -88,10 +88,10 @@
     })();
   </script>
   
-  <link rel="stylesheet" href="styles.css?v=4.7">
-  <script src="config.js?v=4.7"></script>
-  <script src="itinerary_data.js?v=4.7"></script>
-  <script src="app.js?v=4.7&b=2026092307" defer></script>
+  <link rel="stylesheet" href="styles.css?v=4.8">
+  <script src="config.js?v=4.8"></script>
+  <script src="itinerary_data.js?v=4.8"></script>
+  <script src="app.js?v=4.8&b=2026092308" defer></script>
 </head>
 <body class="antialiased min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
@@ -1049,7 +1049,7 @@
             <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span class="font-bold text-sm text-emerald-300">Autonomous Sync Pipeline Active</span>
           </div>
-          <span id="gmail-sync-status-badge" class="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-900/80 text-emerald-200 border border-emerald-500/40 font-bold">17 BOOKINGS VERIFIED</span>
+          <span id="gmail-sync-status-badge" class="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-900/80 text-emerald-200 border border-emerald-500/40 font-bold">19 BOOKINGS VERIFIED</span>
         </div>
         <p class="text-xs text-slate-300 leading-relaxed">
           Your Travel OS operates under the <b>"Hard Anchors, Fluid Routes"</b> rule. All genuine flight, hotel, and transit confirmations in Gmail are automatically mirrored into the itinerary as immutable anchors.
@@ -1075,13 +1075,26 @@
             When running locally with <code class="bg-slate-200 dark:bg-slate-900 px-1 py-0.5 rounded font-mono text-cyan-500">python agent_bridge_server.py</code>, clicking "Sync Gmail" triggers instant local ingestion and direct file synchronization on port 5055.
           </p>
         </div>
+      <!-- Newly Downloaded Vouchers Notification (shown when new attachments arrive) -->
+      <div id="gmail-modal-new-downloads" class="mb-4 hidden">
+        <div class="bg-gradient-to-r from-emerald-950/80 via-teal-950/80 to-slate-900 border border-emerald-500/60 rounded-xl p-3.5 shadow-lg shadow-emerald-950/40">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+              <span>📥</span> Newly Downloaded Gmail Vouchers
+            </span>
+            <span id="gmail-modal-new-count" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-500/40 font-bold">2 NEW</span>
+          </div>
+          <div id="gmail-modal-new-list" class="space-y-1.5 text-xs">
+            <!-- Populated via JS -->
+          </div>
+        </div>
       </div>
 
       <!-- Verified Ground Truth List Container -->
       <div class="mb-4">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-bold text-slate-700 dark:text-slate-300">📋 Verified Bookings in Registry</span>
-          <span id="gmail-modal-count-indicator" class="text-[10px] text-slate-400">17 confirmed items</span>
+          <span id="gmail-modal-count-indicator" class="text-[10px] text-slate-400">19 confirmed items</span>
         </div>
         <div id="gmail-modal-bookings-list" class="max-h-60 overflow-y-auto space-y-2 pr-1">
           <!-- Populated dynamically via JS -->
