@@ -1,12 +1,12 @@
-// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.3)
-const CACHE_NAME = 'travel-os-v4.3';
+// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.4)
+const CACHE_NAME = 'travel-os-v4.4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=4.3',
-  './config.js?v=4.3',
-  './app.js?v=4.3&b=2026092302',
-  './itinerary_data.js?v=4.3',
+  './styles.css?v=4.4',
+  './config.js?v=4.4',
+  './app.js?v=4.4&b=2026092303',
+  './itinerary_data.js?v=4.4',
   './data.json',
   './master_itinerary_doc.html',
   './manifest.json',
@@ -15,15 +15,26 @@ const ASSETS_TO_CACHE = [
   './documents/Sukhon_Hotel_Agoda_697155847.pdf',
   './documents/Flight_Mytrip_BKK_HAN_BKK_1145-554-179.pdf',
   './documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf',
-  './documents/Etihad_BKK_TLV_9KDEH2_Maria_Miriam_Malayev.pdf'
+  './documents/Etihad_BKK_TLV_9KDEH2_Maria_Miriam_Malayev.pdf',
+  './documents/12go_booking_32785393.pdf',
+  './documents/Confirmation_for_Booking_ID__1777345669.pdf',
+  './documents/Confirmation_for_Booking_ID__1777544987.pdf',
+  './documents/Confirmation_for_Booking_ID__2050574832.pdf',
+  './documents/Confirmation_for_Booking_ID__2050577065.pdf',
+  './documents/Confirmation_for_Booking_ID__2051512276.pdf',
+  './documents/Confirmation_for_Booking_ID__2051965881.pdf',
+  './documents/Confirmation_for_Booking_ID__697155847.pdf',
+  './documents/Travel Reservation 24SEP for EYAL ANDRESON.pdf',
+  './documents/Voucher_34GR92_Vexere Confirmation of successful  payme.html',
+  './documents/Voucher_E8PB24_Vexere Confirmation of successful  payme.html'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW v4.2] Pre-caching offline Travel OS assets and PDF documents');
+      console.log('[SW v4.3] Pre-caching offline Travel OS assets and PDF documents');
       return cache.addAll(ASSETS_TO_CACHE).catch((err) => {
-        console.warn('[SW v4.0] Cache addAll warning:', err);
+        console.warn('[SW v4.3] Cache addAll warning:', err);
       });
     })
   );

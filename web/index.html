@@ -30,10 +30,10 @@
     }
   </script>
   
-  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.3) -->
+  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.4) -->
   <script>
     (function() {
-      const TARGET_CACHE = 'travel-os-v4.3';
+      const TARGET_CACHE = 'travel-os-v4.4';
       
       // 1. Purge obsolete caches
       if ('caches' in window) {
@@ -49,8 +49,8 @@
 
       // 2. One-time self-upgrade: unregister any legacy service workers
       const lastVersion = localStorage.getItem('travel_os_active_version');
-      if (lastVersion !== '4.2') {
-        localStorage.setItem('travel_os_active_version', '4.2');
+      if (lastVersion !== '4.3') {
+        localStorage.setItem('travel_os_active_version', '4.3');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(function(regs) {
             for (let reg of regs) {
@@ -60,12 +60,12 @@
         }
       }
 
-      // 3. Register fresh v4.2 Service Worker with update listeners
+      // 3. Register fresh v4.3 Service Worker with update listeners
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('sw.js?v=4.2')
+          navigator.serviceWorker.register('sw.js?v=4.3')
             .then(function(reg) {
-              console.log('[Travel OS v4.2] ServiceWorker registered:', reg.scope);
+              console.log('[Travel OS v4.3] ServiceWorker registered:', reg.scope);
               reg.update();
             })
             .catch(function(err) {
@@ -88,10 +88,10 @@
     })();
   </script>
   
-  <link rel="stylesheet" href="styles.css?v=4.3">
-  <script src="config.js?v=4.3"></script>
-  <script src="itinerary_data.js?v=4.3"></script>
-  <script src="app.js?v=4.3&b=2026092302" defer></script>
+  <link rel="stylesheet" href="styles.css?v=4.4">
+  <script src="config.js?v=4.4"></script>
+  <script src="itinerary_data.js?v=4.4"></script>
+  <script src="app.js?v=4.4&b=2026092303" defer></script>
 </head>
 <body class="antialiased min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
@@ -1263,10 +1263,10 @@ e.g.:
           <div>
             <label class="block text-slate-400 text-[11px] mb-1 font-medium">Target Gemini Model:</label>
             <select id="gemini-model-select" onchange="saveGeminiModelPreference()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:border-indigo-500 focus:outline-none">
-              <option value="gemini-3.5-flash-lite" selected>gemini-3.5-flash-lite (Recommended - Instant & Stable)</option>
+              <option value="gemini-3.8-flash" selected>gemini-3.8-flash (Primary - Highest Performance)</option>
               <option value="gemini-3.6-flash">gemini-3.6-flash (Deep Reasoning)</option>
-              <option value="gemini-3.1-flash-lite">gemini-3.1-flash-lite (Fast Lite)</option>
-              <option value="gemini-3.8-flash">gemini-3.8-flash (High Performance)</option>
+              <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite (Fast &amp; Stable)</option>
+              <option value="gemini-3.1-flash-lite">gemini-3.1-flash-lite (Ultra-Lite Fallback)</option>
             </select>
           </div>
 

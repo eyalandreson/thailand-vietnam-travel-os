@@ -196,7 +196,7 @@ Instructions:
    - "diff_summary": list of strings concisely summarizing each applied change
    - "agent_explanation": a detailed, polished, friendly explanation written directly to Eyal explaining the reasoning, new timings/hotels, and critic compliance.
 """
-        models_to_try = ["gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-3.1-flash-lite", "gemini-3.8-flash"]
+        models_to_try = ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite", "gemini-3.1-flash-lite"]
         for model in models_to_try:
             try:
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"

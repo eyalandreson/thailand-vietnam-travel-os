@@ -28,16 +28,36 @@ let dayExperienceModes = {}; // { [dayNum]: 'primary' | 'contingency' }
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   // Check for local custom overrides from cloud agent fixes
-  const localOverride = localStorage.getItem('travel_os_custom_data');
-  if (localOverride) {
+  const localOverrideStr = localStorage.getItem('travel_os_custom_data');
+  let useLocalOverride = false;
+  if (localOverrideStr && !window.location.search.includes('fresh=1')) {
     try {
-      itineraryData = JSON.parse(localOverride);
-      window.TRAVEL_OS_DATA = itineraryData;
-      initApp();
-      return;
+      const localOverride = JSON.parse(localOverrideStr);
+      const masterData = window.TRAVEL_OS_DATA;
+      // Only use local override if it's strictly newer than the master data generated_at
+      if (masterData && masterData.generated_at && localOverride.generated_at) {
+        if (new Date(localOverride.generated_at) > new Date(masterData.generated_at)) {
+          useLocalOverride = true;
+          itineraryData = localOverride;
+          window.TRAVEL_OS_DATA = localOverride;
+        } else {
+          console.log('[Travel OS] Master data is newer than local override. Discarding stale override.');
+          localStorage.removeItem('travel_os_custom_data');
+        }
+      } else if (!masterData) {
+        useLocalOverride = true;
+        itineraryData = localOverride;
+        window.TRAVEL_OS_DATA = localOverride;
+      }
     } catch (e) {
       console.warn('Failed to parse local custom data override', e);
+      localStorage.removeItem('travel_os_custom_data');
     }
+  }
+
+  if (useLocalOverride) {
+    initApp();
+    return;
   }
 
   if (window.TRAVEL_OS_DATA) {
@@ -207,6 +227,7 @@ async function syncGmailBookings() {
     showToast(`✅ Gmail Synced! ${total} bookings active (${daysUpdated} itinerary days updated).`, 'success');
 
     try {
+      localStorage.removeItem('travel_os_custom_data');
       const freshResp = await fetch('data.json?t=' + Date.now());
       if (freshResp.ok) {
         const freshData = await freshResp.json();
@@ -723,23 +744,46 @@ function renderDays() {
         </div>
       `;
     } else if (day.day_number === 14) {
-      specialBanner = `
-        <div class="bg-purple-50 dark:bg-purple-950/40 border-l-4 border-purple-600 p-4 rounded-r-2xl mb-4 text-xs sm:text-sm text-purple-950 dark:text-purple-200 space-y-1.5 shadow-sm">
-          <div class="flex items-center justify-between flex-wrap gap-2">
-            <span class="font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-              <span>✈️</span> Transition Day &amp; Connection Risk Radar
-            </span>
-            <span class="text-xs px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-500/50 font-bold">PG 169 HIGH RISK</span>
+      const isPG169Confirmed = (day.booking_summary || '').includes('PG169') || 
+                               (day.booking_summary || '').includes('PG 169') ||
+                               (day.booking_summary || '').includes('D7XZQW') ||
+                               (day.door_to_door_logistics?.primary_transit || '').includes('PG 169');
+      if (isPG169Confirmed) {
+        specialBanner = `
+          <div class="bg-emerald-50 dark:bg-emerald-950/40 border-l-4 border-emerald-500 p-4 rounded-r-2xl mb-4 text-xs sm:text-sm text-emerald-950 dark:text-emerald-200 space-y-1.5 shadow-sm">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <span class="font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                <span>✈️</span> Confirmed Flight &amp; Terminal Transit Protocol
+              </span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/50 font-bold">✓ PG 169 CONFIRMED (PNR: D7XZQW)</span>
+            </div>
+            <p class="leading-relaxed">
+              Hanoi flight lands at 14:45. Collect 55L pack, proceed to <b>Floor B Basement AIRPORTELs</b> (15:00) to retrieve checked suitcase. Meet girlfriend at arrivals hall!
+            </p>
+            <p class="font-medium text-emerald-800 dark:text-emerald-300">
+              ⚡ <b>Fast-Track Gate Protocol:</b> Bangkok Airways PG 169 (16:40 BKK -> 17:45 USM). Proceed directly to Level 4 Domestic Check-in Row F before 16:00. Relax in Bangkok Airways Boutique Lounge (Concourse A/F) with complimentary snacks before boarding.
+            </p>
           </div>
-          <p class="leading-relaxed">
-            Hanoi flight lands at 14:45. Friend departs. Retrieve checked suitcase at <b>AIRPORTELs Suvarnabhumi Basement (Floor B)</b>. Reunite with girlfriend at arrivals.
-          </p>
-          <p class="font-medium text-amber-800 dark:text-amber-300">
-            ⚠️ <b>Connection Audit:</b> PG 169 (17:15) leaves only 2h 30m total. <b>Recommended Stress-Free Connection: PG 177 (19:30) or PG 181 (20:00)</b> with 4h 45m buffer!
-            <button onclick="openPriceRadarModal()" class="ml-2 underline text-blue-600 dark:text-cyan-300 font-bold hover:opacity-80">Open Risk Radar →</button>
-          </p>
-        </div>
-      `;
+        `;
+      } else {
+        specialBanner = `
+          <div class="bg-purple-50 dark:bg-purple-950/40 border-l-4 border-purple-600 p-4 rounded-r-2xl mb-4 text-xs sm:text-sm text-purple-950 dark:text-purple-200 space-y-1.5 shadow-sm">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <span class="font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                <span>✈️</span> Transition Day &amp; Connection Risk Radar
+              </span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-500/50 font-bold">PG 169 HIGH RISK</span>
+            </div>
+            <p class="leading-relaxed">
+              Hanoi flight lands at 14:45. Friend departs. Retrieve checked suitcase at <b>AIRPORTELs Suvarnabhumi Basement (Floor B)</b>. Reunite with girlfriend at arrivals.
+            </p>
+            <p class="font-medium text-amber-800 dark:text-amber-300">
+              ⚠️ <b>Connection Audit:</b> PG 169 (17:15) leaves only 2h 30m total. <b>Recommended Stress-Free Connection: PG 177 (19:30) or PG 181 (20:00)</b> with 4h 45m buffer!
+              <button onclick="openPriceRadarModal()" class="ml-2 underline text-blue-600 dark:text-cyan-300 font-bold hover:opacity-80">Open Risk Radar →</button>
+            </p>
+          </div>
+        `;
+      }
     }
 
     // Read persisted daily tasks from localStorage
@@ -1793,7 +1837,7 @@ window.launchTool = launchTool;
 
 let geminiConversation = []; // [{ role: "user" | "model", parts: [{ text: "..." }] }]
 let geminiIsLoading = false;
-let geminiActiveModel = 'gemini-3.5-flash-lite';
+let geminiActiveModel = 'gemini-3.8-flash';
 
 function initGeminiAssistant() {
   // 1. Resolve active model from storage or config
@@ -1802,7 +1846,7 @@ function initGeminiAssistant() {
   if (savedModel && (savedModel.includes('2.5') || savedModel.includes('2.0'))) {
     localStorage.removeItem('travel_os_gemini_model');
   }
-  geminiActiveModel = localStorage.getItem('travel_os_gemini_model') || (window.TRAVEL_OS_CONFIG ? window.TRAVEL_OS_CONFIG.defaultModel : 'gemini-3.5-flash-lite');
+  geminiActiveModel = localStorage.getItem('travel_os_gemini_model') || (window.TRAVEL_OS_CONFIG ? window.TRAVEL_OS_CONFIG.defaultModel : 'gemini-3.8-flash');
   
   const modelSelect = document.getElementById('gemini-model-select');
   if (modelSelect) modelSelect.value = geminiActiveModel;
@@ -2088,7 +2132,7 @@ async function handleGeminiSubmit(e) {
 async function callGeminiApiWithRetry(systemInstruction, conversation, model, apiKey, attempt = 1, isJson = false) {
   const fallbackChain = (window.TRAVEL_OS_CONFIG && window.TRAVEL_OS_CONFIG.modelsChain) 
     ? [...window.TRAVEL_OS_CONFIG.modelsChain]
-    : ['gemini-3.5-flash-lite', 'gemini-3.6-flash', 'gemini-3.1-flash-lite', 'gemini-3.8-flash'];
+    : ['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'];
 
   // If model is legacy/deprecated, map to first active model
   if (model.includes('2.5') || model.includes('2.0')) {
@@ -2133,21 +2177,33 @@ async function callGeminiApiWithRetry(systemInstruction, conversation, model, ap
       throw new Error("Empty candidate received from Gemini API");
     }
 
-    // Temporary 503 high demand or 429 rate limit: quick retry on same model
-    if ((response.status === 503 || response.status === 429) && attempt <= 2) {
-      const delayMs = attempt * 1000;
-      updateTypingIndicator(`${model} spike. Retrying in ${(delayMs / 1000).toFixed(1)}s (Attempt ${attempt}/2)...`);
+    // Rate limit (429) or model deprecated (404): fall back IMMEDIATELY to next model in chain
+    if (response.status === 429 || response.status === 404) {
+      const currentIdx = fallbackChain.indexOf(model);
+      const nextIdx = currentIdx !== -1 ? currentIdx + 1 : 0;
+      if (nextIdx < fallbackChain.length) {
+        const nextModel = fallbackChain[nextIdx];
+        console.warn(`[Gemini Fallback] ${model} returned ${response.status}. Routing to ${nextModel}...`);
+        updateTypingIndicator(`Routing from ${model} to ${nextModel}...`);
+        return await callGeminiApiWithRetry(systemInstruction, conversation, nextModel, apiKey, 1, isJson);
+      }
+    }
+
+    // Temporary 503 high demand: quick retry once, then fall back down the chain
+    if (response.status === 503 && attempt <= 1) {
+      const delayMs = 500;
+      updateTypingIndicator(`${model} busy. Retrying in ${(delayMs / 1000).toFixed(1)}s...`);
       await new Promise(r => setTimeout(r, delayMs));
       return await callGeminiApiWithRetry(systemInstruction, conversation, model, apiKey, attempt + 1, isJson);
     }
 
-    // If retry exhausted or model returned 404 / 503 / 429, fall back along the active chain
+    // Fall back along the active chain (from higher to lower models)
     const currentIdx = fallbackChain.indexOf(model);
     const nextIdx = currentIdx !== -1 ? currentIdx + 1 : 0;
     if (nextIdx < fallbackChain.length) {
       const nextModel = fallbackChain[nextIdx];
       console.warn(`[Gemini Fallback] Switching from ${model} (status ${response.status}) to ${nextModel}...`);
-      updateTypingIndicator(`Routing to stable ${nextModel}...`);
+      updateTypingIndicator(`Routing to ${nextModel}...`);
       return await callGeminiApiWithRetry(systemInstruction, conversation, nextModel, apiKey, 1, isJson);
     }
 
@@ -2817,7 +2873,7 @@ INSTRUCTIONS:
       const systemInstruction = 'You are an autonomous JSON-only Travel Operations Agent. Return ONLY valid JSON.';
       const conversation = [{ role: 'user', parts: [{ text: prompt }] }];
 
-      const targetModel = (window.TRAVEL_OS_CONFIG && window.TRAVEL_OS_CONFIG.defaultModel) || 'gemini-3.5-flash-lite';
+      const targetModel = (window.TRAVEL_OS_CONFIG && window.TRAVEL_OS_CONFIG.defaultModel) || 'gemini-3.8-flash';
       const result = await callGeminiApiWithRetry(systemInstruction, conversation, targetModel, apiKey, 1, true);
       
       let cleaned = (result.text || '').trim();
