@@ -6,8 +6,8 @@
   "audit_note": "Audited & Synchronized with Gmail: Northern route inverted to match actual bookings (Ha Giang -> Sa Pa -> Cat Ba -> Ninh Binh -> Hanoi -> Koh Samui 2 nights -> Gulf -> Bangkok).",
   "confirmed_metrics": {
     "total_days": 29,
-    "confirmed_days_count": 14,
-    "unbooked_days_count": 15,
+    "confirmed_days_count": 16,
+    "unbooked_days_count": 13,
     "confirmed_references": [
       {
         "item": "Tel Aviv (TLV) -> Bangkok (BKK) via Dubai (DXB)",
@@ -84,6 +84,18 @@
       {
         "item": "Thailand Digital Arrival Card (Re-Entry Sep 24)",
         "ref": "Booking: TDAC #B9A1ABB"
+      },
+      {
+        "item": "Agoda - Customer Receipt from Booking ID: 706244679",
+        "ref": "Booking: 706244679"
+      },
+      {
+        "item": "Receipt  (12GO32785393)",
+        "ref": "Booking: 12GO32"
+      },
+      {
+        "item": "Receipt  (AATV7263)",
+        "ref": "Booking: AATV72"
       }
     ]
   },
@@ -454,6 +466,42 @@
       "file_path": "documents/20260923010739842_842708495_96485234.pdf",
       "file_name": "20260923010739842_842708495_96485234.pdf",
       "file_status": "LOCAL_FILE_VERIFIED"
+    },
+    {
+      "id": "BOOKING-GMAIL-706244679",
+      "type": "BOOKING",
+      "date": "Fri, 25 Sep 2026 19:05:44 +0000 (UTC)",
+      "title": "Agoda - Customer Receipt from Booking ID: 706244679",
+      "reference_code": "706244679",
+      "status": "[CONFIRMED - BOOKED]",
+      "details": "Discovered via live Gmail scan from Agoda Customer Service <no-reply@agoda.com>",
+      "file_path": "documents/Confirmation_for_Booking_ID_#_706244679.pdf",
+      "file_name": "Confirmation_for_Booking_ID_#_706244679.pdf",
+      "file_status": "LOCAL_FILE_VERIFIED"
+    },
+    {
+      "id": "BOOKING-GMAIL-12GO32",
+      "type": "BOOKING",
+      "date": "Thu, 10 Sep 2026 14:57:05 +0000",
+      "title": "Receipt  (12GO32785393)",
+      "reference_code": "12GO32",
+      "status": "[CONFIRMED - BOOKED]",
+      "details": "Discovered via live Gmail scan from 12Go <32785393@b.12go.asia>",
+      "file_path": "documents/Voucher_12GO32785393_Receipt  12GO32785393.html",
+      "file_name": "Voucher_12GO32785393_Receipt  12GO32785393.html",
+      "file_status": "LOCAL_FILE_VERIFIED"
+    },
+    {
+      "id": "BOOKING-GMAIL-AATV72",
+      "type": "BOOKING",
+      "date": "Fri, 25 Sep 2026 12:22:08 +0000",
+      "title": "Receipt  (AATV7263)",
+      "reference_code": "AATV72",
+      "status": "[CONFIRMED - BOOKED]",
+      "details": "Discovered via live Gmail scan from 12Go <33091966@b.12go.asia>",
+      "file_path": "",
+      "file_name": "",
+      "file_status": "PENDING_DOWNLOAD"
     }
   ],
   "unbooked_action_items": [
@@ -565,17 +613,17 @@
       "id": "ACTION-SAMUI-PHANGAN-FERRY",
       "category": "FERRY",
       "date": "2026-09-26",
-      "title": "Lomprayah High-Speed Catamaran (Samui to Phangan)",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
-      "notes": "Depart Pralarn Pier Maenam 11:30 AM, arrive Koh Phangan Thong Sala Pier 12:00 PM."
+      "title": "Boonsiri High-Speed Catamaran (Samui to Phangan)",
+      "status": "[RESOLVED - BOOKED IN GMAIL (Boonsiri Catamaran AATV7263)]",
+      "notes": "Confirmed Boonsiri Catamaran departing Koh Samui Nathon Pier 14:35, arriving Koh Phangan Thong Sala Pier 15:05 (Trip: AATV7263 / 12GO33091966)."
     },
     {
       "id": "ACTION-PHANGAN-STAYS",
       "category": "HOTEL",
-      "date": "2026-09-26 to 2026-10-01",
-      "title": "Koh Phangan Sanctuary (5 Nights)",
-      "status": "[ACTION REQUIRED - NOT BOOKED]",
-      "notes": "Vetted: Anantara Rasananda Koh Phangan Villas or Santhiya."
+      "date": "2026-09-26 to 2026-09-28",
+      "title": "Koh Phangan Sanctuary (2 Nights Booked)",
+      "status": "[RESOLVED - BOOKED IN GMAIL (Sunset Hill Boutique Resort #706468715)]",
+      "notes": "Confirmed Sea View Suite at Sunset Hill Boutique Resort for Sep 26 to Sep 28 (Booking: 706468715)."
     },
     {
       "id": "ACTION-PHANGAN-TAO-FERRY",
@@ -2949,12 +2997,12 @@
       "day_number": 16,
       "date": "2026-09-26",
       "day_of_week": "Saturday",
-      "destination": "Koh Samui -> Koh Phangan: Lomprayah High-Speed Catamaran & Island Sanctuary",
+      "destination": "Koh Samui -> Koh Phangan: Boonsiri High-Speed Catamaran & Sunset Hill Sea View Suite",
       "phase": "Couple Trip - Southern Thailand Romance",
       "phase_short": "Phase 2: Couple Trip",
-      "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
-      "status_badge": "UNBOOKED",
-      "booking_summary": "Checkout Fair House Samui • Catamaran to Koh Phangan • Phangan Resort Check-in",
+      "status": "[CONFIRMED - BOOKED]",
+      "status_badge": "CONFIRMED",
+      "booking_summary": "Boonsiri Catamaran (14:35 Nathon Pier • Booking: AATV7263) • Sunset Hill Boutique Resort (Booking: 706468715)",
       "weather_radar": {
         "temp_range": "28°C - 33°C",
         "condition": "Golden sunshine, azure sea",
@@ -2965,32 +3013,23 @@
       "luggage_action": "Resort stay.",
       "accommodation_matrix": [
         {
-          "hotel_name": "Anantara Rasananda Koh Phangan Villas",
-          "status": "UNBOOKED_VETTED_OPTION",
-          "room_spec": "Ocean Pool Suite (Romantic King Bed)",
-          "critic_score": 9.6,
-          "critic_notes": "Premier luxury pool villa tucked into Thong Nai Pan Noi cove.",
-          "price_per_night": "Est. $260 USD",
-          "booking_url": "https://www.anantara.com/en/rasananda-koh-phangan",
-          "map_query": "Anantara+Rasananda+Koh+Phangan"
-        },
-        {
-          "hotel_name": "Santhiya Koh Phangan Resort & Spa",
-          "status": "UNBOOKED_VETTED_ALTERNATIVE",
-          "room_spec": "Supreme Deluxe Ocean View (Romantic King Bed)",
-          "critic_score": 9.2,
-          "critic_notes": "Spectacular carved teakwood cliffside resort.",
-          "price_per_night": "Est. $150 USD",
-          "booking_url": "https://www.santhiya.com/kohphangan/",
-          "map_query": "Santhiya+Koh+Phangan"
+          "hotel_name": "Sunset Hill Boutique Resort",
+          "status": "CONFIRMED_BOOKED",
+          "booking_reference": "706468715",
+          "room_spec": "Sea View Suite (Panoramic Gulf Sunset Terrace)",
+          "critic_score": 9.4,
+          "critic_notes": "Confirmed booked via Agoda. 81/15 Moo 8 Haad Chao Phao. Hillside panoramic sunset views, infinity pool, quiet west coast sanctuary.",
+          "price_per_night": "Booked (฿6,890 THB / 2 nights)",
+          "booking_url": "https://www.agoda.com",
+          "map_query": "Sunset+Hill+Boutique+Resort+Koh+Phangan"
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "Lomprayah High-Speed Catamaran (Dep Pralarn Pier Maenam 11:30 AM, Arr Koh Phangan Thong Sala Pier 12:00 PM)",
-        "departure_time": "10:30 AM Fair House Resort checkout",
-        "arrival_time": "12:00 PM Koh Phangan",
-        "buffer_time": "Smooth 25-minute catamaran crossing across the Gulf",
-        "tips": "Book Lomprayah tickets online or at hotel desk 1 week ahead. Island transfer taxi meets boat at Thong Sala Pier."
+        "primary_transit": "Boonsiri High-Speed Ferries Catamaran (Dep 14:35 Koh Samui Nathon Pier, Arr 15:05 Koh Phangan Thong Sala Pier). Confirmed Tickets Issued (Booking: AATV7263 / 12GO33091966).",
+        "departure_time": "14:35 Nathon Pier",
+        "arrival_time": "15:05 Thong Sala Pier",
+        "buffer_time": "Check in at Boonsiri Nathon Pier counter 45 mins prior (13:50 PM). Taxi from Chaweng Noi takes ~45 mins.",
+        "tips": "Depart Fair House around 12:30 PM. Arrive Nathon Pier counter by 13:50 PM with confirmation #AATV7263. 3 pieces of luggage registered. 30-min smooth catamaran crossing to Thong Sala Pier. 15-min songthaew/taxi from pier up to Sunset Hill Resort."
       },
       "curated_daily_flow": {
         "morning": "Farewell breakfast at The Fair House Beach Resort. 10:30 AM: Check out and take taxi to Lomprayah Pralarn Pier (Maenam).",
@@ -2998,13 +3037,34 @@
         "evening": "Check into Koh Phangan resort. Sunset cocktails by the private pool and barefoot beachside dinner."
       },
       "essential_checklist": [
-        "10:30 AM: Check out of The Fair House Beach Resort",
-        "Taxi to Lomprayah Pralarn Pier (Maenam)",
-        "11:30 AM: Board high-speed catamaran to Koh Phangan (25 mins)",
-        "12:00 PM: Arrive Thong Sala Pier, take resort transfer to Thong Nai Pan",
-        "Check into Koh Phangan luxury pool villa & enjoy sunset dip"
+        "11:30 AM: Relaxed breakfast & checkout from The Fair House Beach Resort",
+        "12:30 PM: Taxi from Chaweng Noi to Nathon Pier (approx. 45 mins)",
+        "13:50 PM: Check in at Boonsiri High-Speed Ferries Nathon Pier counter (Booking: AATV7263)",
+        "14:35 PM: Board Boonsiri Catamaran to Koh Phangan (30-minute crossing)",
+        "15:05 PM: Arrive Thong Sala Pier, take local taxi/songthaew to Haad Chao Phao",
+        "15:45 PM: Check into Sea View Suite at Sunset Hill Boutique Resort",
+        "17:30 PM: Panoramic sunset cocktail overlooking the Gulf of Thailand from infinity pool"
       ],
-      "attached_documents": [],
+      "attached_documents": [
+        {
+          "doc_id": "FERRY-SAMUI-PHANGAN-AATV7263",
+          "title": "Catamaran: Koh Samui -> Koh Phangan (Boonsiri AATV7263)",
+          "ref": "12Go: 12GO33091966",
+          "status": "Verified Transit Ticket (Gmail)",
+          "badge": "CONFIRMED & DOWNLOADED",
+          "file_path": "documents/12go_booking_33091966.pdf",
+          "file_name": "12go_booking_33091966.pdf"
+        },
+        {
+          "doc_id": "HOTEL-SUNSET-HILL-PHANGAN-706468715",
+          "title": "Sunset Hill Boutique Resort Koh Phangan (Agoda)",
+          "ref": "Agoda: 706468715",
+          "status": "Verified Hotel Voucher (Gmail)",
+          "badge": "CONFIRMED & DOWNLOADED",
+          "file_path": "documents/Confirmation_for_Booking_ID_#_706468715.pdf",
+          "file_name": "Confirmation_for_Booking_ID_#_706468715.pdf"
+        }
+      ],
       "google_maps_links": [
         {
           "label": "Luna Lounge Phangan",
@@ -3064,12 +3124,12 @@
       "day_number": 17,
       "date": "2026-09-27",
       "day_of_week": "Sunday",
-      "destination": "Koh Phangan: Bottle Beach & Than Sadet",
+      "destination": "Koh Phangan: Secret Beach & Sunset Hill Sea View Suite (Night 2)",
       "phase": "Couple Trip - Southern Thailand Romance",
       "phase_short": "Phase 2: Couple Trip",
-      "status": "[ACTION REQUIRED - VETTED / UNBOOKED]",
-      "status_badge": "UNBOOKED",
-      "booking_summary": "Phangan night 3 unbooked",
+      "status": "[CONFIRMED - BOOKED]",
+      "status_badge": "CONFIRMED",
+      "booking_summary": "Sunset Hill Boutique Resort (Booking: 706468715 - Night 2)",
       "weather_radar": {
         "temp_range": "27°C - 32°C",
         "condition": "Sunny skies",
@@ -3080,21 +3140,23 @@
       "luggage_action": "Resort stay.",
       "accommodation_matrix": [
         {
-          "hotel_name": "Anantara Rasananda Koh Phangan Villas",
-          "status": "UNBOOKED_VETTED_OPTION",
-          "room_spec": "Ocean Pool Suite (Romantic King Bed)",
-          "critic_score": 9.6,
-          "critic_notes": "Night 3 on Phangan.",
-          "price_per_night": "Est. $260 USD",
-          "booking_url": "https://www.anantara.com/en/rasananda-koh-phangan"
+          "hotel_name": "Sunset Hill Boutique Resort",
+          "status": "CONFIRMED_BOOKED",
+          "booking_reference": "706468715",
+          "room_spec": "Sea View Suite (Panoramic Gulf Sunset Terrace)",
+          "critic_score": 9.4,
+          "critic_notes": "Confirmed booked via Agoda. Night 2 of 2-night reservation.",
+          "price_per_night": "Booked (Night 2)",
+          "booking_url": "https://www.agoda.com",
+          "map_query": "Sunset+Hill+Boutique+Resort+Koh+Phangan"
         }
       ],
       "door_to_door_logistics": {
-        "primary_transit": "Private longtail boat charter to Bottle Beach (15 mins). Vehicle excursion to Than Sadet Waterfall.",
-        "departure_time": "09:30 AM",
-        "arrival_time": "15:30 PM",
-        "buffer_time": "Self-paced",
-        "tips": "Bottle Beach accessible only by boat."
+        "primary_transit": "Zero transit day. Exploring secret coves (Secret Beach / Haad Son) & Zen Beach sunset.",
+        "departure_time": "Flexible leisurely schedule",
+        "arrival_time": "Sunset at Zen Beach / Sunset Hill",
+        "buffer_time": "100% pure island decompression",
+        "tips": "Rent scooter or take short ride to Secret Beach for snorkeling. Visit Koh Raham cliff bar for lunch in hammocks over the sea."
       },
       "curated_daily_flow": {
         "morning": "Private longtail boat past sea cliffs to secluded Bottle Beach.",
@@ -3102,9 +3164,24 @@
         "evening": "Cliffside dinner at 2400 Bar overlooking the Gulf."
       },
       "essential_checklist": [
-        "Dry bag for longtail boat"
+        "Morning espresso on private terrace overlooking Gulf of Thailand",
+        "Short path down to Secret Beach (Haad Son) for swimming and coral snorkeling",
+        "Lunch at Koh Raham cliffside pirate restaurant suspended over waves",
+        "Afternoon decompression by the infinity pool at Sunset Hill",
+        "17:00 PM: Zen Beach sunset gathering with live acoustic rhythms",
+        "Romantic dinner under palm trees at Haad Salad"
       ],
-      "attached_documents": [],
+      "attached_documents": [
+        {
+          "doc_id": "HOTEL-SUNSET-HILL-PHANGAN-706468715",
+          "title": "Sunset Hill Boutique Resort Koh Phangan (Night 2)",
+          "ref": "Agoda: 706468715",
+          "status": "Verified Hotel Voucher (Gmail)",
+          "badge": "CONFIRMED & DOWNLOADED",
+          "file_path": "documents/Confirmation_for_Booking_ID_#_706468715.pdf",
+          "file_name": "Confirmation_for_Booking_ID_#_706468715.pdf"
+        }
+      ],
       "google_maps_links": [
         {
           "label": "Bottle Beach",

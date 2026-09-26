@@ -30,10 +30,10 @@
     }
   </script>
   
-  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.8) -->
+  <!-- IMMEDIATE PWA CACHE PURGE & AUTO-UPGRADE SYSTEM (v4.9) -->
   <script>
     (function() {
-      const TARGET_CACHE = 'travel-os-v4.8';
+      const TARGET_CACHE = 'travel-os-v4.9';
       
       // 1. Purge obsolete caches
       if ('caches' in window) {
@@ -49,8 +49,8 @@
 
       // 2. One-time self-upgrade: unregister any legacy service workers
       const lastVersion = localStorage.getItem('travel_os_active_version');
-      if (lastVersion !== '4.7') {
-        localStorage.setItem('travel_os_active_version', '4.7');
+      if (lastVersion !== '4.9') {
+        localStorage.setItem('travel_os_active_version', '4.9');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(function(regs) {
             for (let reg of regs) {
@@ -60,12 +60,12 @@
         }
       }
 
-      // 3. Register fresh v4.7 Service Worker with update listeners
+      // 3. Register fresh v4.9 Service Worker with update listeners
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('sw.js?v=4.7')
+          navigator.serviceWorker.register('sw.js?v=4.9')
             .then(function(reg) {
-              console.log('[Travel OS v4.7] ServiceWorker registered:', reg.scope);
+              console.log('[Travel OS v4.9] ServiceWorker registered:', reg.scope);
               reg.update();
             })
             .catch(function(err) {
@@ -88,10 +88,10 @@
     })();
   </script>
   
-  <link rel="stylesheet" href="styles.css?v=4.8">
-  <script src="config.js?v=4.8"></script>
-  <script src="itinerary_data.js?v=4.8"></script>
-  <script src="app.js?v=4.8&b=2026092308" defer></script>
+  <link rel="stylesheet" href="styles.css?v=4.9">
+  <script src="config.js?v=4.9"></script>
+  <script src="itinerary_data.js?v=4.9"></script>
+  <script src="app.js?v=4.9&b=2026092601" defer></script>
 </head>
 <body class="antialiased min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
@@ -1049,7 +1049,7 @@
             <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span class="font-bold text-sm text-emerald-300">Autonomous Sync Pipeline Active</span>
           </div>
-          <span id="gmail-sync-status-badge" class="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-900/80 text-emerald-200 border border-emerald-500/40 font-bold">19 BOOKINGS VERIFIED</span>
+          <span id="gmail-sync-status-badge" class="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-900/80 text-emerald-200 border border-emerald-500/40 font-bold">22 BOOKINGS VERIFIED</span>
         </div>
         <p class="text-xs text-slate-300 leading-relaxed">
           Your Travel OS operates under the <b>"Hard Anchors, Fluid Routes"</b> rule. All genuine flight, hotel, and transit confirmations in Gmail are automatically mirrored into the itinerary as immutable anchors.
@@ -1094,7 +1094,7 @@
       <div class="mb-4">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-bold text-slate-700 dark:text-slate-300">📋 Verified Bookings in Registry</span>
-          <span id="gmail-modal-count-indicator" class="text-[10px] text-slate-400">19 confirmed items</span>
+          <span id="gmail-modal-count-indicator" class="text-[10px] text-slate-400">22 confirmed items</span>
         </div>
         <div id="gmail-modal-bookings-list" class="max-h-60 overflow-y-auto space-y-2 pr-1">
           <!-- Populated dynamically via JS -->

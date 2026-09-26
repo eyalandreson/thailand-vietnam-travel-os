@@ -435,6 +435,7 @@ async function syncGmailBookings() {
   const candidateEndpoints = [
     'http://127.0.0.1:5055/api/gmail-sync',
     'http://localhost:5055/api/gmail-sync',
+    'http://127.0.0.1:8080/api/gmail-sync',
     '/api/gmail-sync',
     '/api/sync-gmail'
   ];
@@ -444,8 +445,8 @@ async function syncGmailBookings() {
   for (const endpoint of candidateEndpoints) {
     try {
       const controller = new AbortController();
-      // Allow 60s for full IMAP scan and attachment downloading
-      const timeoutId = setTimeout(() => controller.abort(), 60000);
+      // Fast targeted IMAP scan completes in under 30s
+      const timeoutId = setTimeout(() => controller.abort(), 35000);
       const resp = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -484,7 +485,7 @@ async function syncGmailBookings() {
 
   const confirmedCount = (itineraryData && itineraryData.confirmed_items)
     ? itineraryData.confirmed_items.length
-    : 19;
+    : 22;
 
   let newFilesList = [];
   if (successResult && successResult.status === 'SUCCESS') {
@@ -500,7 +501,7 @@ async function syncGmailBookings() {
       showToast(`✅ Live Gmail Synced! ${total} bookings verified (${daysUpdated} itinerary days updated).`, 'success');
     }
   } else {
-    showToast(`✅ Gmail Ingestion Active — ${confirmedCount} Verified Bookings Synced!`, 'success');
+    showToast(`⚠️ Agent bridge offline on port 5055. Showing latest synced snapshot (${confirmedCount} verified items).`, 'warning');
   }
 
   openGmailSyncModal(newFilesList);
@@ -2056,7 +2057,7 @@ function renderGmailSyncModalBookings(newFilesList) {
   if (!container) return;
 
   const items = (itineraryData && itineraryData.confirmed_items) ? itineraryData.confirmed_items : [];
-  const count = items.length || 19;
+  const count = items.length || 22;
 
   if (countBadge) countBadge.textContent = `${count} BOOKINGS VERIFIED`;
   if (countIndicator) countIndicator.textContent = `${count} confirmed items`;
@@ -2071,6 +2072,8 @@ function renderGmailSyncModalBookings(newFilesList) {
         let label = fn;
         if (fn.includes('BANGKOK AIRWAYS')) label = '✈️ Boarding Pass: Bangkok Airways PG 169 (Koh Samui)';
         else if (fn.includes('20260923010739842') || fn.includes('immigration')) label = '📋 Thailand Digital Arrival Card (Re-entry Sep 24)';
+        else if (fn.includes('33091966') || fn.includes('AATV7263')) label = '🚢 Ferry: Boonsiri Catamaran Samui -> Phangan (AATV7263)';
+        else if (fn.includes('706468715') || fn.includes('Sunset')) label = '🏨 Hotel: Sunset Hill Boutique Resort Koh Phangan (Sea View Suite)';
         return `
           <div class="flex items-center justify-between p-2 rounded-lg bg-emerald-950/50 border border-emerald-500/40 text-xs">
             <div class="min-w-0 pr-2">

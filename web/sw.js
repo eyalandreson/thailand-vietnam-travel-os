@@ -1,12 +1,12 @@
-// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.8)
-const CACHE_NAME = 'travel-os-v4.8';
+// Service Worker: Adaptive Travel OS Offline Resilience Engine (v4.9)
+const CACHE_NAME = 'travel-os-v4.9';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=4.8',
-  './config.js?v=4.8',
-  './app.js?v=4.8&b=2026092308',
-  './itinerary_data.js?v=4.8',
+  './styles.css?v=4.9',
+  './config.js?v=4.9',
+  './app.js?v=4.9&b=2026092601',
+  './itinerary_data.js?v=4.9',
   './data.json',
   './master_itinerary_doc.html',
   './manifest.json',
@@ -17,6 +17,8 @@ const ASSETS_TO_CACHE = [
   './documents/Etihad_BKK_TLV_9KDEH2_Eyal_Andreson.pdf',
   './documents/Etihad_BKK_TLV_9KDEH2_Maria_Miriam_Malayev.pdf',
   './documents/12go_booking_32785393.pdf',
+  './documents/12go_booking_33091966.pdf',
+  './documents/Confirmation_for_Booking_ID_#_706468715.pdf',
   './documents/Confirmation_for_Booking_ID__1777345669.pdf',
   './documents/Confirmation_for_Booking_ID__1777544987.pdf',
   './documents/Confirmation_for_Booking_ID__2050574832.pdf',

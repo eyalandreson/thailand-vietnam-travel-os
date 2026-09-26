@@ -121,9 +121,14 @@ class AgentBridgeHandler(BaseHTTPRequestHandler):
             result = ingestor.sync_and_ingest()
             self._set_headers(200)
             self.wfile.write(json.dumps(result, indent=2).encode("utf-8"))
+        except (ConnectionAbortedError, ConnectionResetError, BrokenPipeError):
+            pass
         except Exception as e:
-            self._set_headers(500)
-            self.wfile.write(json.dumps({"status": "ERROR", "error": str(e)}).encode("utf-8"))
+            try:
+                self._set_headers(500)
+                self.wfile.write(json.dumps({"status": "ERROR", "error": str(e)}).encode("utf-8"))
+            except Exception:
+                pass
 
     def handle_status(self):
         """Returns bridge and Antigravity system health."""

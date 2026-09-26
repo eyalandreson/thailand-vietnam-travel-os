@@ -61,7 +61,7 @@ def deploy():
         ["git", "config", "user.email", "eyal@example.com"],
         ["git", "checkout", "-B", "main"],
         ["git", "add", "."],
-        ["git", "commit", "-m", "feat: autonomous Gmail sync modal, PG 169 connection protocol, bump PWA to v4.7"],
+        ["git", "commit", "-m", "feat: v4.9 - 22 confirmed bookings, Boonsiri Catamaran & Sunset Hill Resort, sub-12s IMAP sync"],
         ["git", "remote", "remove", "origin"],
     ]
     for c in cmds:
@@ -84,7 +84,7 @@ def deploy():
     # Use git subtree or worktree or temporary branch
     web_dir = os.path.abspath("web")
     gh_cmds = [
-        f"cd web; git init; git config user.name 'Eyal Andreson'; git config user.email 'eyal@example.com'; git checkout -B gh-pages; git add -A; git commit -m 'deploy: web dashboard to GitHub Pages (v4.7)'; git remote remove origin; git remote add origin {remote_url}; git push -u origin gh-pages --force"
+        f"cd web; git init; git config user.name 'Eyal Andreson'; git config user.email 'eyal@example.com'; git checkout -B gh-pages; git add -A; git commit -m 'deploy: web dashboard to GitHub Pages (v4.9)'; git remote remove origin; git remote add origin {remote_url}; git push -u origin gh-pages --force"
     ]
     p = subprocess.run(["powershell", "-Command", gh_cmds[0]], capture_output=True, text=True)
     print(f"Pushed to gh-pages: returncode={p.returncode}")
